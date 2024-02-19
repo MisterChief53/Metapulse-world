@@ -1,0 +1,29 @@
+{
+    "gem_name": "Metapulse-world",
+    "version": "1.0.0",
+    "display_name": "Metapulse-world",
+    "license": "What license Metapulse-world uses goes here: i.e. Apache-2.0 or MIT",
+    "license_url": "Link to the license web site goes here: i.e. https://opensource.org/licenses/Apache-2.0 Or https://opensource.org/licenses/MIT",
+    "origin": "The name of the originator goes here. i.e. XYZ Inc.",
+    "origin_url": "The primary repo for Metapulse-world goes here: i.e. http://www.mydomain.com",
+    "type": "",
+    "summary": "A short description of Metapulse-world.",
+    "canonical_tags": [
+        "Gem"
+    ],
+    "user_tags": [
+        "Metapulse-world"
+    ],
+    "platforms": [
+        "${Platforms}"
+    ],
+    "icon_path": "preview.png",
+    "requirements": "",
+    "documentation_url": "",
+    "dependencies": [
+    ],
+    "compatible_engines": [
+    ],
+    "engine_api_dependencies":[
+    ]
+}
