@@ -18,10 +18,11 @@
         "Gem"
     ],
     "gem_names": [
-        "Metapulse-world",
         "Atom",
         "CameraFramework",
-        "ImGui"
+        "ImGui",
+        "LyShine",
+        "Metapulse-world"
     ],
     "restricted": "Metapulse-world",
     "engine_version": "2.2.1"
