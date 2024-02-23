@@ -15,6 +15,7 @@
     "icon_path": "preview.png",
     "engine": "o3de-sdk",
     "external_subdirectories": [
+        "Custom_Gems/Metapulse-Auth-Client-gem",
         "Gem"
     ],
     "gem_names": [
