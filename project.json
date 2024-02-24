@@ -15,11 +15,12 @@
     "icon_path": "preview.png",
     "engine": "o3de-sdk",
     "external_subdirectories": [
-        "Custom_Gems/Metapulse-Auth-Client-gem",
+        "CustomGems/AuthClient",
         "Gem"
     ],
     "gem_names": [
         "Atom",
+        "AuthClient==1.0.0",
         "CameraFramework",
         "ImGui",
         "LyShine",
