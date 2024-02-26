@@ -21,6 +21,7 @@ namespace AuthClient
         // This happens through the [MyComponent]::Reflect() function.
         m_descriptors.insert(m_descriptors.end(), {
             AuthClientSystemComponent::CreateDescriptor(),
+            AuthClientHandlerComponent::CreateDescriptor(),
             });
     }
 

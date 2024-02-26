@@ -7,8 +7,7 @@
 
 namespace AuthClient
 {
-    AZ_COMPONENT_IMPL(AuthClientSystemComponent, "AuthClientSystemComponent",
-        AuthClientSystemComponentTypeId);
+    AZ_COMPONENT_IMPL(AuthClientSystemComponent, "AuthClientSystemComponent", AuthClientSystemComponentTypeId);
 
     void AuthClientSystemComponent::Reflect(AZ::ReflectContext* context)
     {
