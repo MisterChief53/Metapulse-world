@@ -16,8 +16,6 @@ namespace AuthClient
         , public AuthClientHandlerRequestBus::Handler
     {
     public:
-        //AZ_COMPONENT_DECL(AuthClientHandlerComponent);
-
         // Define UUID for component
         AZ_COMPONENT(AuthClient::AuthClientHandlerComponent, "{04C56263-9B8E-4CC7-9B5E-3F42C6B7F0E3}", AZ::Component);
 

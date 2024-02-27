@@ -29,6 +29,7 @@ namespace AuthClient
     {
         return AZ::ComponentTypeList{
             azrtti_typeid<AuthClientSystemComponent>(),
+            azrtti_typeid<AuthClientHandlerComponent>()
         };
     }
 } // namespace AuthClient

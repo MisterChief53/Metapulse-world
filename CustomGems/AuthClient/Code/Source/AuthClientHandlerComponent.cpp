@@ -7,8 +7,6 @@
 
 namespace AuthClient
 {
-    //AZ_COMPONENT_IMPL(AuthClientHandlerComponent, "AuthClientHandlerComponent", "{EE4780C2-5B98-4AEA-9FD2-A37AD662F3B5}");
-
     void AuthClientHandlerComponent::Activate()
     {
         AuthClientHandlerRequestBus::Handler::BusConnect(GetEntityId());
