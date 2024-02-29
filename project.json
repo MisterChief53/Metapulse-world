@@ -24,7 +24,9 @@
         "CameraFramework",
         "ImGui",
         "LyShine",
-        "Metapulse-world"
+        "MessagePopup",
+        "Metapulse-world",
+        "RemoteTools"
     ],
     "restricted": "Metapulse-world",
     "engine_version": "2.2.1"

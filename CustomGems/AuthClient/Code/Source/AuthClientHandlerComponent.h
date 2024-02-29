@@ -3,6 +3,8 @@
 
 #include <AzCore/Component/Component.h>
 #include <AuthClient/AuthClientHandlerInterface.h>
+#include <AzCore/Interface/Interface.h>
+#include "Clients/HandlerClient.h"
 
 namespace AuthClient
 {
@@ -13,7 +15,8 @@ namespace AuthClient
 
     class AuthClientHandlerComponent
         : public AZ::Component
-        , public AuthClientHandlerRequestBus::Handler
+        //, public AuthClientHandlerRequestBus::Handler
+        , public AZ::Interface<AuthClientHandlerRequests>::Registrar
     {
     public:
         // Define UUID for component
@@ -21,6 +24,9 @@ namespace AuthClient
 
 
         int token;
+
+        /*Request to get the token*/
+        int getToken() override;
 
         /*
         * Reflects component data into the reflection contexts, including the serialization, edit, and behavior contexts.

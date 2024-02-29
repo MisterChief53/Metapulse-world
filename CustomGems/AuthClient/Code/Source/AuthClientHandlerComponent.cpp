@@ -7,15 +7,19 @@
 
 namespace AuthClient
 {
+    int AuthClientHandlerComponent::getToken() {
+        return this->token;
+    }
+
     void AuthClientHandlerComponent::Activate()
     {
-        AuthClientHandlerRequestBus::Handler::BusConnect(GetEntityId());
+        //AuthClientHandlerRequestBus::Handler::BusConnect(GetEntityId());
         this->token = 123;
     }
 
     void AuthClientHandlerComponent::Deactivate()
     {
-        AuthClientHandlerRequestBus::Handler::BusDisconnect(GetEntityId());
+        //AuthClientHandlerRequestBus::Handler::BusDisconnect(GetEntityId());
     }
 
     void AuthClientHandlerComponent::Reflect(AZ::ReflectContext* context)
@@ -44,6 +48,7 @@ namespace AuthClient
             behaviorContext->Class<AuthClientHandlerComponent>("AuthClientHandler Component Group")
                 ->Attribute(AZ::Script::Attributes::Category, "AuthClient Gem Group")
                 ;
+            //behaviorContext->Class<AuthClient::HandlerClient>(); fails due to missing RTTI
         }
     }
 
