@@ -1,6 +1,6 @@
-#include "HandlerClient.h"
+#include "AuthClientInterfaceClient.h"
 
-int requestToken() {
+int AuthClient::AuthClientInterfaceClient::requestToken() {
 	int token = -1;
 	if (AuthClient::AuthClientHandlerRequests* handlerInterface = AZ::Interface<AuthClient::AuthClientHandlerRequests>::Get()) {
 		token = handlerInterface->getToken();

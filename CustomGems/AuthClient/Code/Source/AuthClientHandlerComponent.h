@@ -4,7 +4,7 @@
 #include <AzCore/Component/Component.h>
 #include <AuthClient/AuthClientHandlerInterface.h>
 #include <AzCore/Interface/Interface.h>
-#include "Clients/HandlerClient.h"
+#include "Clients/AuthClientInterfaceClient.h"
 
 namespace AuthClient
 {

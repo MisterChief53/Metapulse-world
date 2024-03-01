@@ -242,12 +242,25 @@
 										<Class name="unsigned int" field="ContextID" value="0" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
 										<Class name="ScriptPropertyGroup" field="Properties" type="{79682522-2F81-4B36-9FC2-A091C7504F7F}">
 											<Class name="AZStd::string" field="Name" value="Properties" type="{03AAAB3F-5C47-5A66-9EBC-D5FA4DB353C9}"/>
-											<Class name="AZStd::vector&lt;AzFramework::ScriptProperty*, allocator&gt;" field="Properties" type="{2407B2F9-E3EE-5D01-8DBF-1FB8BED06482}"/>
+											<Class name="AZStd::vector&lt;AzFramework::ScriptProperty*, allocator&gt;" field="Properties" type="{2407B2F9-E3EE-5D01-8DBF-1FB8BED06482}">
+												<Class name="AzFramework::ScriptPropertyGenericClass" field="element" version="1" type="{80618224-814C-44D4-A7B8-14B5A36F96ED}">
+													<Class name="AzFramework::ScriptProperty" field="BaseClass1" version="2" type="{D227D737-F1ED-4FB3-A1FB-38E4985D2E7A}">
+														<Class name="AZ::u64" field="id" value="1210137687" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+														<Class name="AZStd::string" field="name" value="ParentEntity" type="{03AAAB3F-5C47-5A66-9EBC-D5FA4DB353C9}"/>
+													</Class>
+													<Class name="DynamicSerializableField" field="value" type="{D761E0C2-A098-497C-B8EB-EA62F5ED896B}">
+														<Class name="AZ::Uuid" field="TypeId" value="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="EntityId" field="m_data" version="1" type="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}">
+															<Class name="AZ::u64" field="id" value="3962375137954" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+														</Class>
+													</Class>
+												</Class>
+											</Class>
 											<Class name="AZStd::vector&lt;ScriptPropertyGroup, allocator&gt;" field="Groups" type="{E3B6A07B-498D-50CE-A8E5-5AFDA2231792}"/>
 										</Class>
-										<Class name="Asset&lt;ScriptAsset&gt;" field="Script" value="id={00000000-0000-0000-0000-000000000000}:0,type={82557326-4AE3-416C-95D6-C70635AB7588},hint={},loadBehavior=0" version="3" type="{F0CB5839-52FC-5B3B-83F2-6EAFCD6DDE06}"/>
+										<Class name="Asset&lt;ScriptAsset&gt;" field="Script" value="id={AA48D102-9DE6-540B-BABD-AE4995F24540}:1,type={82557326-4AE3-416C-95D6-C70635AB7588},hint={assets/scripts/money_display.luac},loadBehavior=0" version="3" type="{F0CB5839-52FC-5B3B-83F2-6EAFCD6DDE06}"/>
 									</Class>
-									<Class name="Asset&lt;ScriptAsset&gt;" field="ScriptAsset" value="id={00000000-0000-0000-0000-000000000000}:0,type={82557326-4AE3-416C-95D6-C70635AB7588},hint={},loadBehavior=1" version="3" type="{F0CB5839-52FC-5B3B-83F2-6EAFCD6DDE06}"/>
+									<Class name="Asset&lt;ScriptAsset&gt;" field="ScriptAsset" value="id={AA48D102-9DE6-540B-BABD-AE4995F24540}:1,type={82557326-4AE3-416C-95D6-C70635AB7588},hint={assets/scripts/money_display.luac},loadBehavior=1" version="3" type="{F0CB5839-52FC-5B3B-83F2-6EAFCD6DDE06}"/>
 								</Class>
 							</Class>
 							<Class name="bool" field="IsDependencyReady" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>

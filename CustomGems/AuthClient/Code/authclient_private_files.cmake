@@ -6,6 +6,6 @@ set(FILES
     Source/Clients/AuthClientSystemComponent.h
     Source/AuthClientHandlerComponent.cpp
     Source/AuthClientHandlerComponent.h
-    Source/Clients/HandlerClient.cpp
-    Source/Clients/HandlerClient.h
+    Source/Clients/AuthClientInterfaceClient.cpp
+    Source/Clients/AuthClientInterfaceClient.h
 )

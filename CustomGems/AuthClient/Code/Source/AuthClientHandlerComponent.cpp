@@ -48,7 +48,10 @@ namespace AuthClient
             behaviorContext->Class<AuthClientHandlerComponent>("AuthClientHandler Component Group")
                 ->Attribute(AZ::Script::Attributes::Category, "AuthClient Gem Group")
                 ;
-            //behaviorContext->Class<AuthClient::HandlerClient>(); fails due to missing RTTI
+            //fails due to missing RTTI
+            behaviorContext->Class<AuthClient::AuthClientInterfaceClient>()
+                ->Method("RequestToken", &AuthClient::AuthClientInterfaceClient::requestToken);
+            /*behaviorContext->Method("RequestToken", &AuthClient::AuthClientInterfaceClient::requestToken);*/
         }
     }
 

@@ -5,8 +5,14 @@ local start_menu_script = {
 }
 
 function start_menu_script:OnActivate()
-	if(self.Properties.ParentEntitiy:IsValid()) then
-		self.entityBusHandler = EntityBus.Connect(self, self.Properties.ParentEntity)
+	local entityContext = GetEntityContext()
+	local parent = entityContext:FindEntityById(EntityId())
+	
+	if parent ~= nil then
+		local parentCommponent = parent:GetComponentOfType("UiTextComponent")
+		if parentComponent  ~= nil then
+			parentComponent:setText(tostring(AuthClientInterfaceClient:RequestToken()))
+		end
 	end
 end
 

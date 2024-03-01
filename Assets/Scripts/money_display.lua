@@ -1,18 +1,20 @@
-local money_display{
+local money_display = {
 	Properties = {
-		hello = {world}
 		ParentEntity = {default = EntityId()}
 	}
 }
 
 function money_display:OnActivate()
-     -- Activation Code
-      self:Properties.ParentEntity:IsValid() then
-      	self.entityBusHandler
+	if self.Properties.ParentEntity:IsValid() then
+		self.entityBusHandler = EntityBus.Connect(self, self.Properties.ParentEntity)
+		local interface = AuthClientInterfaceClient()
+		local token = tostring(interface:RequestToken())
+		UiTextBus.Event.SetText(self.Properties.ParentEntity, token)
+	end
 end
 
 function money_display:OnDeactivate()
-     -- Deactivation Code
+	
 end
 
 return money_display
