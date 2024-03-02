@@ -5,6 +5,9 @@
 #include <AuthClient/AuthClientHandlerInterface.h>
 #include <AzCore/Interface/Interface.h>
 #include "Clients/AuthClientInterfaceClient.h"
+#include <Clients/AuthClientInterfaceImplementation.h>
+#include <AuthClient/AuthClientHandlerInterface.h>
+#include <AzCore/Console/ILogger.h>
 
 namespace AuthClient
 {
@@ -15,15 +18,20 @@ namespace AuthClient
 
     class AuthClientHandlerComponent
         : public AZ::Component
+        , public AuthClient::AuthClientHandlerRequests
         //, public AuthClientHandlerRequestBus::Handler
-        , public AZ::Interface<AuthClientHandlerRequests>::Registrar
+        //, public AZ::Interface<AuthClient::AuthClientHandlerRequests>::Registrar
     {
     public:
         // Define UUID for component
         AZ_COMPONENT(AuthClient::AuthClientHandlerComponent, "{04C56263-9B8E-4CC7-9B5E-3F42C6B7F0E3}", AZ::Component);
+        
+        AZStd::unique_ptr<AuthClient::AuthClientInterfaceImplementation> interface;
 
+        AuthClientHandlerComponent();
+        ~AuthClientHandlerComponent();
 
-        int token;
+        //int token;
 
         /*Request to get the token*/
         int getToken() override;

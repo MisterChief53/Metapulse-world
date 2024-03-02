@@ -41,6 +41,7 @@ namespace AuthClient
     {
         if (AuthClientInterface::Get() == nullptr)
         {
+            AZLOG_INFO("Auth client system component has been registered");
             AuthClientInterface::Register(this);
         }
     }
@@ -49,6 +50,7 @@ namespace AuthClient
     {
         if (AuthClientInterface::Get() == this)
         {
+            AZLOG_INFO("Auth client system component has been unregistered");
             AuthClientInterface::Unregister(this);
         }
     }

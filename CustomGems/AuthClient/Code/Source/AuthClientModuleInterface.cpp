@@ -27,6 +27,7 @@ namespace AuthClient
 
     AZ::ComponentTypeList AuthClientModuleInterface::GetRequiredSystemComponents() const
     {
+        AZLOG_INFO("Initialized system components..");
         return AZ::ComponentTypeList{
             azrtti_typeid<AuthClientSystemComponent>(),
             azrtti_typeid<AuthClientHandlerComponent>()

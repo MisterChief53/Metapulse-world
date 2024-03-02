@@ -4,6 +4,7 @@
 #include <AzCore/RTTI/RTTIMacros.h>
 #include <AzCore/RTTI/TypeInfoSimple.h>
 #include <AuthClientHandlerComponent.h>
+#include <AzCore/Console/ILogger.h>
 
 namespace AuthClient
 {

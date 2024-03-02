@@ -4,6 +4,7 @@
 #include <AzCore/Component/Component.h>
 #include <AzCore/Component/TickBus.h>
 #include <AuthClient/AuthClientBus.h>
+#include <AzCore/Console/ILogger.h>
 
 namespace AuthClient
 {

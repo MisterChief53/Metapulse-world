@@ -673,8 +673,15 @@
         },
         "Entity_[3983849974434]": {
             "Id": "Entity_[3983849974434]",
-            "Name": "Notification",
+            "Name": "AuthClient",
             "Components": {
+                "AuthClient::AuthClientHandlerComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 8554266377540977690,
+                    "m_template": {
+                        "$type": "AuthClient::AuthClientHandlerComponent"
+                    }
+                },
                 "EditorDisabledCompositionComponent": {
                     "$type": "EditorDisabledCompositionComponent",
                     "Id": 5230210921290952105

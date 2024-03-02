@@ -8,4 +8,6 @@ set(FILES
     Source/AuthClientHandlerComponent.h
     Source/Clients/AuthClientInterfaceClient.cpp
     Source/Clients/AuthClientInterfaceClient.h
+    Source/Clients/AuthClientInterfaceImplementation.cpp
+    Source/Clients/AuthClientInterfaceImplementation.h
 )
