@@ -1,0 +1,5 @@
+{
+  "PackageName": "curl",
+  "License": "BSD-3-Clause",
+  "LicenseFile":  "curl/LICENSES/BSD-3-Clause.txt"
+}

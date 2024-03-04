@@ -1,8 +1,6 @@
 
 #include "AuthClientSystemComponent.h"
-
 #include <AuthClient/AuthClientTypeIds.h>
-
 #include <AzCore/Serialization/SerializeContext.h>
 
 namespace AuthClient

@@ -3,3 +3,7 @@
 [Uu]ser/
 _savebackup/
 CMakeUserPresets.json
+# ignore third party library binaries
+Libraries/Packages/Install/
+Libraries/Packages/curl/curl
+SHA256SUMS

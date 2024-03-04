@@ -12,6 +12,11 @@ o3de_pal_dir(pal_dir ${CMAKE_CURRENT_LIST_DIR}/Platform/${PAL_PLATFORM_NAME} "${
 # is supported by this platform.
 include(${pal_dir}/PAL_${PAL_PLATFORM_NAME_LOWERCASE}.cmake)
 
+# Add curl as a third party
+set(LY_PACKAGE_SERVER_URLS "${LY_PACKAGE_SERVER_URLS};file:///${CMAKE_CURRENT_LIST_DIR}/../../../Libraries/Packages/Install" FORCE)
+file(READ ${CMAKE_CURRENT_LIST_DIR}/../../../Libraries/Packages/Install/SHA256SUMS curl_SHA256_PACKAGE)
+ly_associate_package(PACKAGE_NAME curl TARGETS curl PACKAGE_HASH ${curl_SHA256_PACKAGE})
+
 # Check to see if building the Gem Modules are supported for the current platform
 if(NOT PAL_TRAIT_AUTHCLIENT_SUPPORTED)
     return()
@@ -50,6 +55,7 @@ ly_add_target(
         PUBLIC
             AZ::AzCore
             AZ::AzFramework
+            3rdParty::curl
 )
 
 # Here add ${gem_name} target, it depends on the Private Object library and Public API interface
