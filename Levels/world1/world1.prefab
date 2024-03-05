@@ -617,6 +617,71 @@
                 }
             }
         },
+        "Entity_[319995373671]": {
+            "Id": "Entity_[319995373671]",
+            "Name": "Body",
+            "Components": {
+                "AZ::Render::EditorMeshComponent": {
+                    "$type": "AZ::Render::EditorMeshComponent",
+                    "Id": 9069914322168145911,
+                    "Controller": {
+                        "Configuration": {
+                            "ModelAsset": {
+                                "assetId": {
+                                    "guid": "{C83B1CC8-4A37-5805-858C-8A3CC1EE7CA1}",
+                                    "subId": 283765617
+                                },
+                                "assetHint": "assets/metapulse_character.fbx.azmodel"
+                            }
+                        }
+                    }
+                },
+                "EditorDisabledCompositionComponent": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 15589639439096028487
+                },
+                "EditorEntityIconComponent": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 15368994763488029825
+                },
+                "EditorEntitySortComponent": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 3748435937342795674
+                },
+                "EditorInspectorComponent": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 15352689295495798506
+                },
+                "EditorLockComponent": {
+                    "$type": "EditorLockComponent",
+                    "Id": 10093269715121089884
+                },
+                "EditorOnlyEntityComponent": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 7759065481800831407
+                },
+                "EditorPendingCompositionComponent": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 11351133425922867294
+                },
+                "EditorVisibilityComponent": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 16944305952911022429
+                },
+                "TransformComponent": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 5863915597145401664,
+                    "Parent Entity": "Entity_[812813612153]",
+                    "Transform Data": {
+                        "Translate": [
+                            0.0,
+                            0.0,
+                            3.465768814086914
+                        ]
+                    }
+                }
+            }
+        },
         "Entity_[358897576610]": {
             "Id": "Entity_[358897576610]",
             "Name": "start_menu",
@@ -725,21 +790,6 @@
             "Id": "Entity_[812813612153]",
             "Name": "user",
             "Components": {
-                "AZ::Render::EditorMeshComponent": {
-                    "$type": "AZ::Render::EditorMeshComponent",
-                    "Id": 16803644862195561053,
-                    "Controller": {
-                        "Configuration": {
-                            "ModelAsset": {
-                                "assetId": {
-                                    "guid": "{C83B1CC8-4A37-5805-858C-8A3CC1EE7CA1}",
-                                    "subId": 283765617
-                                },
-                                "assetHint": "assets/metapulse_character.fbx.azmodel"
-                            }
-                        }
-                    }
-                },
                 "EditorCharacterControllerComponent": {
                     "$type": "EditorCharacterControllerComponent",
                     "Id": 7827626483359412301,
@@ -751,6 +801,12 @@
                                     "Name": "Entire object"
                                 }
                             ]
+                        }
+                    },
+                    "ShapeConfig": {
+                        "Capsule": {
+                            "Height": 1.7999999523162842,
+                            "Radius": 0.30000001192092896
                         }
                     }
                 },
@@ -764,7 +820,10 @@
                 },
                 "EditorEntitySortComponent": {
                     "$type": "EditorEntitySortComponent",
-                    "Id": 8195115894871961843
+                    "Id": 8195115894871961843,
+                    "Child Entity Order": [
+                        "Entity_[319995373671]"
+                    ]
                 },
                 "EditorInspectorComponent": {
                     "$type": "EditorInspectorComponent",
@@ -808,9 +867,9 @@
                         "Translate": [
                             0.0,
                             0.0,
-                            1.3933076858520508
+                            -0.11277008056640625
                         ],
-                        "UniformScale": 0.5
+                        "UniformScale": 0.30000001192092896
                     }
                 }
             }
