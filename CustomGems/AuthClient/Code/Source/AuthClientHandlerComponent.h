@@ -33,8 +33,11 @@ namespace AuthClient
 
         //int token;
 
+        /* ############## Interface overrides ################# */
         /*Request to get the token*/
         int getToken() override;
+        int login() override;
+        int signup() override;
 
         /*
         * Reflects component data into the reflection contexts, including the serialization, edit, and behavior contexts.

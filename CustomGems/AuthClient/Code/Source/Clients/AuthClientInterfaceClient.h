@@ -12,5 +12,9 @@ namespace AuthClient {
 		AZ_RTTI(AuthClientInterfaceClient, "{69AA6EEB-D6DF-4EC2-B749-3913D89263E3}");
 
 		int requestToken();
+
+		int loginRequest();
+
+		int signupRequest();
 	};
 }

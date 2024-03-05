@@ -7,3 +7,21 @@ int AuthClient::AuthClientInterfaceClient::requestToken() {
 	}
 	return token;
 }
+
+int AuthClient::AuthClientInterfaceClient::loginRequest()
+{
+	if (AuthClient::AuthClientHandlerRequests* handlerInterface = AZ::Interface<AuthClient::AuthClientHandlerRequests>::Get()) {
+		return handlerInterface->login();
+	}
+
+	return -1;
+}
+
+int AuthClient::AuthClientInterfaceClient::signupRequest()
+{
+	if (AuthClient::AuthClientHandlerRequests* handlerInterface = AZ::Interface<AuthClient::AuthClientHandlerRequests>::Get()) {
+		return handlerInterface->signup();
+	}
+
+	return -1;
+}

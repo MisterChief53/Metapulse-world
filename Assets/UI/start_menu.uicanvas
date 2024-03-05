@@ -22,7 +22,7 @@
 					<Class name="bool" field="IsTextPixelAligned" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 					<Class name="bool" field="RenderToTexture" value="false" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 					<Class name="Asset&lt;AttachmentImageAsset&gt;" field="AttachmentImageAsset" value="id={00000000-0000-0000-0000-000000000000}:0,type={82CEA86B-E891-4969-8F35-D8017E8902C8},hint={},loadBehavior=1" version="3" type="{61538C1C-2EDA-593B-AA53-701FF7D854E7}"/>
-					<Class name="bool" field="IsPosInputSupported" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
+					<Class name="bool" field="IsPosInputSupported" value="false" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 					<Class name="bool" field="IsConsumingAllInput" value="false" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 					<Class name="bool" field="IsMultiTouchSupported" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 					<Class name="bool" field="IsNavigationSupported" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>

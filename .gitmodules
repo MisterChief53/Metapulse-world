@@ -1,3 +1,6 @@
 [submodule "Libraries/curl"]
 	path = Libraries/curl
 	url = git@github.com:curl/curl.git
+[submodule "CustomGems/FirstPersonController"]
+	path = CustomGems/FirstPersonController
+	url = git@github.com:Porcupine-Factory/FirstPersonController.git

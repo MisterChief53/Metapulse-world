@@ -740,6 +740,20 @@
                         }
                     }
                 },
+                "EditorCharacterControllerComponent": {
+                    "$type": "EditorCharacterControllerComponent",
+                    "Id": 7827626483359412301,
+                    "Configuration": {
+                        "entityId": "",
+                        "MaterialSlots": {
+                            "Slots": [
+                                {
+                                    "Name": "Entire object"
+                                }
+                            ]
+                        }
+                    }
+                },
                 "EditorDisabledCompositionComponent": {
                     "$type": "EditorDisabledCompositionComponent",
                     "Id": 3219899610882760024
@@ -771,6 +785,20 @@
                 "EditorVisibilityComponent": {
                     "$type": "EditorVisibilityComponent",
                     "Id": 11027796346902963977
+                },
+                "FirstPersonControllerComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 16624704976994572933,
+                    "m_template": {
+                        "$type": "FirstPersonControllerComponent"
+                    }
+                },
+                "InputConfigurationComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 14979307039192459827,
+                    "m_template": {
+                        "$type": "InputConfigurationComponent"
+                    }
                 },
                 "TransformComponent": {
                     "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",

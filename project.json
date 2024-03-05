@@ -15,6 +15,7 @@
     "icon_path": "preview.png",
     "engine": "o3de-sdk",
     "external_subdirectories": [
+        "CustomGems/FirstPersonController",
         "CustomGems/AuthClient",
         "Gem"
     ],
@@ -22,11 +23,14 @@
         "Atom",
         "AuthClient==1.0.0",
         "CameraFramework",
+        "FirstPersonController==1.0.0",
         "ImGui",
         "LyShine",
         "MessagePopup",
         "Metapulse-world",
-        "RemoteTools"
+        "PhysX",
+        "RemoteTools",
+        "StartingPointInput"
     ],
     "restricted": "Metapulse-world",
     "engine_version": "2.2.1"

@@ -45,6 +45,16 @@ namespace AuthClient
         return 123;
     }
 
+    int AuthClientHandlerComponent::login()
+    {
+        return 0;
+    }
+
+    int AuthClientHandlerComponent::signup()
+    {
+        return 0;
+    }
+
     void AuthClientHandlerComponent::Reflect(AZ::ReflectContext* context)
     {
         if (auto serializeContext = azrtti_cast<AZ::SerializeContext*>(context))
@@ -72,7 +82,9 @@ namespace AuthClient
                 ->Attribute(AZ::Script::Attributes::Category, "AuthClient Gem Group")
                 ;
             behaviorContext->Class<AuthClient::AuthClientInterfaceClient>()
-                ->Method("RequestToken", &AuthClient::AuthClientInterfaceClient::requestToken);
+                ->Method("RequestToken", &AuthClient::AuthClientInterfaceClient::requestToken)
+                ->Method("LoginRequest", &AuthClient::AuthClientInterfaceClient::loginRequest)
+                ->Method("SignUpRequest",&AuthClient::AuthClientInterfaceClient::signupRequest);
         }
     }
 

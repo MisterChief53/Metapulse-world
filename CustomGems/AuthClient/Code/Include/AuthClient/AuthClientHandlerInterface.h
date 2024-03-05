@@ -18,6 +18,8 @@ namespace AuthClient
 
         // Put your public request methods here.
         virtual int getToken() = 0;
+        virtual int login() = 0;
+        virtual int signup() = 0;
         // Put notification events here. Examples:
         // void RegisterEvent(AZ::EventHandler<...> notifyHandler);
         // AZ::Event<...> m_notifyEvent1;
