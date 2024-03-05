@@ -9,14 +9,16 @@ endif()
 # add_library(${TARGET_WITH_NAMESPACE} INTERFACE IMPORTED GLOBAL)
 
 set(${LIB_NAME}_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/${LIB_NAME}/include)
-set(${LIB_NAME}_LIB_DIR ${CMAKE_CURRENT_LIST_DIR}/${LIB_NAME}/lib/${CMAKE_SYSTEM_NAME})
+set(${LIB_NAME}_LIBS_DIR ${CMAKE_CURRENT_LIST_DIR}/${LIB_NAME}/lib/${CMAKE_SYSTEM_NAME}/)
+#set(${LIB_NAME}_LIB_DIR ${CMAKE_CURRENT_LIST_DIR}/${LIB_NAME}/bin/)
 
-if (${PAL_PLATFORM_NAME} STREQUAL "Windows")
+if (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+	message("#################################### windows detected ####################################################")
     file(GLOB ${LIB_NAME}_LIBRARY ${${LIB_NAME}_LIBS_DIR}/*.lib)
 endif()
 
 add_library(${TARGET_WITH_NAMESPACE} INTERFACE IMPORTED GLOBAL)
 
-ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${${LIB_NAME}_LIB_DIR})
+ly_add_target_files(TARGETS ${TARGET_WITH_NAMESPACE} FILES ${${LIB_NAME}_LIBRARY})
 ly_target_include_system_directories(TARGET ${TARGET_WITH_NAMESPACE} INTERFACE ${${LIB_NAME}_INCLUDE_DIR})
 set(${LIB_NAME}_FOUND True)

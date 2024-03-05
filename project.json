@@ -13,7 +13,7 @@
         "Metapulse-world"
     ],
     "icon_path": "preview.png",
-    "engine": "o3de",
+    "engine": "o3de-sdk",
     "external_subdirectories": [
         "CustomGems/AuthClient",
         "Gem"
