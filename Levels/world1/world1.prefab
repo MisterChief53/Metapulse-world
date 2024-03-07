@@ -275,11 +275,6 @@
                             0.0,
                             0.0,
                             5.827296257019043
-                        ],
-                        "Rotate": [
-                            0.0,
-                            0.0,
-                            90.0
                         ]
                     }
                 },
@@ -699,6 +694,11 @@
                             0.0,
                             0.0,
                             3.465768814086914
+                        ],
+                        "Rotate": [
+                            0.0,
+                            0.0,
+                            90.0
                         ]
                     }
                 }
@@ -879,7 +879,13 @@
                     "$type": "GenericComponentWrapper",
                     "Id": 14979307039192459827,
                     "m_template": {
-                        "$type": "InputConfigurationComponent"
+                        "$type": "InputConfigurationComponent",
+                        "Input Event Bindings": {
+                            "assetId": {
+                                "guid": "{D3247AD4-4E3D-55D7-8DF1-6E22E87AB178}"
+                            },
+                            "assetHint": "assets/inputbindings/firstpersoninput.inputbindings"
+                        }
                     }
                 },
                 "TransformComponent": {
