@@ -199,6 +199,10 @@
                     "$type": "EditorVisibilityComponent",
                     "Id": 9410832619875640998
                 },
+                "EditorBoxShapeComponent": {
+                    "$type": "EditorBoxShapeComponent",
+                    "Id": 2999676820588132160
+                },
                 "EditorNonUniformScaleComponent": {
                     "$type": "EditorNonUniformScaleComponent",
                     "Id": 738805094086336732,
@@ -207,6 +211,33 @@
                         0.20000000298023224,
                         50.0
                     ]
+                },
+                "EditorShapeColliderComponent": {
+                    "$type": "EditorShapeColliderComponent",
+                    "Id": 14397654642918527295,
+                    "ColliderConfiguration": {
+                        "MaterialSlots": {
+                            "Slots": [
+                                {
+                                    "Name": "Entire object"
+                                }
+                            ]
+                        }
+                    },
+                    "ShapeConfigs": [
+                        {
+                            "$type": "BoxShapeConfiguration",
+                            "Scale": [
+                                5000.0,
+                                20.0,
+                                5000.0
+                            ]
+                        }
+                    ]
+                },
+                "EditorStaticRigidBodyComponent": {
+                    "$type": "EditorStaticRigidBodyComponent",
+                    "Id": 6510404503302412788
                 }
             }
         },
@@ -238,17 +269,17 @@
                 "Component_[18086214374043522055]": {
                     "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
                     "Id": 18086214374043522055,
-                    "Parent Entity": "Entity_[1176639161715]",
+                    "Parent Entity": "Entity_[812813612153]",
                     "Transform Data": {
                         "Translate": [
-                            5.6317877769470215,
-                            -11.441673278808594,
-                            3.5125315189361572
+                            0.0,
+                            0.0,
+                            5.827296257019043
                         ],
                         "Rotate": [
-                            -0.030124466866254807,
-                            -0.02627260610461235,
-                            41.09647750854492
+                            0.0,
+                            0.0,
+                            90.0
                         ]
                     }
                 },
@@ -263,14 +294,6 @@
                 "Component_[7169798125182238623]": {
                     "$type": "EditorPendingCompositionComponent",
                     "Id": 7169798125182238623
-                },
-                "Component_[7255796294953281766]": {
-                    "$type": "GenericComponentWrapper",
-                    "Id": 7255796294953281766,
-                    "m_template": {
-                        "$type": "FlyCameraInputComponent",
-                        "Is enabled": false
-                    }
                 },
                 "Component_[8866210352157164042]": {
                     "$type": "EditorInspectorComponent",
@@ -456,8 +479,7 @@
                         "Entity_[1155164325235]",
                         "Entity_[1180934129011]",
                         "Entity_[1172344194419]",
-                        "Entity_[1168049227123]",
-                        "Entity_[1163754259827]"
+                        "Entity_[1168049227123]"
                     ]
                 },
                 "Component_[9277695270015777859]": {
@@ -729,7 +751,7 @@
                     "m_template": {
                         "$type": "UiCanvasAssetRefComponent",
                         "CanvasAssetRef": {
-                            "AssetPath": "Assets/UI/start_menu.uicanvas"
+                            "AssetPath": "assets/ui/start_menu.uicanvas"
                         },
                         "IsAutoLoad": true
                     }
@@ -822,6 +844,7 @@
                     "$type": "EditorEntitySortComponent",
                     "Id": 8195115894871961843,
                     "Child Entity Order": [
+                        "Entity_[1163754259827]",
                         "Entity_[319995373671]"
                     ]
                 },
@@ -865,9 +888,9 @@
                     "Parent Entity": "Entity_[1146574390643]",
                     "Transform Data": {
                         "Translate": [
+                            -0.1732769012451172,
                             0.0,
-                            0.0,
-                            -0.11277008056640625
+                            0.2521566152572632
                         ],
                         "UniformScale": 0.30000001192092896
                     }

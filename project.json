@@ -26,6 +26,7 @@
         "FirstPersonController==1.0.0",
         "ImGui",
         "LyShine",
+        "LyShineExamples",
         "MessagePopup",
         "Metapulse-world",
         "PhysX",
