@@ -752,8 +752,7 @@
                         "$type": "UiCanvasAssetRefComponent",
                         "CanvasAssetRef": {
                             "AssetPath": "assets/ui/start_menu.uicanvas"
-                        },
-                        "IsAutoLoad": true
+                        }
                     }
                 }
             }
