@@ -6,6 +6,8 @@
 
 #include <Metapulse-world/Metapulse-worldTypeIds.h>
 
+#include "Source/AutoGen/AutoComponentTypes.h"
+
 namespace Metapulse_world
 {
     class Metapulse_worldModule
