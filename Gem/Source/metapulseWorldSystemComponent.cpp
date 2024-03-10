@@ -5,6 +5,8 @@
 
 #include <Metapulse-world/Metapulse-worldTypeIds.h>
 
+#include <Source/AutoGen/AutoComponentTypes.h>
+
 namespace Metapulse_world
 {
     AZ_COMPONENT_IMPL(Metapulse_worldSystemComponent, "Metapulse_worldSystemComponent",
@@ -60,6 +62,9 @@ namespace Metapulse_world
 
     void Metapulse_worldSystemComponent::Activate()
     {
+        //! Register our gems multiplayer components to assign NetComponentIds
+        RegisterMultiplayerComponents();
+
         Metapulse_worldRequestBus::Handler::BusConnect();
     }
 

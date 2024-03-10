@@ -24,6 +24,8 @@ namespace Metapulse_world
             m_descriptors.insert(m_descriptors.end(), {
                 Metapulse_worldSystemComponent::CreateDescriptor(),
             });
+
+            CreateComponentDescriptors(m_descriptors);
         }
 
         /**

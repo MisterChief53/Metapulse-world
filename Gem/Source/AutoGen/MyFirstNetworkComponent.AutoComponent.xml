@@ -2,7 +2,7 @@
 
 <Component
     Name="MyFirstNetworkComponent"
-    Namespace="metapulse-world"
+    Namespace="metapulseWorld"
     OverrideComponent="false"
     OverrideController="false"
     OverrideInclude=""

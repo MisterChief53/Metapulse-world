@@ -1,16 +1,16 @@
 {
-    "project_name": "Metapulse-world",
+    "project_name": "metapulseWorld",
     "version": "1.0.0",
     "project_id": "{50D8A342-082C-4392-8921-AC2B1D27A44C}",
-    "origin": "The primary repo for Metapulse-world goes here: i.e. http://www.mydomain.com",
-    "license": "What license Metapulse-world uses goes here: i.e. https://opensource.org/licenses/Apache-2.0 Or https://opensource.org/licenses/MIT etc.",
-    "display_name": "Metapulse-world",
-    "summary": "A short description of Metapulse-world.",
+    "origin": "The primary repo for metapulseWorld goes here: i.e. http://www.mydomain.com",
+    "license": "What license metapulseWorld uses goes here: i.e. https://opensource.org/licenses/Apache-2.0 Or https://opensource.org/licenses/MIT etc.",
+    "display_name": "metapulseWorld",
+    "summary": "A short description of metapulseWorld.",
     "canonical_tags": [
         "Project"
     ],
     "user_tags": [
-        "Metapulse-world"
+        "metapulseWorld"
     ],
     "icon_path": "preview.png",
     "engine": "o3de-sdk",
@@ -28,13 +28,13 @@
         "LyShine",
         "LyShineExamples",
         "MessagePopup",
-        "Metapulse-world",
+        "metapulseWorld",
         "Multiplayer",
         "MultiplayerCompression",
         "PhysX",
         "RemoteTools",
         "StartingPointInput"
     ],
-    "restricted": "Metapulse-world",
+    "restricted": "metapulseWorld",
     "engine_version": "2.2.1"
 }
