@@ -1,75 +1,75 @@
 
 #include <AzCore/Serialization/SerializeContext.h>
 
-#include "Metapulse-worldSystemComponent.h"
+#include "metapulseWorldSystemComponent.h"
 
-#include <Metapulse-world/Metapulse-worldTypeIds.h>
+#include <metapulseWorld/metapulseWorldTypeIds.h>
 
 #include <Source/AutoGen/AutoComponentTypes.h>
 
-namespace Metapulse_world
+namespace metapulseWorld
 {
-    AZ_COMPONENT_IMPL(Metapulse_worldSystemComponent, "Metapulse_worldSystemComponent",
-        Metapulse_worldSystemComponentTypeId);
+    AZ_COMPONENT_IMPL(metapulseWorldSystemComponent, "metapulseWorldSystemComponent",
+        metapulseWorldSystemComponentTypeId);
 
-    void Metapulse_worldSystemComponent::Reflect(AZ::ReflectContext* context)
+    void metapulseWorldSystemComponent::Reflect(AZ::ReflectContext* context)
     {
         if (auto serializeContext = azrtti_cast<AZ::SerializeContext*>(context))
         {
-            serializeContext->Class<Metapulse_worldSystemComponent, AZ::Component>()
+            serializeContext->Class<metapulseWorldSystemComponent, AZ::Component>()
                 ->Version(0)
                 ;
         }
     }
 
-    void Metapulse_worldSystemComponent::GetProvidedServices(AZ::ComponentDescriptor::DependencyArrayType& provided)
+    void metapulseWorldSystemComponent::GetProvidedServices(AZ::ComponentDescriptor::DependencyArrayType& provided)
     {
-        provided.push_back(AZ_CRC_CE("Metapulse_worldService"));
+        provided.push_back(AZ_CRC_CE("metapulseWorldService"));
     }
 
-    void Metapulse_worldSystemComponent::GetIncompatibleServices(AZ::ComponentDescriptor::DependencyArrayType& incompatible)
+    void metapulseWorldSystemComponent::GetIncompatibleServices(AZ::ComponentDescriptor::DependencyArrayType& incompatible)
     {
-        incompatible.push_back(AZ_CRC_CE("Metapulse_worldService"));
+        incompatible.push_back(AZ_CRC_CE("metapulseWorldService"));
     }
 
-    void Metapulse_worldSystemComponent::GetRequiredServices([[maybe_unused]] AZ::ComponentDescriptor::DependencyArrayType& required)
-    {
-    }
-
-    void Metapulse_worldSystemComponent::GetDependentServices([[maybe_unused]] AZ::ComponentDescriptor::DependencyArrayType& dependent)
+    void metapulseWorldSystemComponent::GetRequiredServices([[maybe_unused]] AZ::ComponentDescriptor::DependencyArrayType& required)
     {
     }
 
-    Metapulse_worldSystemComponent::Metapulse_worldSystemComponent()
+    void metapulseWorldSystemComponent::GetDependentServices([[maybe_unused]] AZ::ComponentDescriptor::DependencyArrayType& dependent)
     {
-        if (Metapulse_worldInterface::Get() == nullptr)
+    }
+
+    metapulseWorldSystemComponent::metapulseWorldSystemComponent()
+    {
+        if (metapulseWorldInterface::Get() == nullptr)
         {
-            Metapulse_worldInterface::Register(this);
+            metapulseWorldInterface::Register(this);
         }
     }
 
-    Metapulse_worldSystemComponent::~Metapulse_worldSystemComponent()
+    metapulseWorldSystemComponent::~metapulseWorldSystemComponent()
     {
-        if (Metapulse_worldInterface::Get() == this)
+        if (metapulseWorldInterface::Get() == this)
         {
-            Metapulse_worldInterface::Unregister(this);
+            metapulseWorldInterface::Unregister(this);
         }
     }
 
-    void Metapulse_worldSystemComponent::Init()
+    void metapulseWorldSystemComponent::Init()
     {
     }
 
-    void Metapulse_worldSystemComponent::Activate()
+    void metapulseWorldSystemComponent::Activate()
     {
         //! Register our gems multiplayer components to assign NetComponentIds
         RegisterMultiplayerComponents();
 
-        Metapulse_worldRequestBus::Handler::BusConnect();
+        metapulseWorldRequestBus::Handler::BusConnect();
     }
 
-    void Metapulse_worldSystemComponent::Deactivate()
+    void metapulseWorldSystemComponent::Deactivate()
     {
-        Metapulse_worldRequestBus::Handler::BusDisconnect();
+        metapulseWorldRequestBus::Handler::BusDisconnect();
     }
 }

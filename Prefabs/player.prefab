@@ -1,0 +1,161 @@
+{
+    "ContainerEntity": {
+        "Id": "ContainerEntity",
+        "Name": "player",
+        "Components": {
+            "EditorDisabledCompositionComponent": {
+                "$type": "EditorDisabledCompositionComponent",
+                "Id": 17585416994511999841
+            },
+            "EditorEntityIconComponent": {
+                "$type": "EditorEntityIconComponent",
+                "Id": 9854639779900630622
+            },
+            "EditorEntitySortComponent": {
+                "$type": "EditorEntitySortComponent",
+                "Id": 14885503676800874241,
+                "Child Entity Order": [
+                    "Entity_[394615630069]"
+                ]
+            },
+            "EditorInspectorComponent": {
+                "$type": "EditorInspectorComponent",
+                "Id": 5792113935111156199
+            },
+            "EditorLockComponent": {
+                "$type": "EditorLockComponent",
+                "Id": 9418450832423374841
+            },
+            "EditorOnlyEntityComponent": {
+                "$type": "EditorOnlyEntityComponent",
+                "Id": 12983045526133294745
+            },
+            "EditorPendingCompositionComponent": {
+                "$type": "EditorPendingCompositionComponent",
+                "Id": 8070608473449308878
+            },
+            "EditorPrefabComponent": {
+                "$type": "EditorPrefabComponent",
+                "Id": 14372427299891833318
+            },
+            "EditorVisibilityComponent": {
+                "$type": "EditorVisibilityComponent",
+                "Id": 13874623519486409986
+            },
+            "TransformComponent": {
+                "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                "Id": 16947318080890392593,
+                "Parent Entity": ""
+            }
+        }
+    },
+    "Entities": {
+        "Entity_[394615630069]": {
+            "Id": "Entity_[394615630069]",
+            "Name": "player",
+            "Components": {
+                "AZ::Render::EditorMeshComponent": {
+                    "$type": "AZ::Render::EditorMeshComponent",
+                    "Id": 7939598703270150513,
+                    "Controller": {
+                        "Configuration": {
+                            "ModelAsset": {
+                                "assetId": {
+                                    "guid": "{8A2E7A82-D7C3-5E9C-A56C-6EDA70876347}",
+                                    "subId": 268721130
+                                },
+                                "assetHint": "materialeditor/viewportmodels/cylinder.fbx.azmodel"
+                            }
+                        }
+                    }
+                },
+                "EditorDisabledCompositionComponent": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 13603536896470848046
+                },
+                "EditorEntityIconComponent": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 4001786013599528536
+                },
+                "EditorEntitySortComponent": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 16337844422734445504
+                },
+                "EditorInspectorComponent": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 14903734319670428947,
+                    "ComponentOrderEntryArray": [
+                        {
+                            "ComponentId": 9753214958631475075
+                        },
+                        {
+                            "ComponentId": 382001870065750478,
+                            "SortIndex": 1
+                        },
+                        {
+                            "ComponentId": 12270747625355464643,
+                            "SortIndex": 2
+                        },
+                        {
+                            "ComponentId": 11722072309003467353,
+                            "SortIndex": 3
+                        },
+                        {
+                            "ComponentId": 7939598703270150513,
+                            "SortIndex": 4
+                        }
+                    ]
+                },
+                "EditorLockComponent": {
+                    "$type": "EditorLockComponent",
+                    "Id": 1177376336015710342
+                },
+                "EditorOnlyEntityComponent": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 4899052790962270261
+                },
+                "EditorPendingCompositionComponent": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 16120986907475157443
+                },
+                "EditorVisibilityComponent": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 13716183753212169637
+                },
+                "Multiplayer::LocalPredictionPlayerInputComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 12270747625355464643,
+                    "m_template": {
+                        "$type": "Multiplayer::LocalPredictionPlayerInputComponent"
+                    }
+                },
+                "Multiplayer::NetworkTransformComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 7716921735440621641,
+                    "m_template": {
+                        "$type": "Multiplayer::NetworkTransformComponent"
+                    }
+                },
+                "NetBindComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 11722072309003467353,
+                    "m_template": {
+                        "$type": "NetBindComponent"
+                    }
+                },
+                "TransformComponent": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 9753214958631475075,
+                    "Parent Entity": "ContainerEntity"
+                },
+                "metapulseWorld::User": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 382001870065750478,
+                    "m_template": {
+                        "$type": "metapulseWorld::User"
+                    }
+                }
+            }
+        }
+    }
+}

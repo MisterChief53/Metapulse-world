@@ -2,27 +2,27 @@
 #include <AzCore/Memory/SystemAllocator.h>
 #include <AzCore/Module/Module.h>
 
-#include "Metapulse-worldSystemComponent.h"
+#include "metapulseWorldSystemComponent.h"
 
-#include <Metapulse-world/Metapulse-worldTypeIds.h>
+#include <metapulseWorld/metapulseWorldTypeIds.h>
 
 #include "Source/AutoGen/AutoComponentTypes.h"
 
-namespace Metapulse_world
+namespace metapulseWorld
 {
-    class Metapulse_worldModule
+    class metapulseWorldModule
         : public AZ::Module
     {
     public:
-        AZ_RTTI(Metapulse_worldModule, Metapulse_worldModuleTypeId, AZ::Module);
-        AZ_CLASS_ALLOCATOR(Metapulse_worldModule, AZ::SystemAllocator);
+        AZ_RTTI(metapulseWorldModule, metapulseWorldModuleTypeId, AZ::Module);
+        AZ_CLASS_ALLOCATOR(metapulseWorldModule, AZ::SystemAllocator);
 
-        Metapulse_worldModule()
+        metapulseWorldModule()
             : AZ::Module()
         {
             // Push results of [MyComponent]::CreateDescriptor() into m_descriptors here.
             m_descriptors.insert(m_descriptors.end(), {
-                Metapulse_worldSystemComponent::CreateDescriptor(),
+                metapulseWorldSystemComponent::CreateDescriptor(),
             });
 
             CreateComponentDescriptors(m_descriptors);
@@ -34,10 +34,10 @@ namespace Metapulse_world
         AZ::ComponentTypeList GetRequiredSystemComponents() const override
         {
             return AZ::ComponentTypeList{
-                azrtti_typeid<Metapulse_worldSystemComponent>(),
+                azrtti_typeid<metapulseWorldSystemComponent>(),
             };
         }
     };
-}// namespace Metapulse_world
+}// namespace metapulseWorld
 
-AZ_DECLARE_MODULE_CLASS(Gem_Metapulse_world, Metapulse_world::Metapulse_worldModule)
+AZ_DECLARE_MODULE_CLASS(Gem_metapulseWorld, metapulseWorld::metapulseWorldModule)

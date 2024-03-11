@@ -3,16 +3,16 @@
 
 #include <AzCore/Component/Component.h>
 
-#include <Metapulse-world/Metapulse-worldBus.h>
+#include <metapulseWorld/metapulseWorldBus.h>
 
-namespace Metapulse_world
+namespace metapulseWorld
 {
-    class Metapulse_worldSystemComponent
+    class metapulseWorldSystemComponent
         : public AZ::Component
-        , protected Metapulse_worldRequestBus::Handler
+        , protected metapulseWorldRequestBus::Handler
     {
     public:
-        AZ_COMPONENT_DECL(Metapulse_worldSystemComponent);
+        AZ_COMPONENT_DECL(metapulseWorldSystemComponent);
 
         static void Reflect(AZ::ReflectContext* context);
 
@@ -21,12 +21,12 @@ namespace Metapulse_world
         static void GetRequiredServices(AZ::ComponentDescriptor::DependencyArrayType& required);
         static void GetDependentServices(AZ::ComponentDescriptor::DependencyArrayType& dependent);
 
-        Metapulse_worldSystemComponent();
-        ~Metapulse_worldSystemComponent();
+        metapulseWorldSystemComponent();
+        ~metapulseWorldSystemComponent();
 
     protected:
         ////////////////////////////////////////////////////////////////////////
-        // Metapulse_worldRequestBus interface implementation
+        // metapulseWorldRequestBus interface implementation
 
         ////////////////////////////////////////////////////////////////////////
 

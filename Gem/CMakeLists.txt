@@ -44,11 +44,15 @@ ly_add_target(
     NAME ${gem_name}.Client.Private.Object STATIC
     NAMESPACE Gem
     FILES_CMAKE
-        metapulseWorld_files.cmake
+        ${gem_name}_autogen_files.cmake
+        ${gem_name}_files.cmake
         ${gem_name}_client_files.cmake
         ${pal_dir}/metapulseWorld_${PAL_PLATFORM_NAME_LOWERCASE}_files.cmake
-        ${gem_name}_autogen_files.cmake
     INCLUDE_DIRECTORIES
+        PRIVATE
+            .
+            Include
+            Source
         PUBLIC
             Include
     BUILD_DEPENDENCIES
@@ -56,6 +60,7 @@ ly_add_target(
             AZ::AzFramework
             AZ::AzNetworking
             Gem::Multiplayer.Client
+            Gem::StartingPointInput
         PRIVATE
             AZ::AzGameFramework
             Gem::Atom_AtomBridge.Static
@@ -71,11 +76,15 @@ ly_add_target(
     NAME ${gem_name}.Server.Private.Object STATIC
     NAMESPACE Gem
     FILES_CMAKE
-        metapulseWorld_files.cmake
+        ${gem_name}_autogen_files.cmake
+        ${gem_name}_files.cmake
         ${gem_name}_server_files.cmake
         ${pal_dir}/metapulseWorld_${PAL_PLATFORM_NAME_LOWERCASE}_files.cmake
-        ${gem_name}_autogen_files.cmake
     INCLUDE_DIRECTORIES
+        PRIVATE
+            .
+            Include
+            Source
         PUBLIC
             Include
     BUILD_DEPENDENCIES
@@ -83,6 +92,7 @@ ly_add_target(
             AZ::AzFramework
             AZ::AzNetworking
             Gem::Multiplayer.Server
+            Gem::StartingPointInput
         PRIVATE
             AZ::AzGameFramework
             Gem::Atom_AtomBridge.Static
@@ -98,12 +108,16 @@ ly_add_target(
     NAME ${gem_name}.Unified.Private.Object STATIC
     NAMESPACE Gem
     FILES_CMAKE
-        metapulseWorld_files.cmake
+        ${gem_name}_autogen_files.cmake
+        ${gem_name}_files.cmake
         ${gem_name}_server_files.cmake
         ${gem_name}_client_files.cmake
         ${pal_dir}/metapulseWorld_${PAL_PLATFORM_NAME_LOWERCASE}_files.cmake
-        ${gem_name}_autogen_files.cmake
     INCLUDE_DIRECTORIES
+        PRIVATE
+            .
+            Include
+            Source
         PUBLIC
             Include
     BUILD_DEPENDENCIES
@@ -111,6 +125,7 @@ ly_add_target(
             AZ::AzFramework
             AZ::AzNetworking
             Gem::Multiplayer
+            Gem::StartingPointInput
         PRIVATE
             AZ::AzGameFramework
             Gem::Atom_AtomBridge.Static
@@ -129,6 +144,10 @@ ly_add_target(
         metapulseWorld_shared_files.cmake
         ${pal_dir}/metapulseWorld_shared_${PAL_PLATFORM_NAME_LOWERCASE}_files.cmake
     INCLUDE_DIRECTORIES
+        PRIVATE
+            .
+            Include
+            Source
         PUBLIC
             Include
     BUILD_DEPENDENCIES
@@ -145,6 +164,10 @@ ly_add_target(
         metapulseWorld_shared_files.cmake
         ${pal_dir}/metapulseWorld_shared_${PAL_PLATFORM_NAME_LOWERCASE}_files.cmake
     INCLUDE_DIRECTORIES
+        PRIVATE
+            .
+            Include
+            Source
         PUBLIC
             Include
     BUILD_DEPENDENCIES
@@ -161,6 +184,10 @@ ly_add_target(
         metapulseWorld_shared_files.cmake
         ${pal_dir}/metapulseWorld_shared_${PAL_PLATFORM_NAME_LOWERCASE}_files.cmake
     INCLUDE_DIRECTORIES
+        PRIVATE
+            .
+            Include
+            Source
         PUBLIC
             Include
     BUILD_DEPENDENCIES

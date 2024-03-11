@@ -1,22 +1,22 @@
 
 #pragma once
 
-#include <Metapulse-world/Metapulse-worldTypeIds.h>
+#include <metapulseWorld/metapulseWorldTypeIds.h>
 
 #include <AzCore/EBus/EBus.h>
 #include <AzCore/Interface/Interface.h>
 
-namespace Metapulse_world
+namespace metapulseWorld
 {
-    class Metapulse_worldRequests
+    class metapulseWorldRequests
     {
     public:
-        AZ_RTTI(Metapulse_worldRequests, Metapulse_worldRequestsTypeId);
-        virtual ~Metapulse_worldRequests() = default;
+        AZ_RTTI(metapulseWorldRequests, metapulseWorldRequestsTypeId);
+        virtual ~metapulseWorldRequests() = default;
         // Put your public methods here
     };
 
-    class Metapulse_worldBusTraits
+    class metapulseWorldBusTraits
         : public AZ::EBusTraits
     {
     public:
@@ -27,7 +27,7 @@ namespace Metapulse_world
         //////////////////////////////////////////////////////////////////////////
     };
 
-    using Metapulse_worldRequestBus = AZ::EBus<Metapulse_worldRequests, Metapulse_worldBusTraits>;
-    using Metapulse_worldInterface = AZ::Interface<Metapulse_worldRequests>;
+    using metapulseWorldRequestBus = AZ::EBus<metapulseWorldRequests, metapulseWorldBusTraits>;
+    using metapulseWorldInterface = AZ::Interface<metapulseWorldRequests>;
 
-} // namespace Metapulse_world
+} // namespace metapulseWorld

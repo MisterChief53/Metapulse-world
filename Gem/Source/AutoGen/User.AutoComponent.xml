@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<Component
+    Name="User"
+    Namespace="metapulseWorld"
+    OverrideComponent="false"
+    OverrideController="true"
+    OverrideInclude="Source/Components/User.h"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <NetworkInput Type="int" Name="" Init="" />
+    <NetworkInput Type="float" Name="ViewYaw"     Init="0.0f" />
+    <NetworkInput Type="float" Name="ViewPitch"   Init="0.0f" />
+</Component>

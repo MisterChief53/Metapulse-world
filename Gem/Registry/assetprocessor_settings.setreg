@@ -2,13 +2,13 @@
     "Amazon": {
         "AssetProcessor": {
             "Settings": {
-                "ScanFolder Metapulse-world/Assets": {
-                    "watch": "@GEMROOT:Metapulse-world@/Assets",
+                "ScanFolder metapulseWorld/Assets": {
+                    "watch": "@GEMROOT:metapulseWorld@/Assets",
                     "recursive": 1,
                     "order": 101
                 },
-                "ScanFolder Metapulse-world/Registry": {
-                    "watch": "@GEMROOT:Metapulse-world@/Registry",
+                "ScanFolder metapulseWorld/Registry": {
+                    "watch": "@GEMROOT:metapulseWorld@/Registry",
                     "recursive": 1,
                     "order": 102
                 }

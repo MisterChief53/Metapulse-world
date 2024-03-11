@@ -6,4 +6,5 @@ set(FILES
     ${LY_ROOT_FOLDER}/Gems/Multiplayer/Code/Include/Multiplayer/AutoGen/AutoComponentTypes_Source.jinja
 
     Source/AutoGen/MyFirstNetworkComponent.AutoComponent.xml
+    Source/AutoGen/User.AutoComponent.xml
 )

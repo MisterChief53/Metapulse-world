@@ -5,15 +5,15 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Metapulse-world</string>
+	<string>metapulseWorld</string>
 	<key>CFBundleExecutable</key>
-	<string>Metapulse-world.GameLauncher</string>
+	<string>metapulseWorld.GameLauncher</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.amazon.lumberyard.Metapulse-world</string>
+	<string>com.amazon.lumberyard.metapulseWorld</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Metapulse-world</string>
+	<string>metapulseWorld</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

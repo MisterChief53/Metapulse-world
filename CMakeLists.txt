@@ -29,7 +29,7 @@ if(NOT PROJECT_NAME)
 
     include(${engine_finder_cmake_path} OPTIONAL)
     find_package(o3de REQUIRED)
-    project(Metapulse-world
+    project(metapulseWorld
         LANGUAGES C CXX
         VERSION 1.0.0.0
     )

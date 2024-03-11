@@ -1,4 +1,4 @@
 
 set(FILES
-    Source/Metapulse-worldModule.cpp
+    Source/metapulseWorldModule.cpp
 )

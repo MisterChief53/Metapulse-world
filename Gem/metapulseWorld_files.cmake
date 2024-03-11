@@ -1,7 +1,9 @@
 
 set(FILES
-    Include/Metapulse-world/Metapulse-worldBus.h
-    Include/Metapulse-world/Metapulse-worldTypeIds.h
-    Source/Metapulse-worldSystemComponent.cpp
-    Source/Metapulse-worldSystemComponent.h
+    Include/metapulseWorld/metapulseWorldBus.h
+    Include/metapulseWorld/metapulseWorldTypeIds.h
+    Source/metapulseWorldSystemComponent.cpp
+    Source/metapulseWorldSystemComponent.h
+    Source/Components/User.h
+    Source/Components/User.cpp
 )
