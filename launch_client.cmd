@@ -9,4 +9,4 @@ REM
 REM Continuous Integration CLI entrypoint script to start CTest, triggering post-build tests
 REM
 
-.\build\windows\bin\profile\metapulseWorld.GameLauncher.exe --console-command-file=launch_client.cfg
+.\build\windows\bin\profile\metapulseWorld.GameLauncher.exe --console-command-file=launch_client.cfg -rhi=vulkan
