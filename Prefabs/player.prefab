@@ -69,6 +69,20 @@
                         }
                     }
                 },
+                "EditorCharacterControllerComponent": {
+                    "$type": "EditorCharacterControllerComponent",
+                    "Id": 11109397969629461570,
+                    "Configuration": {
+                        "entityId": "",
+                        "MaterialSlots": {
+                            "Slots": [
+                                {
+                                    "Name": "Entire object"
+                                }
+                            ]
+                        }
+                    }
+                },
                 "EditorDisabledCompositionComponent": {
                     "$type": "EditorDisabledCompositionComponent",
                     "Id": 13603536896470848046
@@ -122,11 +136,31 @@
                     "$type": "EditorVisibilityComponent",
                     "Id": 13716183753212169637
                 },
+                "InputConfigurationComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 408854719631320612,
+                    "m_template": {
+                        "$type": "InputConfigurationComponent",
+                        "Input Event Bindings": {
+                            "assetId": {
+                                "guid": "{FAD02F56-DA18-5577-AF5C-D7576872BD50}"
+                            },
+                            "assetHint": "assets/inputbindings/player.inputbindings"
+                        }
+                    }
+                },
                 "Multiplayer::LocalPredictionPlayerInputComponent": {
                     "$type": "GenericComponentWrapper",
                     "Id": 12270747625355464643,
                     "m_template": {
                         "$type": "Multiplayer::LocalPredictionPlayerInputComponent"
+                    }
+                },
+                "Multiplayer::NetworkCharacterComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 8081115829212103869,
+                    "m_template": {
+                        "$type": "Multiplayer::NetworkCharacterComponent"
                     }
                 },
                 "Multiplayer::NetworkTransformComponent": {

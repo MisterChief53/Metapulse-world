@@ -5,9 +5,9 @@
 
 namespace metapulseWorld
 {
-    const StartingPointInput::InputEventNotificationId MoveFwdEventId("move forward");
-    const StartingPointInput::InputEventNotificationId MoveRightEventId("move right");
-    const StartingPointInput::InputEventNotificationId RotateYawEventId("rotate yaw");
+    const StartingPointInput::InputEventNotificationId MoveFwdEventId("move_fwd");
+    const StartingPointInput::InputEventNotificationId MoveRightEventId("move_right");
+    const StartingPointInput::InputEventNotificationId RotateYawEventId("rotate_yaw");
 
     class UserController
         : public UserControllerBase
