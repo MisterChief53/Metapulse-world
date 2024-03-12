@@ -2,24 +2,18 @@
 
 #include <Source/AutoGen/User.AutoComponent.h>
 #include <StartingPointInput/InputEventNotificationBus.h>
-#include <AzFramework/Physics/CharacterBus.h>
 
 namespace metapulseWorld
 {
-
-    // Input Event Ids for Player Controls (from input bindings!)
-    const StartingPointInput::InputEventNotificationId MoveFwdEventId("move_fwd");
-    const StartingPointInput::InputEventNotificationId MoveBackEventId("move_back");
-    const StartingPointInput::InputEventNotificationId MoveLeftEventId("move_left");
-    const StartingPointInput::InputEventNotificationId MoveRightEventId("move_right");
+    const StartingPointInput::InputEventNotificationId MoveFwdEventId("move forward");
+    const StartingPointInput::InputEventNotificationId MoveRightEventId("move right");
+    const StartingPointInput::InputEventNotificationId RotateYawEventId("rotate yaw");
 
     class UserController
         : public UserControllerBase
-        , private StartingPointInput::InputEventNotificationBus::MultiHandler
-        , protected Physics::CharacterNotificationBus::Handler
+        , public StartingPointInput::InputEventNotificationBus::MultiHandler
     {
     public:
-
         explicit UserController(User& parent);
 
         void OnActivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
@@ -37,10 +31,18 @@ namespace metapulseWorld
         //! @param deltaTime amount of time to integrate the provided inputs over
         void ProcessInput(Multiplayer::NetworkInput& input, float deltaTime) override;
 
+        // AZ::InputEventNotificationBus interface
+        void OnPressed(float value) override;
+        void OnReleased(float value) override;
+        void OnHeld(float value) override;
     protected:
+        void UpdateRotation(const UserNetworkInput* input);
+        void UpdateVelocity(const UserNetworkInput* input);
 
+        float m_forward = 0;
+        float m_strafe = 0;
+        float m_yaw = 0;
 
-
-
+        AZ::Vector3 m_velocity = AZ::Vector3::CreateZero();
     };
 }
