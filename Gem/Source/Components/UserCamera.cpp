@@ -15,7 +15,9 @@ namespace metapulseWorld
 
     void UserCameraController::OnActivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
-        AZ::TickBus::Handler::BusConnect();
+        if (IsNetEntityRoleAutonomous()) {
+            AZ::TickBus::Handler::BusConnect();
+        }
     }
 
     void UserCameraController::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
@@ -31,11 +33,14 @@ namespace metapulseWorld
             return;
         }
 
-        // the position of the camera is the user's position plus the camera offset!
-        AZ::Transform user = GetParent().GetTransformComponent()->GetWorldTM();
-        AZ::Vector3 camera = user.GetTranslation() + user.GetRotation().TransformVector(GetCameraOffset());
-        user.SetTranslation(camera);
-        m_activeCameraEntity->GetTransform()->SetWorldTM(user);
+        if (IsNetEntityRoleAutonomous())
+        {
+            // the position of the camera is the user's position plus the camera offset!
+            AZ::Transform user = GetParent().GetTransformComponent()->GetWorldTM();
+            AZ::Vector3 camera = user.GetTranslation() + user.GetRotation().TransformVector(GetCameraOffset());
+            user.SetTranslation(camera);
+            m_activeCameraEntity->GetTransform()->SetWorldTM(user);
+        }
     }
 
     AZ::Entity* UserCameraController::GetActiveCamera()

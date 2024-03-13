@@ -25,7 +25,8 @@
                     "Entity_[358897576610]",
                     "Entity_[3983849974434]",
                     "Entity_[4133891341978]",
-                    "Entity_[759565048006]"
+                    "Entity_[759565048006]",
+                    "Entity_[3437135147677]"
                 ]
             },
             "Component_[15230859088967841193]": {
@@ -599,6 +600,60 @@
                         ],
                         "UniformScale": 200.0
                     }
+                }
+            }
+        },
+        "Entity_[3437135147677]": {
+            "Id": "Entity_[3437135147677]",
+            "Name": "server camera",
+            "Components": {
+                "EditorCameraComponent": {
+                    "$type": "{CA11DA46-29FF-4083-B5F6-E02C3A8C3A3D} EditorCameraComponent",
+                    "Id": 15643727562326755093
+                },
+                "EditorDisabledCompositionComponent": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 7104792571642678914
+                },
+                "EditorEntityIconComponent": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 15819809056749833547
+                },
+                "EditorEntitySortComponent": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 5060134444881837496
+                },
+                "EditorInspectorComponent": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 2976824233333811253
+                },
+                "EditorLockComponent": {
+                    "$type": "EditorLockComponent",
+                    "Id": 4154247167994410748
+                },
+                "EditorOnlyEntityComponent": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 7096063571578703467
+                },
+                "EditorPendingCompositionComponent": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 4045795139373296770
+                },
+                "EditorVisibilityComponent": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 16477777448136652970
+                },
+                "FlyCameraInputComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 12449514304382103878,
+                    "m_template": {
+                        "$type": "FlyCameraInputComponent"
+                    }
+                },
+                "TransformComponent": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 2280732069932866520,
+                    "Parent Entity": "Entity_[1146574390643]"
                 }
             }
         },
