@@ -20,8 +20,5 @@ namespace metapulseWorld
     protected:
         AZ::Entity* m_activeCameraEntity = nullptr;
         AZ::Entity* GetActiveCamera();
-
-
-
     };
 }

@@ -56,15 +56,15 @@
             "Components": {
                 "AZ::Render::EditorMeshComponent": {
                     "$type": "AZ::Render::EditorMeshComponent",
-                    "Id": 7939598703270150513,
+                    "Id": 15747889994888836303,
                     "Controller": {
                         "Configuration": {
                             "ModelAsset": {
                                 "assetId": {
-                                    "guid": "{8A2E7A82-D7C3-5E9C-A56C-6EDA70876347}",
-                                    "subId": 268721130
+                                    "guid": "{C83B1CC8-4A37-5805-858C-8A3CC1EE7CA1}",
+                                    "subId": 283765617
                                 },
-                                "assetHint": "materialeditor/viewportmodels/cylinder.fbx.azmodel"
+                                "assetHint": "assets/metapulse_character.fbx.azmodel"
                             }
                         }
                     }
@@ -80,9 +80,18 @@
                                     "Name": "Entire object"
                                 }
                             ]
-                        }
+                        },
+                        "ScaleCoeff": 1.0
                     },
                     "ShapeConfig": {
+                        "ShapeType": 1,
+                        "Box": {
+                            "Configuration": [
+                                0.5,
+                                0.5,
+                                1.7999999523162842
+                            ]
+                        },
                         "Capsule": {
                             "Radius": 1.0
                         }
@@ -204,8 +213,8 @@
                         "$type": "metapulseWorld::UserCamera",
                         "CameraOffset": [
                             0.0,
-                            -3.0,
-                            1.0
+                            0.0,
+                            1.75
                         ]
                     }
                 }
