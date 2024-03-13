@@ -6,4 +6,6 @@ set(FILES
     Source/metapulseWorldSystemComponent.h
     Source/Components/User.h
     Source/Components/User.cpp
+    Source/Components/UserCamera.h
+    Source/Components/UserCamera.cpp
 )

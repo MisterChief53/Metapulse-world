@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<Component
+  Name="UserCamera"
+  Namespace="metapulseWorld"
+  OverrideComponent="false"
+  OverrideController="true"
+  OverrideInclude="Source/Components/UserCamera.h"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <ComponentRelation Constraint="Weak" HasController="false"
+                     Name="TransformComponent" Namespace="AzFramework"
+                     Include="AzFramework/Components/TransformComponent.h"/>
+  
+  <ArchetypeProperty Type="AZ::Vector3" Name="CameraOffset"
+                     ExposeToEditor="true"/>
+</Component>

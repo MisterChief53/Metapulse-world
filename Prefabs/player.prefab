@@ -69,6 +69,10 @@
                         }
                     }
                 },
+                "EditorCameraComponent": {
+                    "$type": "{CA11DA46-29FF-4083-B5F6-E02C3A8C3A3D} EditorCameraComponent",
+                    "Id": 18250004195297874122
+                },
                 "EditorCharacterControllerComponent": {
                     "$type": "EditorCharacterControllerComponent",
                     "Id": 11109397969629461570,
@@ -80,6 +84,11 @@
                                     "Name": "Entire object"
                                 }
                             ]
+                        }
+                    },
+                    "ShapeConfig": {
+                        "Capsule": {
+                            "Radius": 1.0
                         }
                     }
                 },
@@ -187,6 +196,18 @@
                     "Id": 382001870065750478,
                     "m_template": {
                         "$type": "metapulseWorld::User"
+                    }
+                },
+                "metapulseWorld::UserCamera": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 7684637256499784709,
+                    "m_template": {
+                        "$type": "metapulseWorld::UserCamera",
+                        "CameraOffset": [
+                            0.0,
+                            -0.5,
+                            0.5
+                        ]
                     }
                 }
             }

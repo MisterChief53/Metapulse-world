@@ -7,4 +7,5 @@ set(FILES
 
     Source/AutoGen/MyFirstNetworkComponent.AutoComponent.xml
     Source/AutoGen/User.AutoComponent.xml
+    Source/AutoGen/UserCamera.AutoComponent.xml
 )
