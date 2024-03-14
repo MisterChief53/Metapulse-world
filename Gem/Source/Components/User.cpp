@@ -20,11 +20,14 @@ namespace metapulseWorld
         InputEventNotificationBus::MultiHandler::BusConnect(MoveFwdEventId);
         InputEventNotificationBus::MultiHandler::BusConnect(MoveRightEventId);
         InputEventNotificationBus::MultiHandler::BusConnect(RotateYawEventId);
+        InputEventNotificationBus::MultiHandler::BusConnect(RotatePitchEventId);
+        metapulseWorld::UserBus::Handler::BusConnect(GetEntityId());
     }
 
     void UserController::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
         InputEventNotificationBus::MultiHandler::BusDisconnect();
+        metapulseWorld::UserBus::Handler::BusDisconnect();
     }
 
     // Create input will collect the input for the last input time period
@@ -34,6 +37,7 @@ namespace metapulseWorld
         playerInput->m_forwardAxis = m_forward;
         playerInput->m_strafeAxis = m_strafe;
         playerInput->m_viewYaw = m_yaw;
+        playerInput->m_viewPitch = m_pitch;
 
         playerInput->m_resetCount = GetNetworkTransformComponentController()->GetResetCount();
     }
@@ -45,6 +49,7 @@ namespace metapulseWorld
         if (playerInput->m_resetCount != GetNetworkTransformComponentController()->GetResetCount()) {
             return;
         }
+        pitch_transform = playerInput->m_viewPitch * GetTurnSpeed();
 
         UpdateRotation(playerInput);
         UpdateVelocity(playerInput);
@@ -67,6 +72,9 @@ namespace metapulseWorld
         else if (*inputId == RotateYawEventId) {
             m_yaw = value;
         }
+        else if (*inputId == RotatePitchEventId) {
+            m_pitch = value;
+        }
     }
 
     void UserController::OnHeld(float value) {
@@ -78,6 +86,9 @@ namespace metapulseWorld
 
         if (*inputId == RotateYawEventId) {
             m_yaw = value;
+        }
+        else if (*inputId == RotatePitchEventId) {
+            m_pitch = value;
         }
     }
 
@@ -97,6 +108,15 @@ namespace metapulseWorld
         else if (*inputId == RotateYawEventId) {
             m_yaw = value;
         }
+        else if (*inputId == RotatePitchEventId) {
+            m_pitch = value;
+        }
+    }
+
+    float UserController::getPitchValue()
+    {
+        
+        return pitch_transform;
     }
 
     void UserController::UpdateRotation(const UserNetworkInput* input) {

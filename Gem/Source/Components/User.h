@@ -2,16 +2,19 @@
 
 #include <Source/AutoGen/User.AutoComponent.h>
 #include <StartingPointInput/InputEventNotificationBus.h>
+#include <Components/Interfaces/UserBus.h>
 
 namespace metapulseWorld
 {
     const StartingPointInput::InputEventNotificationId MoveFwdEventId("move_fwd");
     const StartingPointInput::InputEventNotificationId MoveRightEventId("move_right");
     const StartingPointInput::InputEventNotificationId RotateYawEventId("rotate_yaw");
+    const StartingPointInput::InputEventNotificationId RotatePitchEventId("rotate_pitch");
 
     class UserController
         : public UserControllerBase
         , public StartingPointInput::InputEventNotificationBus::MultiHandler
+        , public metapulseWorld::UserBus::Handler
     {
     public:
         explicit UserController(User& parent);
@@ -35,6 +38,9 @@ namespace metapulseWorld
         void OnPressed(float value) override;
         void OnReleased(float value) override;
         void OnHeld(float value) override;
+
+        // UserBus Implementations
+        float getPitchValue() override;
     protected:
         void UpdateRotation(const UserNetworkInput* input);
         void UpdateVelocity(const UserNetworkInput* input);
@@ -42,6 +48,11 @@ namespace metapulseWorld
         float m_forward = 0;
         float m_strafe = 0;
         float m_yaw = 0;
+        float m_pitch = 0;
+
+        // this is the transformation needed to be applied
+        // to the camera to move it vertically
+        float pitch_transform = 0;
 
         AZ::Vector3 m_velocity = AZ::Vector3::CreateZero();
     };

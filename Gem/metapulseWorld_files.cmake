@@ -8,4 +8,5 @@ set(FILES
     Source/Components/User.cpp
     Source/Components/UserCamera.h
     Source/Components/UserCamera.cpp
+    Source/Components/Interfaces/UserBus.h
 )
