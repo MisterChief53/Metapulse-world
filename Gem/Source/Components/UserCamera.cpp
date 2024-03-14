@@ -39,7 +39,6 @@ namespace metapulseWorld
             float pitchRotation;
             metapulseWorld::UserBus::EventResult(pitchRotation, GetEntityId(),
                 &metapulseWorld::UserBus::Events::getPitchValue);
-            AZLOG_INFO("%0.2f pitch", pitchRotation);
 
 
             // the position of the camera is the user's position plus the camera offset!
