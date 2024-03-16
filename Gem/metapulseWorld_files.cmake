@@ -9,4 +9,7 @@ set(FILES
     Source/Components/UserCamera.h
     Source/Components/UserCamera.cpp
     Source/Components/Interfaces/UserBus.h
+    Source/Components/StartMenuComponent.h
+    Source/Components/StartMenuComponent.cpp
+    Source/Components/Interfaces/UIStatusBus.h
 )

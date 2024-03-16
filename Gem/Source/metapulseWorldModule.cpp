@@ -8,6 +8,9 @@
 
 #include "Source/AutoGen/AutoComponentTypes.h"
 
+#include <Components/StartMenuComponent.h>
+
+
 namespace metapulseWorld
 {
     class metapulseWorldModule
@@ -23,6 +26,7 @@ namespace metapulseWorld
             // Push results of [MyComponent]::CreateDescriptor() into m_descriptors here.
             m_descriptors.insert(m_descriptors.end(), {
                 metapulseWorldSystemComponent::CreateDescriptor(),
+                StartMenuComponent::CreateDescriptor(),
             });
 
             CreateComponentDescriptors(m_descriptors);
