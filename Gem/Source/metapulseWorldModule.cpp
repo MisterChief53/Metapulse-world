@@ -10,6 +10,10 @@
 
 #include <Components/StartMenuComponent.h>
 
+#if AZ_TRAIT_CLIENT
+#include <Components/APIRequestsComponent.h>
+#endif
+
 
 namespace metapulseWorld
 {
@@ -27,6 +31,9 @@ namespace metapulseWorld
             m_descriptors.insert(m_descriptors.end(), {
                 metapulseWorldSystemComponent::CreateDescriptor(),
                 StartMenuComponent::CreateDescriptor(),
+#if AZ_TRAIT_CLIENT
+                APIRequestsComponent::CreateDescriptor(),
+#endif
             });
 
             CreateComponentDescriptors(m_descriptors);

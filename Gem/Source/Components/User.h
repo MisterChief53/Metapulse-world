@@ -55,7 +55,5 @@ namespace metapulseWorld
         float pitch_transform = 0;
 
         AZ::Vector3 m_velocity = AZ::Vector3::CreateZero();
-
-        bool canMove;
     };
 }

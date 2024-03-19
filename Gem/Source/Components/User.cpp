@@ -5,8 +5,6 @@
 #include <AzCore/Serialization/SerializeContext.h>
 // we still need to include the network components even after the XML config
 #include <Multiplayer/Components/NetworkCharacterComponent.h>
-#include <Components/Interfaces/UIStatusBus.h>
-
 
 namespace metapulseWorld
 {
@@ -35,14 +33,6 @@ namespace metapulseWorld
     // Create input will collect the input for the last input time period
     void UserController::CreateInput([[maybe_unused]] Multiplayer::NetworkInput& input, [[maybe_unused]] float deltaTime)
     {
-        // Request to uistatus bus to see of we are allowed to move. This would mean that there is a ui that does not
-        // let us move, active.
-        UIStatusBus::BroadcastResult(canMove, &UIStatusBus::Events::canMove);
-        if (!canMove) {
-            return;
-        }
-
-
         auto playerInput = input.FindComponentInput<UserNetworkInput>();
         playerInput->m_forwardAxis = m_forward;
         playerInput->m_strafeAxis = m_strafe;
@@ -67,9 +57,6 @@ namespace metapulseWorld
     }
 
     void UserController::OnPressed(float value) {
-        if (!canMove) {
-            return;
-        }
 
         const InputEventNotificationId* inputId = InputEventNotificationBus::GetCurrentBusId();
 
@@ -92,9 +79,6 @@ namespace metapulseWorld
     }
 
     void UserController::OnHeld(float value) {
-        if (!canMove) {
-            return;
-        }
 
         const InputEventNotificationId* inputId = InputEventNotificationBus::GetCurrentBusId();
 
@@ -111,9 +95,6 @@ namespace metapulseWorld
     }
 
     void UserController::OnReleased(float value) {
-        if (!canMove) {
-            return;
-        }
 
         const InputEventNotificationId* inputId = InputEventNotificationBus::GetCurrentBusId();
 

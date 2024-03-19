@@ -1,17 +1,17 @@
-#include <AzCore/EBus/EBus.h>
-#include <AzCore/Component/ComponentBus.h>
+#pragma once
+
+#include <azcore/EBus/EBus.h>
 
 namespace metapulseWorld {
-	class UIStatusRequests
-		: public AZ::EBusTraits {
+	class StartMenuRequests
+		: public AZ::EBusTraits{
 	public:
-		
 		static const AZ::EBusHandlerPolicy HandlerPolicy = AZ::EBusHandlerPolicy::Single;
 
 		static const AZ::EBusAddressPolicy AddressPolicy = AZ::EBusAddressPolicy::Single;
 
-		virtual bool canMove() = 0;
+		virtual void closeStartMenu() = 0;
 	};
 
-	using UIStatusBus = AZ::EBus<UIStatusRequests>;
+	using StartMenuBus = AZ::EBus<StartMenuRequests>;
 }

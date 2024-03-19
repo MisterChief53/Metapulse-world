@@ -321,7 +321,8 @@
                 },
                 "Component_[7984048488947365511]": {
                     "$type": "EditorVisibilityComponent",
-                    "Id": 7984048488947365511
+                    "Id": 7984048488947365511,
+                    "VisibilityFlag": false
                 },
                 "Component_[8118181039276487398]": {
                     "$type": "EditorOnlyEntityComponent",
@@ -355,7 +356,8 @@
                 },
                 "Component_[16247165675903986673]": {
                     "$type": "EditorVisibilityComponent",
-                    "Id": 16247165675903986673
+                    "Id": 16247165675903986673,
+                    "VisibilityFlag": false
                 },
                 "Component_[18082433625958885247]": {
                     "$type": "EditorDisabledCompositionComponent",
@@ -861,6 +863,60 @@
                 }
             }
         },
+        "Entity_[686761042901]": {
+            "Id": "Entity_[686761042901]",
+            "Name": "hud",
+            "Components": {
+                "EditorDisabledCompositionComponent": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 1167986469039120862
+                },
+                "EditorEntityIconComponent": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 18249602482528435420
+                },
+                "EditorEntitySortComponent": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 16356717384246542055
+                },
+                "EditorInspectorComponent": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 11860277645001202338
+                },
+                "EditorLockComponent": {
+                    "$type": "EditorLockComponent",
+                    "Id": 2009136028188722255
+                },
+                "EditorOnlyEntityComponent": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 4793681556816511532
+                },
+                "EditorPendingCompositionComponent": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 11553808806743816733
+                },
+                "EditorVisibilityComponent": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 13656497716282226468
+                },
+                "TransformComponent": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 687751594404329215,
+                    "Parent Entity": "Entity_[997177333263]"
+                },
+                "UiCanvasAssetRefComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 11519396140320844028,
+                    "m_template": {
+                        "$type": "UiCanvasAssetRefComponent",
+                        "CanvasAssetRef": {
+                            "AssetPath": "assets/ui/hud.uicanvas"
+                        },
+                        "IsAutoLoad": true
+                    }
+                }
+            }
+        },
         "Entity_[759565048006]": {
             "Id": "Entity_[759565048006]",
             "Name": "spawnpoint2",
@@ -928,7 +984,8 @@
                     "Id": 3300741271964331346,
                     "Child Entity Order": [
                         "Entity_[358897576610]",
-                        "Entity_[354734257237]"
+                        "Entity_[354734257237]",
+                        "Entity_[686761042901]"
                     ]
                 },
                 "EditorInspectorComponent": {

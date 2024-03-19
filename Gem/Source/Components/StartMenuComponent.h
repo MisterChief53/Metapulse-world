@@ -1,10 +1,10 @@
 #include <AzCore/Component/Component.h>
-#include <Components/Interfaces/UIStatusBus.h>
+#include <Components/Interfaces/StartMenuBus.h>
 
 namespace metapulseWorld {
 	class StartMenuComponent
 		: public AZ::Component
-		, public metapulseWorld::UIStatusBus::Handler
+		, public metapulseWorld::StartMenuBus::Handler
 	{
 	public:
 
@@ -19,10 +19,22 @@ namespace metapulseWorld {
 
 		static void Reflect(AZ::ReflectContext* context);
 
-		// UIStatusBus override
-		bool canMove() override;
+		// StartMenuBus override
+		void closeStartMenu() override;
 
-	protected:
-		bool canPlayerMove;
+		AZ::EntityId m_canvasEntity;
+
+	private:
+
+		AZ::EntityId loginButtonEntity;
+		AZ::EntityId signupButtonEntity;
+		
+
+		// We will assign each entity a callback function that will execute a custom function depending on the button's nature.
+		// since we are handling login and signup, both of them will require username an password, and the function itself will
+		// depend on if we are dealing with loginButtonEntity or signupButtonEntity
+		void InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&)> buttonUpdateFunc, AZ::EntityId& canvasEntity);
+
+		static void OnLoginButtonPressed(AZ::EntityId& canvasEntity);
 	};
 }
