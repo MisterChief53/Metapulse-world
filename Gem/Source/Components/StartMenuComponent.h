@@ -26,8 +26,11 @@ namespace metapulseWorld {
 
 	private:
 
-		AZ::EntityId loginButtonEntity;
-		AZ::EntityId signupButtonEntity;
+		AZ::EntityId m_loginButtonEntity;
+		AZ::EntityId m_signupButtonEntity;
+		AZ::EntityId m_statusTextEntityId;
+		AZ::EntityId m_usernameInputTextEntityId;
+		AZ::EntityId m_passwordInputTextEntityId;
 		
 
 		// We will assign each entity a callback function that will execute a custom function depending on the button's nature.

@@ -1,3 +1,4 @@
+add_definitions(-DAWS_EC2_METADATA_DISABLED=true)
 
 # Query the gem name from the gem.json file if possible
 # otherwise fallback to using metapulseWorld
@@ -68,11 +69,15 @@ ly_add_target(
             Gem::StartingPointInput
             Gem::LyShine
             #3rdParty::curl
+            Gem::HttpRequestor
+            3rdParty::AWSNativeSDK::Core
         PRIVATE
             AZ::AzGameFramework
             Gem::Atom_AtomBridge.Static
             Gem::Multiplayer.Client.Static
             Gem::LyShine.Static
+            Gem::HttpRequestor
+            3rdParty::AWSNativeSDK::Core
     AUTOGEN_RULES
         *.AutoComponent.xml,AutoComponent_Header.jinja,$path/$fileprefix.AutoComponent.h
         *.AutoComponent.xml,AutoComponent_Source.jinja,$path/$fileprefix.AutoComponent.cpp
@@ -103,11 +108,15 @@ ly_add_target(
             Gem::StartingPointInput
             Gem::LyShine
             #3rdParty::curl
+            Gem::HttpRequestor
+            3rdParty::AWSNativeSDK::Core
         PRIVATE
             AZ::AzGameFramework
             Gem::Atom_AtomBridge.Static
             Gem::Multiplayer.Server.Static
             Gem::LyShine.Static
+            Gem::HttpRequestor
+            3rdParty::AWSNativeSDK::Core
     AUTOGEN_RULES
         *.AutoComponent.xml,AutoComponent_Header.jinja,$path/$fileprefix.AutoComponent.h
         *.AutoComponent.xml,AutoComponent_Source.jinja,$path/$fileprefix.AutoComponent.cpp
@@ -139,11 +148,15 @@ ly_add_target(
             Gem::StartingPointInput
             Gem::LyShine
             #3rdParty::curl
+            Gem::HttpRequestor
+            3rdParty::AWSNativeSDK::Core
         PRIVATE
             AZ::AzGameFramework
             Gem::Atom_AtomBridge.Static
             Gem::Multiplayer.Unified.Static
             Gem::LyShine.Static
+            Gem::HttpRequestor
+            3rdParty::AWSNativeSDK::Core
     AUTOGEN_RULES
         *.AutoComponent.xml,AutoComponent_Header.jinja,$path/$fileprefix.AutoComponent.h
         *.AutoComponent.xml,AutoComponent_Source.jinja,$path/$fileprefix.AutoComponent.cpp

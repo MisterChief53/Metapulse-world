@@ -2,6 +2,9 @@
 #include <AzCore/Serialization/SerializeContext.h>
 #include <AzCore/Serialization/EditContext.h>
 #include <AzCore/Console/ILogger.h>
+#include <aws/core/http/HttpResponse.h>
+#include <HttpRequestor/HttpRequestorBus.h>
+#include <HttpRequestor/HttpTypes.h>
 
 namespace metapulseWorld {
 	void APIRequestsComponent::Init() {
@@ -36,6 +39,35 @@ namespace metapulseWorld {
 			}
 		}
 	}
+
+	void APIRequestsComponent::GerRequiredServices(AZ::ComponentDescriptor::DependencyArrayType& required)
+	{
+		required.push_back(AZ_CRC_CE("HttpRequestorService"));
+	}
+
+	void APIRequestsComponent::login(AZStd::string& responseText, bool& succeed, AZStd::string& token, const AZStd::string& username, const AZStd::string& password)
+	{
+		AZStd::string body = "name=" + username + "&password=" + password;
+		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeadersAndBody, m_accountsServerUrl, Aws::Http::HttpMethod::HTTP_POST,
+			HttpRequestor::Headers(
+				{ {"Content-Type", "application/x-www-form-urlencoded"} }
+			),
+			body,
+			[&responseText, &succeed, &token](const AZStd::string& response, Aws::Http::HttpResponseCode responseCode) {
+				if (responseCode == Aws::Http::HttpResponseCode::OK) {
+					succeed = true;
+					token = response;
+					responseText = "Login Succesful!";
+				}
+				else {
+					succeed = false;
+					token = "";
+					responseText = response;
+				}
+			}
+		);
+	}
+
 
 	//void APIRequestsComponent::login(AZStd::string& response, bool& succeed, AZStd::string& token, 
 	//	const AZStd::string& username, const AZStd::string& password){

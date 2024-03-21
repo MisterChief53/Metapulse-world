@@ -26,7 +26,8 @@
                     "Entity_[4133891341978]",
                     "Entity_[759565048006]",
                     "Entity_[3437135147677]",
-                    "Entity_[997177333263]"
+                    "Entity_[997177333263]",
+                    "Entity_[414057373550]"
                 ]
             },
             "Component_[15230859088967841193]": {
@@ -859,6 +860,56 @@
                             0.0,
                             0.1922154426574707
                         ]
+                    }
+                }
+            }
+        },
+        "Entity_[414057373550]": {
+            "Id": "Entity_[414057373550]",
+            "Name": "APIRequests",
+            "Components": {
+                "EditorDisabledCompositionComponent": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 3107183970948180290
+                },
+                "EditorEntityIconComponent": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 5401817710130954062
+                },
+                "EditorEntitySortComponent": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 15072820952017063764
+                },
+                "EditorInspectorComponent": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 3904948040832998228
+                },
+                "EditorLockComponent": {
+                    "$type": "EditorLockComponent",
+                    "Id": 418578666973743605
+                },
+                "EditorOnlyEntityComponent": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 10124124221474146547
+                },
+                "EditorPendingCompositionComponent": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 13112610480019843238
+                },
+                "EditorVisibilityComponent": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 17425783565693790364
+                },
+                "TransformComponent": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 13844938024406678507,
+                    "Parent Entity": "Entity_[1146574390643]"
+                },
+                "metapulseWorld::APIRequestsComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 6575160589947581961,
+                    "m_template": {
+                        "$type": "metapulseWorld::APIRequestsComponent"
                     }
                 }
             }
