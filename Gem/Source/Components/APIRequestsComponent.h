@@ -22,14 +22,15 @@ namespace metapulseWorld {
 		static void GerRequiredServices(AZ::ComponentDescriptor::DependencyArrayType& required);
 
 		// APIRequestsBus overrides
-		void login(AZStd::string& responseText, bool& succeed, AZStd::string& token,
+		void login(AZStd::string& responseText, bool& succeed,
 			const AZStd::string& username, const AZStd::string& password) override;
 
 		// curl functions
 		//static size_t WriteMemoryCallback(char* contents, size_t size, size_t nmemb, std::string* userp);
+		AZStd::string m_token;
 	private:
 		//CURL* m_handle;
-		AZStd::string m_token;
+		
 		const AZStd::string m_accountsServerUrl = "http://localhost:8080";
 	};
 }

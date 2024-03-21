@@ -5,6 +5,8 @@
 #include <AzCore/Console/ILogger.h>
 #include <LyShine/Bus/UiCanvasBus.h>
 #include <LyShine/Bus/UiCanvasManagerBus.h>
+#include <Components/Interfaces/APIRequestsBus.h>
+#include <LyShine/Bus/UiTextBus.h>
 
 namespace metapulseWorld {
 
@@ -16,7 +18,7 @@ namespace metapulseWorld {
 	{
 		metapulseWorld::StartMenuBus::Handler::BusConnect();
 
-		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_canvasEntity);
+		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_canvasEntity, m_usernameInputTextEntityId);
 	}
 
 	void metapulseWorld::StartMenuComponent::Deactivate()
@@ -64,19 +66,34 @@ namespace metapulseWorld {
 			});
 	}
 
-	void StartMenuComponent::OnLoginButtonPressed(AZ::EntityId& canvasEntity)
+	void StartMenuComponent::OnLoginButtonPressed(AZ::EntityId& canvasEntity, AZ::EntityId& usernameInputTextEntityId)
 	{
 
-		AZStd::string pathname = "assets/ui/start_menu.uicanvas";
-		UiCanvasManagerBus::BroadcastResult(canvasEntity, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, pathname, false);
+		AZStd::string username, password, response;
+		bool succeed;
+		UiTextBus::BroadcastResult(username, &UiTextBus::Events::GetText, usernameInputTextEntityId);
+		
 
-		if (!canvasEntity.IsValid()) {
-			AZLOG_INFO("invalid canvas entityid");
+		// Perform login request
+		APIRequestsBus::Broadcast(&APIRequestsBus::Events::login, response, succeed, username, password);
+
+		if (succeed) {
+
+
+
+			AZStd::string pathname = "assets/ui/start_menu.uicanvas";
+			UiCanvasManagerBus::BroadcastResult(canvasEntity, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, pathname, false);
+
+			if (!canvasEntity.IsValid()) {
+				AZLOG_INFO("invalid canvas entityid");
+			}
+
+
+			AZLOG_INFO("unloading canvas...");
+			UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntity);
 		}
 
-
-		AZLOG_INFO("unloading canvas...");
-		UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntity);
+		
 	}
 
 	void StartMenuComponent::closeStartMenu()

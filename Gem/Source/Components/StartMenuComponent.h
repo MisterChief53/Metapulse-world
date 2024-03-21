@@ -38,6 +38,6 @@ namespace metapulseWorld {
 		// depend on if we are dealing with loginButtonEntity or signupButtonEntity
 		void InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&)> buttonUpdateFunc, AZ::EntityId& canvasEntity);
 
-		static void OnLoginButtonPressed(AZ::EntityId& canvasEntity);
+		static void OnLoginButtonPressed(AZ::EntityId& canvasEntity, AZ::EntityId& usernameInputTextEntityId);
 	};
 }

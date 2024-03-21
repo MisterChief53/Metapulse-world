@@ -45,9 +45,10 @@ namespace metapulseWorld {
 		required.push_back(AZ_CRC_CE("HttpRequestorService"));
 	}
 
-	void APIRequestsComponent::login(AZStd::string& responseText, bool& succeed, AZStd::string& token, const AZStd::string& username, const AZStd::string& password)
+	void APIRequestsComponent::login(AZStd::string& responseText, bool& succeed, const AZStd::string& username, const AZStd::string& password)
 	{
 		AZStd::string body = "name=" + username + "&password=" + password;
+		AZStd::string token;
 		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeadersAndBody, m_accountsServerUrl, Aws::Http::HttpMethod::HTTP_POST,
 			HttpRequestor::Headers(
 				{ {"Content-Type", "application/x-www-form-urlencoded"} }
@@ -66,6 +67,8 @@ namespace metapulseWorld {
 				}
 			}
 		);
+
+		m_token = token;
 	}
 
 
