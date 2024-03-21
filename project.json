@@ -24,6 +24,7 @@
         "AuthClient==1.0.0",
         "CameraFramework",
         "FirstPersonController==1.0.0",
+        "HttpRequestor",
         "ImGui",
         "LyShine",
         "LyShineExamples",

@@ -11,7 +11,7 @@ namespace metapulseWorld {
 
 		static const AZ::EBusAddressPolicy AddressPolicy = AZ::EBusAddressPolicy::Single;
 
-		virtual void login(AZStd::string & response, bool& succeed, AZStd::string& token, const AZStd::string& username, const AZStd::string& password) = 0;
+		//virtual void login(AZStd::string & response, bool& succeed, AZStd::string& token, const AZStd::string& username, const AZStd::string& password) = 0;
 	};
 
 	using APIRequestsBus = AZ::EBus<APIRequestsInterface>;

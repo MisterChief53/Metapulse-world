@@ -24,9 +24,9 @@ o3de_restricted_path(${gem_json} gem_restricted_path gem_parent_relative_path)
 o3de_pal_dir(pal_dir ${CMAKE_CURRENT_SOURCE_DIR}/Platform/${PAL_PLATFORM_NAME} "${gem_restricted_path}" "${gem_path}" "${gem_parent_relative_path}")
 
 # Add curl as a third party
-set(LY_PACKAGE_SERVER_URLS "${LY_PACKAGE_SERVER_URLS};file:///${CMAKE_CURRENT_LIST_DIR}/../Libraries/Packages/Install" FORCE)
-file(READ ${CMAKE_CURRENT_LIST_DIR}/../Libraries/Packages/Install/SHA256SUMS curl_SHA256_PACKAGE)
-ly_associate_package(PACKAGE_NAME curl TARGETS curl PACKAGE_HASH ${curl_SHA256_PACKAGE})
+#set(LY_PACKAGE_SERVER_URLS "${LY_PACKAGE_SERVER_URLS};file:///${CMAKE_CURRENT_LIST_DIR}/../Libraries/Packages/Install" FORCE)
+#file(READ ${CMAKE_CURRENT_LIST_DIR}/../Libraries/Packages/Install/SHA256SUMS curl_SHA256_PACKAGE)
+#ly_associate_package(PACKAGE_NAME curl TARGETS curl PACKAGE_HASH ${curl_SHA256_PACKAGE})
 
 # Now that we have the platform abstraction layer (PAL) folder for this folder, thats where we will find the
 # traits for this platform. Traits for a platform are defines for things like whether or not something in this project
@@ -67,13 +67,12 @@ ly_add_target(
             Gem::Multiplayer.Client
             Gem::StartingPointInput
             Gem::LyShine
-            3rdParty::curl
+            #3rdParty::curl
         PRIVATE
             AZ::AzGameFramework
             Gem::Atom_AtomBridge.Static
             Gem::Multiplayer.Client.Static
             Gem::LyShine.Static
-            3rdParty::curl
     AUTOGEN_RULES
         *.AutoComponent.xml,AutoComponent_Header.jinja,$path/$fileprefix.AutoComponent.h
         *.AutoComponent.xml,AutoComponent_Source.jinja,$path/$fileprefix.AutoComponent.cpp
@@ -103,13 +102,12 @@ ly_add_target(
             Gem::Multiplayer.Server
             Gem::StartingPointInput
             Gem::LyShine
-            3rdParty::curl
+            #3rdParty::curl
         PRIVATE
             AZ::AzGameFramework
             Gem::Atom_AtomBridge.Static
             Gem::Multiplayer.Server.Static
             Gem::LyShine.Static
-            3rdParty::curl
     AUTOGEN_RULES
         *.AutoComponent.xml,AutoComponent_Header.jinja,$path/$fileprefix.AutoComponent.h
         *.AutoComponent.xml,AutoComponent_Source.jinja,$path/$fileprefix.AutoComponent.cpp
@@ -140,13 +138,12 @@ ly_add_target(
             Gem::Multiplayer
             Gem::StartingPointInput
             Gem::LyShine
-            3rdParty::curl
+            #3rdParty::curl
         PRIVATE
             AZ::AzGameFramework
             Gem::Atom_AtomBridge.Static
             Gem::Multiplayer.Unified.Static
             Gem::LyShine.Static
-            3rdParty::curl
     AUTOGEN_RULES
         *.AutoComponent.xml,AutoComponent_Header.jinja,$path/$fileprefix.AutoComponent.h
         *.AutoComponent.xml,AutoComponent_Source.jinja,$path/$fileprefix.AutoComponent.cpp

@@ -1,4 +1,3 @@
-add_definitions(-DCURL_STATICLIB)
 set(LIB_NAME "curl")
 set(TARGET_WITH_NAMESPACE "3rdParty::${LIB_NAME}")
 
@@ -30,7 +29,7 @@ set_target_properties(${TARGET_WITH_NAMESPACE}
         IMPORTED_LOCATION_PROFILE ${${LIB_NAME}_DLL}
         #IMPORTED_LOCATION_DEBUG XXXXX # optional - if theres a differnt one in debug
         #IMPORTED_LOCATION_RELEASE XXXX # also optional but for release
-        IMPORTED_LIB ${${LIB_NAME}_LIBRARY} # where the import library file is (ignored on non-windows)
+        IMPORTED_IMPLIB ${${LIB_NAME}_LIBRARY} # where the import library file is (ignored on non-windows)
         IMPORTED_IMPLIB_PROFILE ${${LIB_NAME}_LIBRARY}
         #IMPORTED_IMPLIB_DEBUG xxxxxxxxxxx # optional line, for if theres a different one in debug
 )

@@ -1,7 +1,7 @@
 #include <AzCore/Component/Component.h>
 #include <Components/Interfaces/APIRequestsBus.h>
-#include <curl/curl.h>
-#include <curl/easy.h>
+//#include <curl/curl.h>
+//#include <curl/easy.h>
 
 namespace metapulseWorld {
 	class APIRequestsComponent
@@ -20,12 +20,12 @@ namespace metapulseWorld {
 		static void Reflect(AZ::ReflectContext* context);
 
 		// APIRequestsBus overrides
-		void login(AZStd::string& response, bool& succeed, AZStd::string& token, 
-			const AZStd::string& username, const AZStd::string& password) override;
+		//void login(AZStd::string& response, bool& succeed, AZStd::string& token, 
+		//	const AZStd::string& username, const AZStd::string& password) override;
 
 		// curl functions
-		static size_t WriteMemoryCallback(char* contents, size_t size, size_t nmemb, std::string* userp);
+		//static size_t WriteMemoryCallback(char* contents, size_t size, size_t nmemb, std::string* userp);
 	private:
-		CURL* m_handle;
+		//CURL* m_handle;
 	};
 }

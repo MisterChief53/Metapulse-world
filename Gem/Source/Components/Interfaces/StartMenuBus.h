@@ -1,6 +1,7 @@
 #pragma once
 
-#include <azcore/EBus/EBus.h>
+#include <AzCore/EBus/EBus.h>
+#include <AzCore/Component/ComponentBus.h>
 
 namespace metapulseWorld {
 	class StartMenuRequests
