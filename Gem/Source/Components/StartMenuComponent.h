@@ -36,8 +36,13 @@ namespace metapulseWorld {
 		// We will assign each entity a callback function that will execute a custom function depending on the button's nature.
 		// since we are handling login and signup, both of them will require username an password, and the function itself will
 		// depend on if we are dealing with loginButtonEntity or signupButtonEntity
-		void InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&)> buttonUpdateFunc, AZ::EntityId& canvasEntity);
+		void InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&, AZ::EntityId&, AZ::EntityId&, AZ::EntityId&)> buttonUpdateFunc,
+			AZ::EntityId& canvasEntity,
+			AZ::EntityId& usernameInputTextEntityId,
+			AZ::EntityId& passwordInputTextEntityId,
+			AZ::EntityId& statusTextEntityId);
 
-		static void OnLoginButtonPressed(AZ::EntityId& canvasEntity, AZ::EntityId& usernameInputTextEntityId);
+		static void OnLoginButtonPressed(AZ::EntityId& canvasEntity, AZ::EntityId& usernameInputTextEntityId,
+			AZ::EntityId& passwordInputTextEntityId, AZ::EntityId& statusTextEntityId);
 	};
 }

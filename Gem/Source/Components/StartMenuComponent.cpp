@@ -18,7 +18,7 @@ namespace metapulseWorld {
 	{
 		metapulseWorld::StartMenuBus::Handler::BusConnect();
 
-		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_canvasEntity, m_usernameInputTextEntityId);
+		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_canvasEntity, m_usernameInputTextEntityId, m_passwordInputTextEntityId, m_statusTextEntityId);
 	}
 
 	void metapulseWorld::StartMenuComponent::Deactivate()
@@ -56,31 +56,37 @@ namespace metapulseWorld {
 		}
 	}
 
-	void StartMenuComponent::InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&)> buttonUpdateFunc, AZ::EntityId& canvasEntity) {
-		buttonUpdateFunc(canvasEntity);
+	void StartMenuComponent::InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&, AZ::EntityId&, AZ::EntityId&, AZ::EntityId&)> buttonUpdateFunc,
+		AZ::EntityId& canvasEntity,
+		AZ::EntityId& usernameInputTextEntityId,
+		AZ::EntityId& passwordInputTextEntityId, 
+		AZ::EntityId& statusTextEntityId) {
+
+		buttonUpdateFunc(canvasEntity, usernameInputTextEntityId, passwordInputTextEntityId, statusTextEntityId);
 
 		UiButtonBus::Event(buttonEntity, &UiButtonInterface::SetOnClickCallback,
-			[&canvasEntity, buttonUpdateFunc]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position ) {
-				AZLOG_INFO("callback called");
-				buttonUpdateFunc(canvasEntity);
+			[&canvasEntity,&usernameInputTextEntityId, &passwordInputTextEntityId, &statusTextEntityId, buttonUpdateFunc]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position ) {
+				AZLOG_INFO("UIButtonInterface Onclick callback called");
+				buttonUpdateFunc(canvasEntity, usernameInputTextEntityId, passwordInputTextEntityId, statusTextEntityId);
 			});
 	}
 
-	void StartMenuComponent::OnLoginButtonPressed(AZ::EntityId& canvasEntity, AZ::EntityId& usernameInputTextEntityId)
+	void StartMenuComponent::OnLoginButtonPressed(AZ::EntityId& canvasEntity, AZ::EntityId& usernameInputTextEntityId,
+		AZ::EntityId& passwordInputTextEntityId, AZ::EntityId& statusTextEntityId)
 	{
 
 		AZStd::string username, password, response;
 		bool succeed;
-		UiTextBus::BroadcastResult(username, &UiTextBus::Events::GetText, usernameInputTextEntityId);
-		
+		UiTextBus::EventResult(username, usernameInputTextEntityId, &UiTextBus::Events::GetText);
+		UiTextBus::EventResult(password, passwordInputTextEntityId, &UiTextBus::Events::GetText);
 
 		// Perform login request
 		APIRequestsBus::Broadcast(&APIRequestsBus::Events::login, response, succeed, username, password);
-
 		if (succeed) {
+			// Set status
+			UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Logged in succesfully!");
 
-
-
+			// Now, disable the canvas
 			AZStd::string pathname = "assets/ui/start_menu.uicanvas";
 			UiCanvasManagerBus::BroadcastResult(canvasEntity, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, pathname, false);
 
@@ -88,12 +94,13 @@ namespace metapulseWorld {
 				AZLOG_INFO("invalid canvas entityid");
 			}
 
-
 			AZLOG_INFO("unloading canvas...");
 			UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntity);
 		}
-
-		
+		else {
+			//Set status
+			UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, response);
+		}
 	}
 
 	void StartMenuComponent::closeStartMenu()

@@ -16,11 +16,13 @@ namespace metapulseWorld {
 		// Per application lifetime
 		//curl_global_init(CURL_GLOBAL_WIN32);
 		//m_handle = curl_easy_init();
+		APIRequestsBus::Handler::BusConnect();
 	}
 
 	void APIRequestsComponent::Deactivate() {
 		//curl_easy_setopt(handle, CURLOPT_URL, "http://localhost:8080/");
 		//curl_global_cleanup();
+		APIRequestsBus::Handler::BusDisconnect();
 	}
 
 	void APIRequestsComponent::Reflect(AZ::ReflectContext* context) {
@@ -38,37 +40,6 @@ namespace metapulseWorld {
 					;
 			}
 		}
-	}
-
-	void APIRequestsComponent::GerRequiredServices(AZ::ComponentDescriptor::DependencyArrayType& required)
-	{
-		required.push_back(AZ_CRC_CE("HttpRequestorService"));
-	}
-
-	void APIRequestsComponent::login(AZStd::string& responseText, bool& succeed, const AZStd::string& username, const AZStd::string& password)
-	{
-		AZStd::string body = "name=" + username + "&password=" + password;
-		AZStd::string token;
-		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeadersAndBody, m_accountsServerUrl, Aws::Http::HttpMethod::HTTP_POST,
-			HttpRequestor::Headers(
-				{ {"Content-Type", "application/x-www-form-urlencoded"} }
-			),
-			body,
-			[&responseText, &succeed, &token](const AZStd::string& response, Aws::Http::HttpResponseCode responseCode) {
-				if (responseCode == Aws::Http::HttpResponseCode::OK) {
-					succeed = true;
-					token = response;
-					responseText = "Login Succesful!";
-				}
-				else {
-					succeed = false;
-					token = "";
-					responseText = response;
-				}
-			}
-		);
-
-		m_token = token;
 	}
 
 

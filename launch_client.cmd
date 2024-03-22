@@ -9,4 +9,6 @@ REM
 REM Continuous Integration CLI entrypoint script to start CTest, triggering post-build tests
 REM
 
+SET AWS_EC2_METADATA_DISABLED=true
+
 .\build\windows\bin\profile\metapulseWorld.GameLauncher.exe --console-command-file=launch_client.cfg -rhi=vulkan
