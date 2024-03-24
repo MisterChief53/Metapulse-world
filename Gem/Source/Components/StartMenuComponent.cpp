@@ -21,8 +21,6 @@ namespace metapulseWorld {
 	{
 		metapulseWorld::StartMenuBus::Handler::BusConnect();
 
-		metapulseWorld::APIRequestsBus::BroadcastResult(m_accountsServerUrl, &metapulseWorld::APIRequestsBus::Events::getUrl);
-
 		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_usernameInputTextEntityId, m_passwordInputTextEntityId, m_statusTextEntityId, m_canvasEntity);
 	}
 
@@ -79,21 +77,24 @@ namespace metapulseWorld {
 	void StartMenuComponent::OnLoginButtonPressed(AZ::EntityId& usernameInputTextEntityId,
 		AZ::EntityId& passwordInputTextEntityId, AZ::EntityId& statusTextEntityId, AZ::EntityId& canvasEntity)
 	{
-		AZStd::string username, password;
+		AZStd::string username, password, accountsServerUrl;
+		APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
 		UiTextBus::EventResult(username, usernameInputTextEntityId, &UiTextBus::Events::GetText);
 		UiTextBus::EventResult(password, passwordInputTextEntityId, &UiTextBus::Events::GetText);
 
 		AZLOG_INFO("Performing request...");
 		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
-			"http://localhost:8080/auth/login?name=" + username + "&password=" + password,
+			//"http://localhost:8080/auth/login?name=" + username + "&password=" + password,
+			accountsServerUrl + "/auth/login?name=" + username + "&password=" + password,
 			Aws::Http::HttpMethod::HTTP_POST,
 			AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
-			//"name=" + username + "&password=" + password,
-			//loginCallback
 			[&statusTextEntityId, &canvasEntity](const AZStd::string& response, Aws::Http::HttpResponseCode responseCode) {
 				AZLOG_INFO("Executing login callback...");
 				if (responseCode == Aws::Http::HttpResponseCode::OK) {
 					UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Logged in succesfully!");
+
+					APIRequestsBus::Broadcast(&APIRequestsBus::Events::setToken, response);
+					AZLOG_INFO("token: %s", response.c_str());
 
 					// Now, disable the canvas
 					AZStd::string pathname = "assets/ui/start_menu.uicanvas";

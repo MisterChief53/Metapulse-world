@@ -32,8 +32,6 @@ namespace metapulseWorld {
 		AZ::EntityId m_statusTextEntityId;
 		AZ::EntityId m_usernameInputTextEntityId;
 		AZ::EntityId m_passwordInputTextEntityId;
-
-		AZStd::string m_accountsServerUrl;
 		
 
 		// We will assign each entity a callback function that will execute a custom function depending on the button's nature.
