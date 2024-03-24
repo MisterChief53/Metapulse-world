@@ -13,6 +13,7 @@ namespace metapulseWorld {
 
 		virtual void setToken(const AZStd::string& token) = 0;
 		virtual AZStd::string getToken() = 0;
+		virtual AZStd::string getUrl() = 0;
 	};
 
 	using APIRequestsBus = AZ::EBus<APIRequestsInterface>;

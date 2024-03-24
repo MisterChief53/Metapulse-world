@@ -29,6 +29,7 @@ namespace metapulseWorld {
 		if (auto serializeContext = azrtti_cast<AZ::SerializeContext*>(context)) {
 			serializeContext->Class<APIRequestsComponent, AZ::Component>()
 				->Version(1)
+				->Field("Accounts Server URL", &APIRequestsComponent::m_accountsServerUrl)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext()) {
@@ -37,9 +38,25 @@ namespace metapulseWorld {
 					->Attribute(AZ::Edit::Attributes::Category, "Accounts Server")
 					->Attribute(AZ::Edit::Attributes::Icon, "Icons/Components/Component_Placeholder.svg")
 					->Attribute(AZ::Edit::Attributes::AppearsInAddComponentMenu, AZ_CRC_CE("Game"))
+					->DataElement(AZ::Edit::UIHandlers::Default, &APIRequestsComponent::m_accountsServerUrl)
 					;
 			}
 		}
+	}
+
+	void APIRequestsComponent::setToken(const AZStd::string& token)
+	{
+		m_token = token;
+	}
+
+	AZStd::string APIRequestsComponent::getToken()
+	{
+		return m_token;
+	}
+
+	AZStd::string APIRequestsComponent::getUrl()
+	{
+		return m_accountsServerUrl;
 	}
 
 

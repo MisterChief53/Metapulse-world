@@ -7,6 +7,9 @@
 #include <LyShine/Bus/UiCanvasManagerBus.h>
 #include <Components/Interfaces/APIRequestsBus.h>
 #include <LyShine/Bus/UiTextBus.h>
+#include <aws/core/http/HttpResponse.h>
+#include <HttpRequestor/HttpRequestorBus.h>
+#include <HttpRequestor/HttpTypes.h>
 
 namespace metapulseWorld {
 
@@ -18,7 +21,9 @@ namespace metapulseWorld {
 	{
 		metapulseWorld::StartMenuBus::Handler::BusConnect();
 
-		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_canvasEntity, m_usernameInputTextEntityId, m_passwordInputTextEntityId, m_statusTextEntityId);
+		metapulseWorld::APIRequestsBus::BroadcastResult(m_accountsServerUrl, &metapulseWorld::APIRequestsBus::Events::getUrl);
+
+		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_usernameInputTextEntityId, m_passwordInputTextEntityId);
 	}
 
 	void metapulseWorld::StartMenuComponent::Deactivate()
@@ -56,50 +61,75 @@ namespace metapulseWorld {
 		}
 	}
 
-	void StartMenuComponent::InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&, AZ::EntityId&, AZ::EntityId&, AZ::EntityId&)> buttonUpdateFunc,
-		AZ::EntityId& canvasEntity,
+	void StartMenuComponent::InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&, AZ::EntityId&)> buttonUpdateFunc,
 		AZ::EntityId& usernameInputTextEntityId,
-		AZ::EntityId& passwordInputTextEntityId, 
-		AZ::EntityId& statusTextEntityId) {
+		AZ::EntityId& passwordInputTextEntityId) {
 
-		buttonUpdateFunc(canvasEntity, usernameInputTextEntityId, passwordInputTextEntityId, statusTextEntityId);
+		buttonUpdateFunc(usernameInputTextEntityId, passwordInputTextEntityId);
 
 		UiButtonBus::Event(buttonEntity, &UiButtonInterface::SetOnClickCallback,
-			[&canvasEntity,&usernameInputTextEntityId, &passwordInputTextEntityId, &statusTextEntityId, buttonUpdateFunc]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position ) {
+			[&usernameInputTextEntityId, &passwordInputTextEntityId, buttonUpdateFunc]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position ) {
 				AZLOG_INFO("UIButtonInterface Onclick callback called");
-				buttonUpdateFunc(canvasEntity, usernameInputTextEntityId, passwordInputTextEntityId, statusTextEntityId);
+				buttonUpdateFunc(usernameInputTextEntityId, passwordInputTextEntityId);
 			});
 	}
 
-	void StartMenuComponent::OnLoginButtonPressed(AZ::EntityId& canvasEntity, AZ::EntityId& usernameInputTextEntityId,
-		AZ::EntityId& passwordInputTextEntityId, AZ::EntityId& statusTextEntityId)
+	void StartMenuComponent::OnLoginButtonPressed(AZ::EntityId& usernameInputTextEntityId,
+		AZ::EntityId& passwordInputTextEntityId)
 	{
-
-		AZStd::string username, password, response;
-		bool succeed;
+		AZStd::string username, password;
 		UiTextBus::EventResult(username, usernameInputTextEntityId, &UiTextBus::Events::GetText);
 		UiTextBus::EventResult(password, passwordInputTextEntityId, &UiTextBus::Events::GetText);
 
-		// Perform login request
-		APIRequestsBus::Broadcast(&APIRequestsBus::Events::login, response, succeed, username, password);
-		if (succeed) {
-			// Set status
-			UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Logged in succesfully!");
+		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeadersAndBody,
+			"http://localhost:8080/auth/login",
+			Aws::Http::HttpMethod::HTTP_POST,
+			AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
+			"name=" + username + "&password=" + password,
+			&loginCallback
+		);
+
+		//// Perform login request
+		//APIRequestsBus::Broadcast(&APIRequestsBus::Events::login, response, succeed, username, password);
+		//if (succeed) {
+		//	// Set status
+		//	UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Logged in succesfully!");
+
+		//	// Now, disable the canvas
+		//	AZStd::string pathname = "assets/ui/start_menu.uicanvas";
+		//	UiCanvasManagerBus::BroadcastResult(canvasEntity, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, pathname, false);
+
+		//	if (!canvasEntity.IsValid()) {
+		//		AZLOG_INFO("invalid canvas entityid");
+		//	}
+
+		//	AZLOG_INFO("unloading canvas...");
+		//	UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntity);
+		//}
+		//else {
+		//	//Set status
+		//	UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, response);
+		//}
+	}
+
+	void StartMenuComponent::loginCallback(const AZStd::string& response, Aws::Http::HttpResponseCode responseCode)
+	{
+		if (responseCode == Aws::Http::HttpResponseCode::OK) {
+			UiTextBus::Event(m_statusTextEntityId, &UiTextBus::Events::SetText, "Logged in succesfully!");
 
 			// Now, disable the canvas
 			AZStd::string pathname = "assets/ui/start_menu.uicanvas";
-			UiCanvasManagerBus::BroadcastResult(canvasEntity, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, pathname, false);
+			UiCanvasManagerBus::BroadcastResult(m_canvasEntity, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, pathname, false);
 
-			if (!canvasEntity.IsValid()) {
+			if (!m_canvasEntity.IsValid()) {
 				AZLOG_INFO("invalid canvas entityid");
 			}
 
 			AZLOG_INFO("unloading canvas...");
-			UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntity);
+			UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, m_canvasEntity);
 		}
 		else {
-			//Set status
-			UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, response);
+			UiTextBus::Event(m_statusTextEntityId, &UiTextBus::Events::SetText, response);
 		}
 	}
 
