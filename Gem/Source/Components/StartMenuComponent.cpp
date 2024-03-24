@@ -84,7 +84,6 @@ namespace metapulseWorld {
 
 		AZLOG_INFO("Performing request...");
 		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
-			//"http://localhost:8080/auth/login?name=" + username + "&password=" + password,
 			accountsServerUrl + "/auth/login?name=" + username + "&password=" + password,
 			Aws::Http::HttpMethod::HTTP_POST,
 			AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
@@ -118,49 +117,6 @@ namespace metapulseWorld {
 				}
 			}
 		);
-
-		//// Perform login request
-		//APIRequestsBus::Broadcast(&APIRequestsBus::Events::login, response, succeed, username, password);
-		//if (succeed) {
-		//	// Set status
-		//	UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Logged in succesfully!");
-
-		//	// Now, disable the canvas
-		//	AZStd::string pathname = "assets/ui/start_menu.uicanvas";
-		//	UiCanvasManagerBus::BroadcastResult(canvasEntity, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, pathname, false);
-
-		//	if (!canvasEntity.IsValid()) {
-		//		AZLOG_INFO("invalid canvas entityid");
-		//	}
-
-		//	AZLOG_INFO("unloading canvas...");
-		//	UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntity);
-		//}
-		//else {
-		//	//Set status
-		//	UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, response);
-		//}
-	}
-
-	void StartMenuComponent::loginCallback(const AZStd::string& response, Aws::Http::HttpResponseCode responseCode)
-	{
-		if (responseCode == Aws::Http::HttpResponseCode::OK) {
-			UiTextBus::Event(m_statusTextEntityId, &UiTextBus::Events::SetText, "Logged in succesfully!");
-
-			// Now, disable the canvas
-			AZStd::string pathname = "assets/ui/start_menu.uicanvas";
-			UiCanvasManagerBus::BroadcastResult(m_canvasEntity, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, pathname, false);
-
-			if (!m_canvasEntity.IsValid()) {
-				AZLOG_INFO("invalid canvas entityid");
-			}
-
-			AZLOG_INFO("unloading canvas...");
-			UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, m_canvasEntity);
-		}
-		else {
-			UiTextBus::Event(m_statusTextEntityId, &UiTextBus::Events::SetText, response);
-		}
 	}
 
 	void StartMenuComponent::closeStartMenu()

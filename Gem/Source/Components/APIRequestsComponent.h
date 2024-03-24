@@ -26,11 +26,8 @@ namespace metapulseWorld {
 
 		AZStd::string getUrl() override;
 
-		// curl functions
-		//static size_t WriteMemoryCallback(char* contents, size_t size, size_t nmemb, std::string* userp);
 	private:
-		//CURL* m_handle;
-		
+	
 		AZStd::string m_accountsServerUrl;
 		AZStd::string m_token;
 	};
