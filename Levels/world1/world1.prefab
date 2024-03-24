@@ -909,7 +909,8 @@
                     "$type": "GenericComponentWrapper",
                     "Id": 6575160589947581961,
                     "m_template": {
-                        "$type": "metapulseWorld::APIRequestsComponent"
+                        "$type": "metapulseWorld::APIRequestsComponent",
+                        "Accounts Server URL": "http://localhost:8080/"
                     }
                 }
             }

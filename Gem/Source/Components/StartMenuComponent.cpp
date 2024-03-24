@@ -23,7 +23,7 @@ namespace metapulseWorld {
 
 		metapulseWorld::APIRequestsBus::BroadcastResult(m_accountsServerUrl, &metapulseWorld::APIRequestsBus::Events::getUrl);
 
-		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_usernameInputTextEntityId, m_passwordInputTextEntityId);
+		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_usernameInputTextEntityId, m_passwordInputTextEntityId, m_statusTextEntityId, m_canvasEntity);
 	}
 
 	void metapulseWorld::StartMenuComponent::Deactivate()
@@ -61,32 +61,61 @@ namespace metapulseWorld {
 		}
 	}
 
-	void StartMenuComponent::InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&, AZ::EntityId&)> buttonUpdateFunc,
+	void StartMenuComponent::InitializeButton(AZ::EntityId buttonEntity, AZStd::function<void(AZ::EntityId&,AZ::EntityId&,AZ::EntityId&,AZ::EntityId&)> buttonUpdateFunc,
 		AZ::EntityId& usernameInputTextEntityId,
-		AZ::EntityId& passwordInputTextEntityId) {
+		AZ::EntityId& passwordInputTextEntityId, 
+		AZ::EntityId& statusTextEntityId, 
+		AZ::EntityId& canvasEntity) {
 
-		buttonUpdateFunc(usernameInputTextEntityId, passwordInputTextEntityId);
+		buttonUpdateFunc(usernameInputTextEntityId, passwordInputTextEntityId, statusTextEntityId, canvasEntity);
 
 		UiButtonBus::Event(buttonEntity, &UiButtonInterface::SetOnClickCallback,
-			[&usernameInputTextEntityId, &passwordInputTextEntityId, buttonUpdateFunc]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position ) {
+			[&usernameInputTextEntityId, &passwordInputTextEntityId, &statusTextEntityId, &canvasEntity, buttonUpdateFunc]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position ) {
 				AZLOG_INFO("UIButtonInterface Onclick callback called");
-				buttonUpdateFunc(usernameInputTextEntityId, passwordInputTextEntityId);
+				buttonUpdateFunc(usernameInputTextEntityId, passwordInputTextEntityId, statusTextEntityId, canvasEntity);
 			});
 	}
 
 	void StartMenuComponent::OnLoginButtonPressed(AZ::EntityId& usernameInputTextEntityId,
-		AZ::EntityId& passwordInputTextEntityId)
+		AZ::EntityId& passwordInputTextEntityId, AZ::EntityId& statusTextEntityId, AZ::EntityId& canvasEntity)
 	{
 		AZStd::string username, password;
 		UiTextBus::EventResult(username, usernameInputTextEntityId, &UiTextBus::Events::GetText);
 		UiTextBus::EventResult(password, passwordInputTextEntityId, &UiTextBus::Events::GetText);
 
-		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeadersAndBody,
-			"http://localhost:8080/auth/login",
+		AZLOG_INFO("Performing request...");
+		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
+			"http://localhost:8080/auth/login?name=" + username + "&password=" + password,
 			Aws::Http::HttpMethod::HTTP_POST,
 			AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
-			"name=" + username + "&password=" + password,
-			&loginCallback
+			//"name=" + username + "&password=" + password,
+			//loginCallback
+			[&statusTextEntityId, &canvasEntity](const AZStd::string& response, Aws::Http::HttpResponseCode responseCode) {
+				AZLOG_INFO("Executing login callback...");
+				if (responseCode == Aws::Http::HttpResponseCode::OK) {
+					UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Logged in succesfully!");
+
+					// Now, disable the canvas
+					AZStd::string pathname = "assets/ui/start_menu.uicanvas";
+					UiCanvasManagerBus::BroadcastResult(canvasEntity, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, pathname, false);
+
+					if (!canvasEntity.IsValid()) {
+						AZLOG_INFO("invalid canvas entityid");
+					}
+
+					AZLOG_INFO("unloading canvas...");
+					UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntity);
+				}
+				else {
+					if (!response.empty()) {
+						UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, response);
+					}
+					else {
+						UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Could not initiate request");
+					}
+
+				}
+			}
 		);
 
 		//// Perform login request
