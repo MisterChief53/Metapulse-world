@@ -45,5 +45,8 @@ namespace metapulseWorld {
 
 		static void OnLoginButtonPressed(AZ::EntityId& usernameInputTextEntityId,
 			AZ::EntityId& passwordInputTextEntityId, AZ::EntityId& statusTextEntityId, AZ::EntityId& canvasEntity);
+
+		static void OnSignUpButtonPressed(AZ::EntityId& usernameInputTextEntityId,
+			AZ::EntityId& passwordInputTextEntityId, AZ::EntityId& statusTextEntityId, [[maybe_unused]] AZ::EntityId& canvasEntity);
 	};
 }

@@ -22,6 +22,7 @@ namespace metapulseWorld {
 		metapulseWorld::StartMenuBus::Handler::BusConnect();
 
 		InitializeButton(m_loginButtonEntity, OnLoginButtonPressed, m_usernameInputTextEntityId, m_passwordInputTextEntityId, m_statusTextEntityId, m_canvasEntity);
+		InitializeButton(m_signupButtonEntity, OnSignUpButtonPressed, m_usernameInputTextEntityId, m_passwordInputTextEntityId, m_statusTextEntityId, m_canvasEntity);
 	}
 
 	void metapulseWorld::StartMenuComponent::Deactivate()
@@ -117,6 +118,41 @@ namespace metapulseWorld {
 				}
 			}
 		);
+	}
+
+	void StartMenuComponent::OnSignUpButtonPressed(AZ::EntityId& usernameInputTextEntityId,
+		AZ::EntityId& passwordInputTextEntityId, AZ::EntityId& statusTextEntityId, [[maybe_unused]] AZ::EntityId& canvasEntity)
+	{
+		AZStd::string username, password, accountsServerUrl;
+		APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+		UiTextBus::EventResult(username, usernameInputTextEntityId, &UiTextBus::Events::GetText);
+		UiTextBus::EventResult(password, passwordInputTextEntityId, &UiTextBus::Events::GetText);
+
+		if (!username.empty() && !password.empty()) {
+			AZLOG_INFO("Performing request...");
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
+				accountsServerUrl + "/auth/register?name=" + username + "&password=" + password,
+				Aws::Http::HttpMethod::HTTP_POST,
+				AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
+				[&statusTextEntityId](const AZStd::string& response, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Executing signup callback...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						if (!response.empty()) {
+							UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, response);
+						}
+						else {
+							UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "User created succesfully");
+						}
+					}
+					else {
+						UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Could not create user correctly");
+					}
+				}
+			);
+		}
+		else {
+			UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Both Username and Password must contain characters");
+		}
 	}
 
 	void StartMenuComponent::closeStartMenu()
