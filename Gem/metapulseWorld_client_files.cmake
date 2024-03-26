@@ -2,4 +2,9 @@ set(FILES
 	Source/Components/APIRequestsComponent.cpp
 	Source/Components/APIRequestsComponent.h
 	Source/Components/Interfaces/APIRequestsBus.h
+	Source/Components/UIAdminComponent.h
+	Source/Components/UIAdminComponent.cpp
+	Source/Components/IngameMenuComponent.h
+	Source/Components/IngameMenuComponent.cpp
+	Source/Components/Interfaces/UIAdminBus.h
 )

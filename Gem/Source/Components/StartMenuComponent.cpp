@@ -11,6 +11,8 @@
 #include <HttpRequestor/HttpRequestorBus.h>
 #include <HttpRequestor/HttpTypes.h>
 
+#include <LyShine/Bus/UiSpawnerBus.h>
+
 namespace metapulseWorld {
 
 	void metapulseWorld::StartMenuComponent::Init()

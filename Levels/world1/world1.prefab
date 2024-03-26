@@ -703,10 +703,84 @@
                     "$type": "EditorVisibilityComponent",
                     "Id": 4113156733941817507
                 },
+                "InputConfigurationComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 5299791819930305791,
+                    "m_template": {
+                        "$type": "InputConfigurationComponent",
+                        "Input Event Bindings": {
+                            "assetId": {
+                                "guid": "{FAD02F56-DA18-5577-AF5C-D7576872BD50}"
+                            },
+                            "assetHint": "assets/inputbindings/player.inputbindings"
+                        }
+                    }
+                },
                 "TransformComponent": {
                     "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
                     "Id": 13011959732201869796,
                     "Parent Entity": "Entity_[997177333263]"
+                },
+                "metapulseWorld::UIAdminComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 11933845709568983385,
+                    "m_template": {
+                        "$type": "metapulseWorld::UIAdminComponent",
+                        "Ingame Menu Canvas Path": "assets/ui/ingame_menu.uicanvas"
+                    }
+                }
+            }
+        },
+        "Entity_[356665965953]": {
+            "Id": "Entity_[356665965953]",
+            "Name": "ingame_menu",
+            "Components": {
+                "EditorDisabledCompositionComponent": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 15092083192279185345
+                },
+                "EditorEntityIconComponent": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 2587313663397149710
+                },
+                "EditorEntitySortComponent": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 5039278979457269256
+                },
+                "EditorInspectorComponent": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 5546251651484909820
+                },
+                "EditorLockComponent": {
+                    "$type": "EditorLockComponent",
+                    "Id": 16756833829463084449
+                },
+                "EditorOnlyEntityComponent": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 3304764185689106924
+                },
+                "EditorPendingCompositionComponent": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 10946266603492310304
+                },
+                "EditorVisibilityComponent": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 8024247997592049473
+                },
+                "TransformComponent": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 10327006156439764235,
+                    "Parent Entity": "Entity_[997177333263]"
+                },
+                "UiCanvasAssetRefComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 2718311420638805741,
+                    "m_template": {
+                        "$type": "UiCanvasAssetRefComponent",
+                        "CanvasAssetRef": {
+                            "AssetPath": "assets/ui/ingame_menu.uicanvas"
+                        }
+                    }
                 }
             }
         },
@@ -1037,7 +1111,8 @@
                     "Child Entity Order": [
                         "Entity_[358897576610]",
                         "Entity_[354734257237]",
-                        "Entity_[686761042901]"
+                        "Entity_[686761042901]",
+                        "Entity_[356665965953]"
                     ]
                 },
                 "EditorInspectorComponent": {

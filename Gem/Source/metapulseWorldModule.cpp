@@ -12,6 +12,8 @@
 
 #if AZ_TRAIT_CLIENT
 #include <Components/APIRequestsComponent.h>
+#include <Components/UIAdminComponent.h>
+#include <Components/IngameMenuComponent.h>
 #endif
 
 
@@ -33,6 +35,8 @@ namespace metapulseWorld
                 StartMenuComponent::CreateDescriptor(),
 #if AZ_TRAIT_CLIENT
                 APIRequestsComponent::CreateDescriptor(),
+                UIAdminComponent::CreateDescriptor(),
+                IngameMenuComponent::CreateDescriptor(),
 #endif
             });
 
