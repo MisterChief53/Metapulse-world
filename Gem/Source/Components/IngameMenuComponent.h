@@ -21,9 +21,9 @@ namespace metapulseWorld {
 
 	private:
 		AZ::EntityId m_closeButtonEntityId;
+		AZ::EntityId m_logoutButtonEntityId;
 
 		AZStd::string m_canvasPath;
 
-		static void OnCloseButtonPressed(AZ::EntityId canvasEntityId);
 	};
 }

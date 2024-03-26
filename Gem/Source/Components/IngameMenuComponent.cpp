@@ -5,6 +5,7 @@
 #include <LyShine/LyShineBus.h>
 #include <AzCore/Console/ILogger.h>
 #include <LyShine/Bus/UiButtonBus.h>
+#include <AzCore/Console/IConsole.h>
 
 namespace metapulseWorld {
 	void IngameMenuComponent::Init()
@@ -26,6 +27,18 @@ namespace metapulseWorld {
 				AZLOG_INFO("unloading canvas");
 				UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntityId);
 			});
+
+		UiButtonBus::Event(m_logoutButtonEntityId, &UiButtonInterface::SetOnClickCallback,
+			[]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position) {
+				const auto console = AZ::Interface<AZ::IConsole>::Get();
+
+				if (!console) {
+					AZ_Assert(false, "UiStartMenuComponent attempting to use console commands before AZ::Console is available.");
+					return;
+				}
+
+				console->PerformCommand("quit");
+			});
 	}
 
 	void IngameMenuComponent::Deactivate()
@@ -40,6 +53,7 @@ namespace metapulseWorld {
 				->Version(1)
 				->Field("Close Button Entity", &IngameMenuComponent::m_closeButtonEntityId)
 				->Field("Canvas Path", &IngameMenuComponent::m_canvasPath)
+				->Field("Logout Button Entity", &IngameMenuComponent::m_logoutButtonEntityId)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -51,15 +65,10 @@ namespace metapulseWorld {
 					->Attribute(AZ::Edit::Attributes::AppearsInAddComponentMenu, AZ_CRC_CE("CanvasUI"))
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_closeButtonEntityId, "Close Button Entity Id", "The id of the button used to close this UI")
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_canvasPath, "Canvas Path", "The path to the canvas file relative from the root")
+					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_logoutButtonEntityId, "Logout Button Entity", "The id of the button used to logout")
 					;
 			}
 		}
-	}
-
-	void IngameMenuComponent::OnCloseButtonPressed(AZ::EntityId canvasEntityId)
-	{
-		AZLOG_INFO("unloading canvas");
-		UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntityId);
 	}
 
 }
