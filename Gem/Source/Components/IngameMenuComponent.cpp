@@ -10,6 +10,7 @@
 #include <AzFramework/Components/CameraBus.h>
 #include <AzCore/Component/ComponentApplicationBus.h>
 #include <LyShine/Bus/UiCanvasBus.h>
+#include <AzFramework/Windowing/WindowBus.h>
 
 namespace metapulseWorld {
 	void IngameMenuComponent::Init()
@@ -44,6 +45,9 @@ namespace metapulseWorld {
 			});
 
 		setupSlider();
+
+		//connect to dropdown bus to handle events
+		UiDropdownNotificationBus::Handler::BusConnect(m_resolutionDropdownEntityId);
 		
 	}
 
@@ -61,6 +65,10 @@ namespace metapulseWorld {
 				->Field("Canvas Path", &IngameMenuComponent::m_canvasPath)
 				->Field("Logout Button Entity", &IngameMenuComponent::m_logoutButtonEntityId)
 				->Field("Fov Slider Entity", &IngameMenuComponent::m_fovSliderEntityId)
+				->Field("Resolution Dropdown Entity", &IngameMenuComponent::m_resolutionDropdownEntityId)
+				->Field("Resolution Button Entity 1", &IngameMenuComponent::m_resolutionOption1)
+				->Field("Resolution Button Entity 2", &IngameMenuComponent::m_resolutionOption2)
+				->Field("Resolution Button Entity 3", &IngameMenuComponent::m_resolutionOption3)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -74,7 +82,71 @@ namespace metapulseWorld {
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_canvasPath, "Canvas Path", "The path to the canvas file relative from the root")
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_logoutButtonEntityId, "Logout Button Entity", "The id of the button used to logout")
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_fovSliderEntityId, "Fov Slider Entity", "The id of the slider used to change fov")
+					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_resolutionDropdownEntityId, "Resolution Dropdown Entity", "The id of the dropdown that changes res")
+					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_resolutionOption1, "Resolution Button Entity 1", "The id of button #1 in the dropdown")
+					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_resolutionOption2, "Resolution Button Entity 2", "The id of button #2 in the dropdown")
+					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_resolutionOption3, "Resolution Button Entity 3", "The id of button #3 in the dropdown")
 					;
+			}
+		}
+	}
+
+	void IngameMenuComponent::OnDropdownExpanded()
+	{
+	}
+
+	void IngameMenuComponent::OnDropdownCollapsed()
+	{
+	}
+
+	void IngameMenuComponent::OnDropdownValueChanged([[maybe_unused]] AZ::EntityId option)
+	{
+		AZLOG_INFO("An option in the dropdown was chosen");
+
+		size_t resolutionIdx = 0;
+
+		bool canChangeResolution = false;
+
+		if (option == m_resolutionOption1) {
+			AZLOG_INFO("Resolution 1 chosen");
+			resolutionIdx = 0;
+			canChangeResolution = true;
+		}
+		else if (option == m_resolutionOption2) {
+			AZLOG_INFO("Resolution 2 chosen");
+			resolutionIdx = 1;
+			canChangeResolution = true;
+		}
+		else if (option == m_resolutionOption3) {
+			AZLOG_INFO("Resolution 3 chosen");
+			resolutionIdx = 2;
+			canChangeResolution = true;
+		}
+
+		if (AZ::IConsole* console = AZ::Interface<AZ::IConsole>::Get(); console)
+		{
+			AZLOG_INFO("Getting window handle...");
+			AzFramework::NativeWindowHandle windowHandle = nullptr;
+			AzFramework::WindowSystemRequestBus::BroadcastResult(
+				windowHandle,
+				&AzFramework::WindowSystemRequestBus::Events::GetDefaultWindowHandle);
+
+			if (windowHandle)
+			{
+				AZLOG_INFO("Window handle was valid, now changing resolution...");
+				AzFramework::WindowRequestBus::Event(windowHandle,
+					&AzFramework::WindowRequestBus::Events::ResizeClientArea,
+					AzFramework::WindowSize(m_resolutionsVector[resolutionIdx].first, m_resolutionsVector[resolutionIdx].second),
+					AzFramework::WindowPosOptions()
+				);
+				
+				// This comment is left here, since this is how we would do it
+				// if we were in fullscreen. For future reference!
+				/*AzFramework::WindowRequestBus::Event(
+					windowHandle,
+					&AzFramework::WindowRequestBus::Events::SetRenderResolution,
+					AzFramework::WindowSize(m_resolutionsVector[0].first, m_resolutionsVector[0].second)
+				);*/
 			}
 		}
 	}
