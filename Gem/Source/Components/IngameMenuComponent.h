@@ -22,8 +22,13 @@ namespace metapulseWorld {
 	private:
 		AZ::EntityId m_closeButtonEntityId;
 		AZ::EntityId m_logoutButtonEntityId;
+		AZ::EntityId m_fovSliderEntityId;
 
 		AZStd::string m_canvasPath;
+
+		AZ::Entity* GetActiveCamera();
+
+		void setupSlider();
 
 	};
 }

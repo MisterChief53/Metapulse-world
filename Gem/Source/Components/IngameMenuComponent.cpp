@@ -6,6 +6,10 @@
 #include <AzCore/Console/ILogger.h>
 #include <LyShine/Bus/UiButtonBus.h>
 #include <AzCore/Console/IConsole.h>
+#include <LyShine/Bus/UiSliderBus.h>
+#include <AzFramework/Components/CameraBus.h>
+#include <AzCore/Component/ComponentApplicationBus.h>
+#include <LyShine/Bus/UiCanvasBus.h>
 
 namespace metapulseWorld {
 	void IngameMenuComponent::Init()
@@ -14,7 +18,6 @@ namespace metapulseWorld {
 
 	void IngameMenuComponent::Activate()
 	{
-
 		UiButtonBus::Event(m_closeButtonEntityId, &UiButtonInterface::SetOnClickCallback, 
 			[]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position) {
 				AZLOG_INFO("Close ui callback triggered");
@@ -39,6 +42,9 @@ namespace metapulseWorld {
 
 				console->PerformCommand("quit");
 			});
+
+		setupSlider();
+		
 	}
 
 	void IngameMenuComponent::Deactivate()
@@ -54,6 +60,7 @@ namespace metapulseWorld {
 				->Field("Close Button Entity", &IngameMenuComponent::m_closeButtonEntityId)
 				->Field("Canvas Path", &IngameMenuComponent::m_canvasPath)
 				->Field("Logout Button Entity", &IngameMenuComponent::m_logoutButtonEntityId)
+				->Field("Fov Slider Entity", &IngameMenuComponent::m_fovSliderEntityId)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -66,9 +73,43 @@ namespace metapulseWorld {
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_closeButtonEntityId, "Close Button Entity Id", "The id of the button used to close this UI")
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_canvasPath, "Canvas Path", "The path to the canvas file relative from the root")
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_logoutButtonEntityId, "Logout Button Entity", "The id of the button used to logout")
+					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_fovSliderEntityId, "Fov Slider Entity", "The id of the slider used to change fov")
 					;
 			}
 		}
 	}
 
+	AZ::Entity* IngameMenuComponent::GetActiveCamera()
+	{
+		using namespace AZ;
+		using namespace Camera;
+
+		EntityId activeCameraId;
+		CameraSystemRequestBus::BroadcastResult(activeCameraId, &CameraSystemRequestBus::Events::GetActiveCamera);
+
+		auto ca = Interface<ComponentApplicationRequests>::Get();
+		return ca->FindEntity(activeCameraId);
+	}
+	
+	void IngameMenuComponent::setupSlider() {
+		float currentFov;
+		AZ::EntityId activeCameraId;
+
+		Camera::CameraSystemRequestBus::BroadcastResult(activeCameraId, &Camera::CameraSystemRequestBus::Events::GetActiveCamera);
+
+		Camera::CameraRequestBus::EventResult(currentFov, activeCameraId, &Camera::CameraRequestBus::Events::GetFovDegrees);
+
+		UiSliderBus::Event(m_fovSliderEntityId, &UiSliderInterface::SetValue, currentFov);
+
+		UiSliderBus::Event(m_fovSliderEntityId, &UiSliderInterface::SetValueChangingCallback,
+			[]([[maybe_unused]] AZ::EntityId entityId, [[maybe_unused]] float newValue) {
+				AZLOG_INFO("Performing fov change to: %0.2f", newValue);
+				AZ::EntityId activeCameraId;
+				// It might seem redundant to get the active camera Id twice. However, we need to *request* it again if we want to make
+				// the changes to the fov. So, once up there to get the current fov, and once in this callback to change it.
+				Camera::CameraSystemRequestBus::BroadcastResult(activeCameraId, &Camera::CameraSystemRequestBus::Events::GetActiveCamera);
+
+				Camera::CameraRequestBus::Event(activeCameraId, &Camera::CameraRequestBus::Events::SetFovDegrees, newValue);
+			});
+	}
 }
