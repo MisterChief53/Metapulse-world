@@ -14,6 +14,7 @@
 #include <Components/APIRequestsComponent.h>
 #include <Components/UIAdminComponent.h>
 #include <Components/IngameMenuComponent.h>
+#include <Components/InventoryMenuComponent.h>
 #endif
 
 
@@ -37,6 +38,7 @@ namespace metapulseWorld
                 APIRequestsComponent::CreateDescriptor(),
                 UIAdminComponent::CreateDescriptor(),
                 IngameMenuComponent::CreateDescriptor(),
+                InventoryMenuComponent::CreateDescriptor(),
 #endif
             });
 

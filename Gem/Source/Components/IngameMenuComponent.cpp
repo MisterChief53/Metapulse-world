@@ -11,6 +11,7 @@
 #include <AzCore/Component/ComponentApplicationBus.h>
 #include <LyShine/Bus/UiCanvasBus.h>
 #include <AzFramework/Windowing/WindowBus.h>
+#include <Components/Interfaces/UIAdminBus.h>
 
 namespace metapulseWorld {
 	void IngameMenuComponent::Init()
@@ -48,6 +49,8 @@ namespace metapulseWorld {
 
 		//connect to dropdown bus to handle events
 		UiDropdownNotificationBus::Handler::BusConnect(m_resolutionDropdownEntityId);
+
+		setupInventoryButton();
 		
 	}
 
@@ -69,6 +72,7 @@ namespace metapulseWorld {
 				->Field("Resolution Button Entity 1", &IngameMenuComponent::m_resolutionOption1)
 				->Field("Resolution Button Entity 2", &IngameMenuComponent::m_resolutionOption2)
 				->Field("Resolution Button Entity 3", &IngameMenuComponent::m_resolutionOption3)
+				->Field("Inventory Button Entity", &IngameMenuComponent::m_inventoryButtonEntityId)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -86,6 +90,7 @@ namespace metapulseWorld {
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_resolutionOption1, "Resolution Button Entity 1", "The id of button #1 in the dropdown")
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_resolutionOption2, "Resolution Button Entity 2", "The id of button #2 in the dropdown")
 					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_resolutionOption3, "Resolution Button Entity 3", "The id of button #3 in the dropdown")
+					->DataElement(AZ::Edit::UIHandlers::Default, &IngameMenuComponent::m_inventoryButtonEntityId, "Inventory Button Entity", "The id of the button used to open inventory")
 					;
 			}
 		}
@@ -182,6 +187,14 @@ namespace metapulseWorld {
 				Camera::CameraSystemRequestBus::BroadcastResult(activeCameraId, &Camera::CameraSystemRequestBus::Events::GetActiveCamera);
 
 				Camera::CameraRequestBus::Event(activeCameraId, &Camera::CameraRequestBus::Events::SetFovDegrees, newValue);
+			});
+	}
+
+	void IngameMenuComponent::setupInventoryButton() {
+		UiButtonBus::Event(m_inventoryButtonEntityId, &UiButtonBus::Events::SetOnClickCallback,
+			[]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position) {
+				AZLOG_INFO("Inventory Menu Callback Triggered");
+				UIAdminBus::Broadcast(&UIAdminBus::Events::LoadInventoryMenu);
 			});
 	}
 }

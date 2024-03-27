@@ -34,6 +34,7 @@ namespace metapulseWorld {
 		AZ::EntityId m_logoutButtonEntityId;
 		AZ::EntityId m_fovSliderEntityId;
 		AZ::EntityId m_resolutionDropdownEntityId;
+		AZ::EntityId m_inventoryButtonEntityId;
 
 		// Options for resolutions
 		AZ::EntityId m_resolutionOption1;
@@ -46,7 +47,10 @@ namespace metapulseWorld {
 
 		AZ::Entity* GetActiveCamera();
 
+		// Button Setup
 		void setupSlider();
+
+		void setupInventoryButton();
 
 	};
 }

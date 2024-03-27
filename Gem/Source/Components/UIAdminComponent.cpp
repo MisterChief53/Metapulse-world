@@ -13,10 +13,13 @@ namespace metapulseWorld {
 	void UIAdminComponent::Activate()
 	{
 		StartingPointInput::InputEventNotificationBus::MultiHandler::BusConnect(ToggleIngameMenu);
+		metapulseWorld::UIAdminBus::Handler::BusConnect();
 	}
 
 	void UIAdminComponent::Deactivate()
 	{
+		StartingPointInput::InputEventNotificationBus::MultiHandler::BusDisconnect(ToggleIngameMenu);
+		metapulseWorld::UIAdminBus::Handler::BusDisconnect();
 	}
 
 	void UIAdminComponent::Reflect(AZ::ReflectContext* context)
@@ -25,6 +28,7 @@ namespace metapulseWorld {
 			serializeContext->Class<UIAdminComponent, AZ::Component>()
 				->Version(1)
 				->Field("Ingame Menu Canvas Path", &UIAdminComponent::m_ingameMenuPath)
+				->Field("Inventory Menu Canvas Path", &UIAdminComponent::m_inventoryMenuPath)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext()) {
@@ -34,6 +38,7 @@ namespace metapulseWorld {
 					->Attribute(AZ::Edit::Attributes::Icon, "Icons/Components/Component_Placeholder.svg")
 					->Attribute(AZ::Edit::Attributes::AppearsInAddComponentMenu, AZ_CRC_CE("Game"))
 					->DataElement(AZ::Edit::UIHandlers::Default, &UIAdminComponent::m_ingameMenuPath,"Ingame Menu Canvas Path", "Path relative to root folder where the ingame manu canvas is located")
+					->DataElement(AZ::Edit::UIHandlers::Default, &UIAdminComponent::m_inventoryMenuPath, "Inventory Menu Canvas Path", "Path relative to root folder where the inventory menu canvas is located")
 					;
 			}
 		}
@@ -51,7 +56,7 @@ namespace metapulseWorld {
 
 			UiCanvasManagerBus::BroadcastResult(m_ingameMenuEntityId, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, m_ingameMenuPath, false);
 
-			// The unloading will be done inside the canvas, since it consumes all the input.
+			// The unloading will be done inside the canvas, since it consumes all the input, it would never get triggered here.
 			if (!m_ingameMenuEntityId.IsValid()) {
 				UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::LoadCanvas, m_ingameMenuPath);
 			}
@@ -63,5 +68,29 @@ namespace metapulseWorld {
 	}
 	void UIAdminComponent::OnHeld([[maybe_unused]] float value)
 	{
+	}
+
+	void UIAdminComponent::UnloadStartMenu()
+	{
+		UiCanvasManagerBus::BroadcastResult(m_ingameMenuEntityId, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, m_ingameMenuPath, false);
+
+		// if the canvas is in a valid entity, unload it.
+		if (m_ingameMenuEntityId.IsValid()) {
+			UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, m_ingameMenuEntityId);
+		}
+	}
+	
+	void UIAdminComponent::LoadInventoryMenu()
+	{
+		AZLOG_INFO("Unloading Ingame Menu");
+		// it is expected that if we want to load the inventory menu, we are unloading the start menu
+		UnloadStartMenu();
+
+		UiCanvasManagerBus::BroadcastResult(m_inventoryMenuEntityId, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, m_inventoryMenuPath, false);
+
+		// if the canvas is not a valid entity, meaning it is not loaded, load it.
+		if (!m_inventoryMenuEntityId.IsValid()) {
+			UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::LoadCanvas, m_inventoryMenuPath);
+		}
 	}
 }

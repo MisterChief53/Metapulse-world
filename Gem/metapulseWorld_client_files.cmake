@@ -7,4 +7,6 @@ set(FILES
 	Source/Components/IngameMenuComponent.h
 	Source/Components/IngameMenuComponent.cpp
 	Source/Components/Interfaces/UIAdminBus.h
+	Source/Components/InventoryMenuComponent.h
+	Source/Components/InventoryMenuComponent.cpp
 )

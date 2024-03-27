@@ -1,5 +1,6 @@
 #include <AzCore/Component/Component.h>
 #include <StartingPointInput/InputEventNotificationBus.h>
+#include <Components/Interfaces/UIAdminBus.h>
 
 namespace metapulseWorld {
 
@@ -7,7 +8,9 @@ namespace metapulseWorld {
 
 	class UIAdminComponent
 		: public AZ::Component
-		, public StartingPointInput::InputEventNotificationBus::MultiHandler{
+		, public StartingPointInput::InputEventNotificationBus::MultiHandler 
+		, public metapulseWorld::UIAdminBus::Handler
+	{
 	public:
 		AZ_COMPONENT(metapulseWorld::UIAdminComponent, "{D7579DDA-4644-4F9F-8FB9-27239770AD34}", AZ::Component);
 
@@ -25,9 +28,15 @@ namespace metapulseWorld {
 		void OnReleased(float value) override;
 		void OnHeld(float value) override;
 
+		// UIAdminBus overrides
+		void UnloadStartMenu() override;
+		void LoadInventoryMenu() override;
+
 	private:
 		AZStd::string m_ingameMenuPath;
-
 		AZ::EntityId m_ingameMenuEntityId;
+
+		AZStd::string m_inventoryMenuPath;
+		AZ::EntityId m_inventoryMenuEntityId;
 	};
 }
