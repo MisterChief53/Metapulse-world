@@ -4,7 +4,7 @@
 namespace metapulseWorld {
 	class InventoryMenuComponent
 		: public AZ::Component
-		, public UiDropTargetNotificationBus::Handler {
+		, public UiDropTargetNotificationBus::MultiHandler {
 	public:
 		AZ_COMPONENT(metapulseWorld::InventoryMenuComponent, "{9EAAE2FF-9265-4BA0-98EE-ADACEAE57911}", AZ::Component);
 
@@ -21,7 +21,10 @@ namespace metapulseWorld {
 
 	private:
 		AZ::EntityId m_closeButtonEntityId;
+
 		AZ::EntityId m_unequippedItemsListEntityId;
+		AZ::EntityId m_unequippedDropTargetEntityId;
+
 		AZ::EntityId m_equippedItemsListEntityId;
 		AZ::EntityId m_equippedDropTargetEntityId;
 	};

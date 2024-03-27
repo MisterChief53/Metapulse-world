@@ -27,7 +27,8 @@ namespace metapulseWorld {
 				UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntityId);
 			});
 
-		UiDropTargetNotificationBus::Handler::BusConnect(m_equippedDropTargetEntityId);
+		UiDropTargetNotificationBus::MultiHandler::BusConnect(m_equippedDropTargetEntityId);
+		UiDropTargetNotificationBus::MultiHandler::BusConnect(m_unequippedDropTargetEntityId);
 	}
 	void InventoryMenuComponent::Deactivate()
 	{
@@ -39,6 +40,7 @@ namespace metapulseWorld {
 				->Version(1)
 				->Field("Close Button Entity", &InventoryMenuComponent::m_closeButtonEntityId)
 				->Field("Unequipped List Entity", &InventoryMenuComponent::m_unequippedItemsListEntityId)
+				->Field("Unequipped Drop Target", &InventoryMenuComponent::m_unequippedDropTargetEntityId)
 				->Field("Equipped List Entity", &InventoryMenuComponent::m_equippedItemsListEntityId)
 				->Field("Equipped Drop Target", &InventoryMenuComponent::m_equippedDropTargetEntityId)
 				;
@@ -51,6 +53,7 @@ namespace metapulseWorld {
 					->Attribute(AZ::Edit::Attributes::AppearsInAddComponentMenu, AZ_CRC_CE("CanvasUI"))
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_closeButtonEntityId, "Close Button Entity Id", "The id of the button used to close this UI")
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_unequippedItemsListEntityId, "Unequipped List Entity", "The id of the list that contains unequipped items")
+					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_unequippedDropTargetEntityId, "Unequipped Drop Target", "The id of the drop target for unequipped items")
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_equippedItemsListEntityId, "Equipped List Entity", "The id of the list that contains equipped items")
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_equippedDropTargetEntityId, "Equipped Drop Target", "The id of the drop target for equipped items")
 					;
