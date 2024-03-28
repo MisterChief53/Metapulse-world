@@ -26,9 +26,14 @@ namespace metapulseWorld {
 
 		AZStd::string getUrl() override;
 
+		void setUsername(const AZStd::string& username) override;
+
+		AZStd::string getUsername() override;
+
 	private:
 	
 		AZStd::string m_accountsServerUrl;
 		AZStd::string m_token;
+		AZStd::string m_username;
 	};
 }

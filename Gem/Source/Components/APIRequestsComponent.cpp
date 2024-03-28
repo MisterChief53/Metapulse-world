@@ -59,4 +59,14 @@ namespace metapulseWorld {
 		return m_accountsServerUrl;
 	}
 
+	void APIRequestsComponent::setUsername(const AZStd::string& username)
+	{
+		m_username = username;
+	}
+
+	AZStd::string APIRequestsComponent::getUsername()
+	{
+		return m_username;
+	}
+
 }

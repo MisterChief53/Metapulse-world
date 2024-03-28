@@ -90,12 +90,13 @@ namespace metapulseWorld {
 			accountsServerUrl + "/auth/login?name=" + username + "&password=" + password,
 			Aws::Http::HttpMethod::HTTP_POST,
 			AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
-			[&statusTextEntityId, &canvasEntity](const AZStd::string& response, Aws::Http::HttpResponseCode responseCode) {
+			[&statusTextEntityId, &canvasEntity, &username](const AZStd::string& response, Aws::Http::HttpResponseCode responseCode) {
 				AZLOG_INFO("Executing login callback...");
 				if (responseCode == Aws::Http::HttpResponseCode::OK) {
 					UiTextBus::Event(statusTextEntityId, &UiTextBus::Events::SetText, "Logged in succesfully!");
 
 					APIRequestsBus::Broadcast(&APIRequestsBus::Events::setToken, response);
+					APIRequestsBus::Broadcast(&APIRequestsBus::Events::setUsername, username);
 					AZLOG_INFO("token: %s", response.c_str());
 
 					// Now, disable the canvas

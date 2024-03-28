@@ -1,5 +1,6 @@
 #include <AzCore/Component/Component.h>
 #include <LyShine/Bus/UiDropTargetBus.h>
+#include <HttpRequestor/HttpTypes.h>
 
 namespace metapulseWorld {
 	class InventoryMenuComponent
@@ -19,6 +20,8 @@ namespace metapulseWorld {
 		void OnDropHoverEnd(AZ::EntityId draggable) override;
 		void OnDrop(AZ::EntityId draggable) override;
 
+		void FetchItems();
+
 	private:
 		AZ::EntityId m_closeButtonEntityId;
 
@@ -27,5 +30,7 @@ namespace metapulseWorld {
 
 		AZ::EntityId m_equippedItemsListEntityId;
 		AZ::EntityId m_equippedDropTargetEntityId;
+
+		AZ::EntityId m_spawnerEntityId;
 	};
 }

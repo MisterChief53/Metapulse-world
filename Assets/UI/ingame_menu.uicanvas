@@ -74,7 +74,7 @@
 						<Class name="AZ::u64" field="Id" value="6893824501796749063" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 					</Class>
 					<Class name="EntityId" field="Close Button Entity" version="1" type="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}">
-						<Class name="AZ::u64" field="id" value="406587734548" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+						<Class name="AZ::u64" field="id" value="498072802190" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 					</Class>
 					<Class name="AZStd::string" field="Canvas Path" value="assets/ui/ingame_menu.uicanvas" type="{03AAAB3F-5C47-5A66-9EBC-D5FA4DB353C9}"/>
 					<Class name="EntityId" field="Logout Button Entity" version="1" type="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}">

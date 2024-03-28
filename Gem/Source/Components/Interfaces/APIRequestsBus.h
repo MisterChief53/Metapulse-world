@@ -13,6 +13,10 @@ namespace metapulseWorld {
 
 		virtual void setToken(const AZStd::string& token) = 0;
 		virtual AZStd::string getToken() = 0;
+
+		virtual void setUsername(const AZStd::string& username) = 0;
+		virtual AZStd::string getUsername() = 0;
+
 		virtual AZStd::string getUrl() = 0;
 	};
 

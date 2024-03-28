@@ -5,8 +5,12 @@
 #include <AzCore/Console/ILogger.h>
 #include <LyShine/Bus/UiCanvasManagerBus.h>
 #include <LyShine/Bus/UiDraggableBus.h>
-#include <LyShine/Bus/UiCanvasBus.h>
 #include <LyShine/Bus/UiElementBus.h>
+#include <aws/core/http/HttpResponse.h>
+#include <HttpRequestor/HttpRequestorBus.h>
+#include <HttpRequestor/HttpTypes.h>
+#include <Components/Interfaces/APIRequestsBus.h>
+#include <LyShine/Bus/UiSpawnerBus.h>
 
 namespace metapulseWorld {
 	void InventoryMenuComponent::Init()
@@ -43,6 +47,7 @@ namespace metapulseWorld {
 				->Field("Unequipped Drop Target", &InventoryMenuComponent::m_unequippedDropTargetEntityId)
 				->Field("Equipped List Entity", &InventoryMenuComponent::m_equippedItemsListEntityId)
 				->Field("Equipped Drop Target", &InventoryMenuComponent::m_equippedDropTargetEntityId)
+				->Field("Spawner Entity", &InventoryMenuComponent::m_spawnerEntityId)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext()) {
@@ -56,6 +61,7 @@ namespace metapulseWorld {
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_unequippedDropTargetEntityId, "Unequipped Drop Target", "The id of the drop target for unequipped items")
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_equippedItemsListEntityId, "Equipped List Entity", "The id of the list that contains equipped items")
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_equippedDropTargetEntityId, "Equipped Drop Target", "The id of the drop target for equipped items")
+					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_spawnerEntityId, "Spawner Entity", "The id of the ui spawner entity that will get the fetched items")
 					;
 			}
 		}
@@ -77,6 +83,44 @@ namespace metapulseWorld {
 		}
 		else if (draggableParent.IsValid() && draggableParent == m_equippedItemsListEntityId) {
 			UiElementBus::Event(draggable, &UiElementBus::Events::ReparentByEntityId, m_unequippedItemsListEntityId, AZ::EntityId());
+		}
+	}
+	void InventoryMenuComponent::FetchItems()
+	{
+		AZStd::string accountsServerUrl, username;
+		APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+		APIRequestsBus::BroadcastResult(username, &APIRequestsBus::Events::getUsername);
+
+		AZ::EntityId spawnerEntity = m_spawnerEntityId;
+
+		if (!username.empty() && !accountsServerUrl.empty()) {
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
+				accountsServerUrl + "/items/getItemsUser?name=" + username,
+				Aws::Http::HttpMethod::HTTP_POST,
+				AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
+				[&spawnerEntity](const Aws::Utils::Json::JsonValue& json, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Executing fetch items callback...");
+
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AzFramework::SliceInstantiationTicket itemInstantiationTicket;
+						AZ::EntityId itemEntityId;
+
+						Aws::Utils::Array<Aws::Utils::Json::JsonView> items = json.View().AsArray();
+
+						for (size_t i = 0; i < items.GetLength(); i++) {
+							Aws::Utils::Json::JsonView item = items.GetItem(i);
+
+							UiSpawnerBus::EventResult(itemInstantiationTicket, spawnerEntity, &UiSpawnerBus::Events::Spawn);
+						}
+					}
+					else {
+						AZLOG_ERROR("Failed fetching items");
+					}
+				}
+			);
+		}
+		else {
+			AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
 		}
 	}
 }
