@@ -10,7 +10,7 @@
 #include <HttpRequestor/HttpRequestorBus.h>
 #include <HttpRequestor/HttpTypes.h>
 #include <Components/Interfaces/APIRequestsBus.h>
-#include <LyShine/Bus/UiSpawnerBus.h>
+#include <LyShine/Bus/UiTextBus.h>
 
 namespace metapulseWorld {
 	void InventoryMenuComponent::Init()
@@ -33,6 +33,10 @@ namespace metapulseWorld {
 
 		UiDropTargetNotificationBus::MultiHandler::BusConnect(m_equippedDropTargetEntityId);
 		UiDropTargetNotificationBus::MultiHandler::BusConnect(m_unequippedDropTargetEntityId);
+
+		UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
+
+		FetchItems();
 	}
 	void InventoryMenuComponent::Deactivate()
 	{
@@ -85,32 +89,58 @@ namespace metapulseWorld {
 			UiElementBus::Event(draggable, &UiElementBus::Events::ReparentByEntityId, m_unequippedItemsListEntityId, AZ::EntityId());
 		}
 	}
+	void InventoryMenuComponent::OnSpawnBegin([[maybe_unused]] const AzFramework::SliceInstantiationTicket&)
+	{
+	}
+	void InventoryMenuComponent::OnEntitySpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket& ticket, const AZ::EntityId& spawnedEntity)
+	{
+		m_itemMap[spawnedEntity] = AZStd::make_pair(m_spawnMap[ticket.GetRequestId()].first, m_spawnMap[ticket.GetRequestId()].second);
+		m_spawnMap.erase(ticket.GetRequestId());
+
+		UiTextBus::Event(spawnedEntity, &UiTextBus::Events::SetText, m_itemMap[spawnedEntity].second);
+
+		UiElementBus::Event(spawnedEntity, &UiElementBus::Events::ReparentByEntityId, m_unequippedItemsListEntityId, AZ::EntityId());
+	}
+	void InventoryMenuComponent::OnEntitiesSpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZStd::vector<AZ::EntityId>&)
+	{
+	}
+	void InventoryMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZStd::vector<AZ::EntityId>&)
+	{
+	}
+	void InventoryMenuComponent::OnSpawnEnd([[maybe_unused]] const AzFramework::SliceInstantiationTicket&)
+	{
+	}
+	void InventoryMenuComponent::OnSpawnFailed([[maybe_unused]] const AzFramework::SliceInstantiationTicket&)
+	{
+	}
 	void InventoryMenuComponent::FetchItems()
 	{
 		AZStd::string accountsServerUrl, username;
 		APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
 		APIRequestsBus::BroadcastResult(username, &APIRequestsBus::Events::getUsername);
 
-		AZ::EntityId spawnerEntity = m_spawnerEntityId;
+		//AZ::EntityId spawnerEntity = m_spawnerEntityId;
 
 		if (!username.empty() && !accountsServerUrl.empty()) {
 			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
 				accountsServerUrl + "/items/getItemsUser?name=" + username,
 				Aws::Http::HttpMethod::HTTP_POST,
 				AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
-				[&spawnerEntity](const Aws::Utils::Json::JsonValue& json, Aws::Http::HttpResponseCode responseCode) {
+				[this](const Aws::Utils::Json::JsonView& json, Aws::Http::HttpResponseCode responseCode) {
 					AZLOG_INFO("Executing fetch items callback...");
-
 					if (responseCode == Aws::Http::HttpResponseCode::OK) {
 						AzFramework::SliceInstantiationTicket itemInstantiationTicket;
 						AZ::EntityId itemEntityId;
 
-						Aws::Utils::Array<Aws::Utils::Json::JsonView> items = json.View().AsArray();
+						Aws::Utils::Array<Aws::Utils::Json::JsonView> items = json.AsArray();
 
 						for (size_t i = 0; i < items.GetLength(); i++) {
 							Aws::Utils::Json::JsonView item = items.GetItem(i);
 
-							UiSpawnerBus::EventResult(itemInstantiationTicket, spawnerEntity, &UiSpawnerBus::Events::Spawn);
+							UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
+
+							//m_spawnQueue.push(AZStd::make_pair( (size_t) item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()) ));
+							m_spawnMap[itemInstantiationTicket.GetRequestId()] = AZStd::make_pair((size_t)item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()));
 						}
 					}
 					else {
