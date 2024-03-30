@@ -12,16 +12,10 @@ namespace metapulseWorld {
 	}
 
 	void APIRequestsComponent::Activate() {
-		// Globally initialize curl functionality for windows systems. Only do this once
-		// Per application lifetime
-		//curl_global_init(CURL_GLOBAL_WIN32);
-		//m_handle = curl_easy_init();
 		APIRequestsBus::Handler::BusConnect();
 	}
 
 	void APIRequestsComponent::Deactivate() {
-		//curl_easy_setopt(handle, CURLOPT_URL, "http://localhost:8080/");
-		//curl_global_cleanup();
 		APIRequestsBus::Handler::BusDisconnect();
 	}
 

@@ -12,6 +12,7 @@
 #include <HttpRequestor/HttpTypes.h>
 
 #include <LyShine/Bus/UiSpawnerBus.h>
+#include <Components/Interfaces/HUDBus.h>
 
 namespace metapulseWorld {
 
@@ -98,6 +99,9 @@ namespace metapulseWorld {
 
 					APIRequestsBus::Broadcast(&APIRequestsBus::Events::setToken, response);
 					AZLOG_INFO("token: %s", response.c_str());
+
+					// update the money on the HUD
+					HUDBus::Broadcast(&HUDBus::Events::DisplayMoney);
 
 					// Now, disable the canvas
 					AZStd::string pathname = "assets/ui/start_menu.uicanvas";

@@ -15,6 +15,7 @@
 #include <Components/UIAdminComponent.h>
 #include <Components/IngameMenuComponent.h>
 #include <Components/InventoryMenuComponent.h>
+#include <Components/HUDComponent.h>
 #endif
 
 
@@ -39,6 +40,7 @@ namespace metapulseWorld
                 UIAdminComponent::CreateDescriptor(),
                 IngameMenuComponent::CreateDescriptor(),
                 InventoryMenuComponent::CreateDescriptor(),
+                HUDComponent::CreateDescriptor(),
 #endif
             });
 

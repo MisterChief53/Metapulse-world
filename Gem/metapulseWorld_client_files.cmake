@@ -9,4 +9,7 @@ set(FILES
 	Source/Components/Interfaces/UIAdminBus.h
 	Source/Components/InventoryMenuComponent.h
 	Source/Components/InventoryMenuComponent.cpp
+	Source/Components/HUDComponent.h
+	Source/Components/HUDComponent.cpp
+	Source/Components/Interfaces/HUDBus.h
 )
