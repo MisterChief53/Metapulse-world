@@ -37,9 +37,15 @@ namespace metapulseWorld {
 		UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
 
 		FetchItems();
+
+		DisplayMoney();
 	}
 	void InventoryMenuComponent::Deactivate()
 	{
+		UiDropTargetNotificationBus::MultiHandler::BusDisconnect(m_equippedDropTargetEntityId);
+		UiDropTargetNotificationBus::MultiHandler::BusDisconnect(m_unequippedDropTargetEntityId);
+
+		UiSpawnerNotificationBus::Handler::BusDisconnect(m_spawnerEntityId);
 	}
 	void InventoryMenuComponent::Reflect(AZ::ReflectContext* context)
 	{
@@ -52,6 +58,7 @@ namespace metapulseWorld {
 				->Field("Equipped List Entity", &InventoryMenuComponent::m_equippedItemsListEntityId)
 				->Field("Equipped Drop Target", &InventoryMenuComponent::m_equippedDropTargetEntityId)
 				->Field("Spawner Entity", &InventoryMenuComponent::m_spawnerEntityId)
+				->Field("Money Quantity", &InventoryMenuComponent::m_moneyDisplayEntityId)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext()) {
@@ -66,6 +73,7 @@ namespace metapulseWorld {
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_equippedItemsListEntityId, "Equipped List Entity", "The id of the list that contains equipped items")
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_equippedDropTargetEntityId, "Equipped Drop Target", "The id of the drop target for equipped items")
 					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_spawnerEntityId, "Spawner Entity", "The id of the ui spawner entity that will get the fetched items")
+					->DataElement(AZ::Edit::UIHandlers::Default, &InventoryMenuComponent::m_moneyDisplayEntityId, "Money Quantity", "The id of the text entity that will display the money quantity")
 					;
 			}
 		}
@@ -152,5 +160,36 @@ namespace metapulseWorld {
 		else {
 			AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
 		}
+	}
+	void InventoryMenuComponent::DisplayMoney()
+	{
+		AZStd::string accountsServerUrl, token;
+		APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+		APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
+			accountsServerUrl + "/auth/userInfo",
+			Aws::Http::HttpMethod::HTTP_GET,
+			AZStd::map<AZStd::string, AZStd::string>({
+				{"Authorization", token}
+				}),
+			[this](const Aws::Utils::Json::JsonView& json, Aws::Http::HttpResponseCode responseCode) {
+				AZLOG_INFO("Executing display money callback on invontory menu...");
+				if (responseCode == Aws::Http::HttpResponseCode::OK) {
+					AZStd::string moneyString = AZStd::to_string((float)json.GetDouble("money"));
+
+					// Ugly hack to get rid of extra zeroes
+					moneyString.pop_back();
+					moneyString.pop_back();
+					moneyString.pop_back();
+					moneyString.pop_back();
+
+					UiTextBus::Event(m_moneyDisplayEntityId, &UiTextBus::Events::SetText, moneyString);
+				}
+				else {
+					AZLOG_ERROR("Failed fetching user's money");
+				}
+			}
+		);
 	}
 }

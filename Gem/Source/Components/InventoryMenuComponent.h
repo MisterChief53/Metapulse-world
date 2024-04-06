@@ -43,10 +43,14 @@ namespace metapulseWorld {
 		AZ::EntityId m_equippedDropTargetEntityId;
 
 		AZ::EntityId m_spawnerEntityId;
+
+		AZ::EntityId m_moneyDisplayEntityId;
 		
 		// pairs contain itemId, itemName
 		// AZStd::queue<AZStd::pair<size_t, AZStd::string>> m_spawnQueue;
 		AZStd::map<AZ::u64, AZStd::pair<size_t, AZStd::string>> m_spawnMap;
 		AZStd::map<AZ::EntityId, AZStd::pair<size_t, AZStd::string>> m_itemMap;
+
+		void DisplayMoney();
 	};
 }
