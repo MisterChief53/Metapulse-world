@@ -5,6 +5,7 @@
 #include <AzCore/Serialization/SerializeContext.h>
 // we still need to include the network components even after the XML config
 #include <Multiplayer/Components/NetworkCharacterComponent.h>
+#include <Components/Interfaces/UserRegistryBus.h>
 
 namespace metapulseWorld
 {
@@ -21,6 +22,9 @@ namespace metapulseWorld
         InputEventNotificationBus::MultiHandler::BusConnect(MoveRightEventId);
         InputEventNotificationBus::MultiHandler::BusConnect(RotateYawEventId);
         InputEventNotificationBus::MultiHandler::BusConnect(RotatePitchEventId);
+        // register the user on user registry
+        AZLOG_INFO("######################################## Attempting to register the user ########################################");
+        UserRegistryBus::Broadcast(&UserRegistryBus::Events::RegisterUser, this->GetEntityId());
         metapulseWorld::UserBus::Handler::BusConnect(GetEntityId());
     }
 

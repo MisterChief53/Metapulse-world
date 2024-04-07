@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<Component
+  Name="UserRegistry"
+  Namespace="metapulseWorld"
+  OverrideComponent="false"
+  OverrideController="true"
+  OverrideInclude="Source/Components/UserRegistry.h"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+</Component>

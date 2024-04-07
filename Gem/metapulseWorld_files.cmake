@@ -13,4 +13,7 @@ set(FILES
     Source/Components/StartMenuComponent.h
     Source/Components/StartMenuComponent.cpp
     Source/Components/Interfaces/StartMenuBus.h
+    Source/Components/UserRegistry.h
+    Source/Components/UserRegistry.cpp
+    Source/Components/Interfaces/UserRegistryBus.h
 )
