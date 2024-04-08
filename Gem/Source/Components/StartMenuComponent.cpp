@@ -10,7 +10,7 @@
 #include <aws/core/http/HttpResponse.h>
 #include <HttpRequestor/HttpRequestorBus.h>
 #include <HttpRequestor/HttpTypes.h>
-
+#include <Components/Interfaces/UserRegistryBus.h>
 #include <LyShine/Bus/UiSpawnerBus.h>
 #include <Components/Interfaces/HUDBus.h>
 

@@ -13,6 +13,8 @@ namespace metapulseWorld {
 		static const AZ::EBusAddressPolicy AddressPolicy = AZ::EBusAddressPolicy::Single;
 
 		virtual void RegisterUser(const AZ::EntityId& entityId) = 0;
+
+		virtual void UnregisterUser(const AZStd::string& entityId) = 0;
 	};
 
 	using UserRegistryBus = AZ::EBus<UserRegistryRequests>;

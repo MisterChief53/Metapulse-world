@@ -19,9 +19,9 @@ namespace metapulseWorld
         // user registry overrides
 
         void RegisterUser(const AZ::EntityId& entityId) override;
+        void UnregisterUser(const AZStd::string& entityId) override;
 
     protected:
-
-        AZStd::vector<AZ::EntityId> m_userEntityIdVector;
+        AZStd::unordered_map<AZStd::string, AZ::EntityId> m_userEntityIdMap;
     };
 }

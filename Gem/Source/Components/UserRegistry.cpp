@@ -21,7 +21,16 @@ namespace metapulseWorld
     }
     void UserRegistryController::RegisterUser(const AZ::EntityId& entityId)
     {
-        m_userEntityIdVector.push_back(entityId);
-        AZLOG_INFO("new user registered");
+        m_userEntityIdMap[entityId.ToString()] = entityId;
+        AZLOG_INFO("################################### new user registered ###################################");
+    }
+    void UserRegistryController::UnregisterUser(const AZStd::string& entityId)
+    {
+        if (m_userEntityIdMap.find(entityId) != m_userEntityIdMap.end()) {
+            m_userEntityIdMap.erase(entityId);
+        }
+        else {
+            AZLOG_ERROR("Could not find user to deregister from user registry");
+        }
     }
 }

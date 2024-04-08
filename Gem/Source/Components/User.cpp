@@ -22,16 +22,18 @@ namespace metapulseWorld
         InputEventNotificationBus::MultiHandler::BusConnect(MoveRightEventId);
         InputEventNotificationBus::MultiHandler::BusConnect(RotateYawEventId);
         InputEventNotificationBus::MultiHandler::BusConnect(RotatePitchEventId);
-        // register the user on user registry
-        AZLOG_INFO("######################################## Attempting to register the user ########################################");
-        UserRegistryBus::Broadcast(&UserRegistryBus::Events::RegisterUser, this->GetEntityId());
         metapulseWorld::UserBus::Handler::BusConnect(GetEntityId());
+
+        // register the user on user registry
+        AZLOG_INFO("######################################## Attempting to register a user ########################################");
+        UserRegistryBus::Broadcast(&UserRegistryBus::Events::RegisterUser, this->GetEntityId());
     }
 
     void UserController::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
         InputEventNotificationBus::MultiHandler::BusDisconnect();
         metapulseWorld::UserBus::Handler::BusDisconnect();
+        UserRegistryBus::Broadcast(&UserRegistryBus::Events::UnregisterUser, this->GetEntityId().ToString());
     }
 
     // Create input will collect the input for the last input time period
