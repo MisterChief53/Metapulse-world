@@ -29,7 +29,7 @@ void metapulseWorld::UserMenuComponent::Activate()
 
 	UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
 
-	UserRegistryBus::BroadcastResult(m_userMap, &UserRegistryBus::Events::GetUserMap);
+	UserRegistryBus::BroadcastResult(m_userVector, &UserRegistryBus::Events::GetUserVector);
 
 	FetchUsers();
 
@@ -95,11 +95,11 @@ void metapulseWorld::UserMenuComponent::FetchUsers()
 {
 	AZLOG_INFO("Fetching the users for user list...");
 	AzFramework::SliceInstantiationTicket itemInstantiationTicket;
-	if (m_userMap.empty()) {
-		AZLOG_INFO("User map is empty!");
+	if (m_userVector.empty()) {
+		AZLOG_INFO("User vector is empty!");
 		return;
 	}
-	for (auto user : m_userMap) {
+	for (auto user : m_userVector) {
 		UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
 	}
 }

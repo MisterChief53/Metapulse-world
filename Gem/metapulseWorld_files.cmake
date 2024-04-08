@@ -16,4 +16,5 @@ set(FILES
     Source/Components/UserRegistry.h
     Source/Components/UserRegistry.cpp
     Source/Components/Interfaces/UserRegistryBus.h
+    Source/Helpers/NetworkTypes.h
 )

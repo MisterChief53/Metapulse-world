@@ -32,7 +32,7 @@ namespace metapulseWorld {
 		AZ::EntityId m_userListEntityId;
 		AZ::EntityId m_spawnerEntityId;
 
-		AZStd::unordered_map<AZStd::string, AZ::EntityId> m_userMap;
+		AZStd::vector<AZStd::string> m_userVector;
 
 		void FetchUsers();
 	};

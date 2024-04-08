@@ -8,10 +8,10 @@
   OverrideInclude="Source/Components/UserRegistry.h"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-  <NetworkProperty Name="UserMap"
+  <NetworkProperty Name="Player1"
                    Description="The map that holds the users connected and their ids"
-                   Type="AZStd::unordered_map&lt;AZStd::string, AZ::EntityId&gt;"
-                   Init="{}"
+                   Type="AZStd::string"
+                   Init="&quot;&quot;"
                    ReplicateFrom="Authority"
                    ReplicateTo="Client"
                    IsPublic="false"
@@ -19,5 +19,20 @@
                    IsRewindable="false"
                    GenerateEventBindings="false"
                    ExposeToEditor="false"
+                   Container="Object"
+                   />
+
+  <NetworkProperty Name="Player2"
+                   Description="The map that holds the users connected and their ids"
+                   Type="AZStd::string"
+                   Init="&quot;&quot;"
+                   ReplicateFrom="Authority"
+                   ReplicateTo="Client"
+                   IsPublic="false"
+                   IsPredictable="false"
+                   IsRewindable="false"
+                   GenerateEventBindings="false"
+                   ExposeToEditor="false"
+                   Container="Object"
                    />
 </Component>

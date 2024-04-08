@@ -19,22 +19,39 @@ namespace metapulseWorld
     {
         UserRegistryBus::Handler::BusDisconnect();
     }
-    void UserRegistryController::RegisterUser(const AZ::EntityId& entityId)
+    void UserRegistryController::RegisterUser([[maybe_unused]] const AZ::EntityId& entityId)
     {
-        m_userEntityIdMap[entityId.ToString()] = entityId;
+#if AZ_TRAIT_SERVER
+        if (GetPlayer1().empty()) {
+            SetPlayer1(entityId.ToString());
+        }
+        else if (GetPlayer2().empty()) {
+            SetPlayer1(entityId.ToString());
+        }
+        else {
+            AZLOG_ERROR("Cannot register more users!");
+            return;
+        }
         AZLOG_INFO("################################### new user registered ###################################");
+#endif
     }
-    void UserRegistryController::UnregisterUser(const AZStd::string& entityId)
+    void UserRegistryController::UnregisterUser([[maybe_unused]] const AZStd::string& entityId)
     {
-        if (m_userEntityIdMap.find(entityId) != m_userEntityIdMap.end()) {
-            m_userEntityIdMap.erase(entityId);
+#if AZ_TRAIT_SERVER
+        if (entityId == GetPlayer1()) {
+            SetPlayer1("");
+        }
+        else if (entityId == GetPlayer2()) {
+            SetPlayer2("");
         }
         else {
             AZLOG_ERROR("Could not find user to deregister from user registry");
         }
+#endif
+
     }
-    AZStd::unordered_map<AZStd::string, AZ::EntityId> UserRegistryController::GetUserMap()
+    AZStd::vector<AZStd::string> UserRegistryController::GetUserVector()
     {
-        return m_userEntityIdMap;
+        return AZStd::vector({ GetPlayer1(), GetPlayer2() });
     }
 }

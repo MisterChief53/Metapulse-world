@@ -16,7 +16,7 @@ namespace metapulseWorld {
 
 		virtual void UnregisterUser(const AZStd::string& entityId) = 0;
 
-		virtual AZStd::unordered_map<AZStd::string, AZ::EntityId> GetUserMap() = 0;
+		virtual AZStd::vector<AZStd::string> GetUserVector() = 0;
 	};
 
 	using UserRegistryBus = AZ::EBus<UserRegistryRequests>;
