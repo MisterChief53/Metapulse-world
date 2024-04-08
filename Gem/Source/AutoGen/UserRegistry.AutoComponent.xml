@@ -7,4 +7,17 @@
   OverrideController="true"
   OverrideInclude="Source/Components/UserRegistry.h"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <NetworkProperty Name="UserMap"
+                   Description="The map that holds the users connected and their ids"
+                   Type="AZStd::unordered_map&lt;AZStd::string, AZ::EntityId&gt;"
+                   Init="{}"
+                   ReplicateFrom="Authority"
+                   ReplicateTo="Client"
+                   IsPublic="false"
+                   IsPredictable="false"
+                   IsRewindable="false"
+                   GenerateEventBindings="false"
+                   ExposeToEditor="false"
+                   />
 </Component>

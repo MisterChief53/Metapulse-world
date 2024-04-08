@@ -4,6 +4,9 @@
 #include <LyShine/Bus/UiButtonBus.h>
 #include <AzCore/Console/ILogger.h>
 #include <LyShine/Bus/UiCanvasManagerBus.h>
+#include <Components/Interfaces/UserRegistryBus.h>
+#include <LyShine/Bus/UiSpawnerBus.h>
+#include <LyShine/Bus/UiElementBus.h>
 
 void metapulseWorld::UserMenuComponent::Init()
 {
@@ -24,10 +27,17 @@ void metapulseWorld::UserMenuComponent::Activate()
 			UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntityId);
 		});
 
+	UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
+
+	UserRegistryBus::BroadcastResult(m_userMap, &UserRegistryBus::Events::GetUserMap);
+
+	FetchUsers();
+
 }
 
 void metapulseWorld::UserMenuComponent::Deactivate()
 {
+	UiSpawnerNotificationBus::Handler::BusDisconnect(m_spawnerEntityId);
 }
 
 void metapulseWorld::UserMenuComponent::Reflect(AZ::ReflectContext* context)
@@ -37,6 +47,8 @@ void metapulseWorld::UserMenuComponent::Reflect(AZ::ReflectContext* context)
 		serializeContext->Class<UserMenuComponent, AZ::Component>()
 			->Version(1)
 			->Field("Close Button Entity", &UserMenuComponent::m_closeButtonEntityId)
+			->Field("User List Entity", &UserMenuComponent::m_userListEntityId)
+			->Field("Spawner Entity", &UserMenuComponent::m_spawnerEntityId)
 			;
 
 		if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -47,7 +59,47 @@ void metapulseWorld::UserMenuComponent::Reflect(AZ::ReflectContext* context)
 				->Attribute(AZ::Edit::Attributes::Icon, "Icons/Components/Component_Placeholder.svg")
 				->Attribute(AZ::Edit::Attributes::AppearsInAddComponentMenu, AZ_CRC_CE("CanvasUI"))
 				->DataElement(AZ::Edit::UIHandlers::Default, &UserMenuComponent::m_closeButtonEntityId, "Close Button Entity Id", "The id of the button used to close this UI")
+				->DataElement(AZ::Edit::UIHandlers::Default, &UserMenuComponent::m_userListEntityId, "User List Entity Id", "The id of the user list to put users on")
+				->DataElement(AZ::Edit::UIHandlers::Default, &UserMenuComponent::m_spawnerEntityId, "Spawner Entity", "The id of the spawner that spawns user buttons")
 				;
 		}
+	}
+}
+
+void metapulseWorld::UserMenuComponent::OnSpawnBegin([[maybe_unused]] const AzFramework::SliceInstantiationTicket&)
+{
+}
+
+void metapulseWorld::UserMenuComponent::OnEntitySpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZ::EntityId& spawnedEntity)
+{
+	UiElementBus::Event(spawnedEntity, &UiElementBus::Events::ReparentByEntityId, m_userListEntityId, AZ::EntityId());
+}
+
+void metapulseWorld::UserMenuComponent::OnEntitiesSpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZStd::vector<AZ::EntityId>&)
+{
+}
+
+void metapulseWorld::UserMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZStd::vector<AZ::EntityId>&)
+{
+}
+
+void metapulseWorld::UserMenuComponent::OnSpawnEnd(const AzFramework::SliceInstantiationTicket&)
+{
+}
+
+void metapulseWorld::UserMenuComponent::OnSpawnFailed(const AzFramework::SliceInstantiationTicket&)
+{
+}
+
+void metapulseWorld::UserMenuComponent::FetchUsers()
+{
+	AZLOG_INFO("Fetching the users for user list...");
+	AzFramework::SliceInstantiationTicket itemInstantiationTicket;
+	if (m_userMap.empty()) {
+		AZLOG_INFO("User map is empty!");
+		return;
+	}
+	for (auto user : m_userMap) {
+		UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
 	}
 }

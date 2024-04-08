@@ -33,4 +33,8 @@ namespace metapulseWorld
             AZLOG_ERROR("Could not find user to deregister from user registry");
         }
     }
+    AZStd::unordered_map<AZStd::string, AZ::EntityId> UserRegistryController::GetUserMap()
+    {
+        return m_userEntityIdMap;
+    }
 }
