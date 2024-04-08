@@ -12,4 +12,6 @@ set(FILES
 	Source/Components/HUDComponent.h
 	Source/Components/HUDComponent.cpp
 	Source/Components/Interfaces/HUDBus.h
+	Source/Components/UserMenuComponent.h
+	Source/Components/UserMenuComponent.cpp
 )
