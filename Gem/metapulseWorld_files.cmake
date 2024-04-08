@@ -17,4 +17,6 @@ set(FILES
     Source/Components/UserRegistry.cpp
     Source/Components/Interfaces/UserRegistryBus.h
     Source/Helpers/NetworkTypes.h
+    Source/Components/UserMenuComponent.h
+	Source/Components/UserMenuComponent.cpp
 )

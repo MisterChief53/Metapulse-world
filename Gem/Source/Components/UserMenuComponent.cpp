@@ -29,7 +29,12 @@ void metapulseWorld::UserMenuComponent::Activate()
 
 	UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
 
-	UserRegistryBus::BroadcastResult(m_userVector, &UserRegistryBus::Events::GetUserVector);
+	/*UserRegistryBus::BroadcastResult(m_userVector, &UserRegistryBus::Events::GetUserVector);*/
+	AZStd::string user;
+	UserRegistryBus::BroadcastResult(user, &UserRegistryBus::Events::BusGetPlayer1);
+	m_userVector.push_back(user);
+	UserRegistryBus::BroadcastResult(user, &UserRegistryBus::Events::BusGetPlayer2);
+	m_userVector.push_back(user);
 
 	FetchUsers();
 
@@ -100,6 +105,8 @@ void metapulseWorld::UserMenuComponent::FetchUsers()
 		return;
 	}
 	for (auto user : m_userVector) {
-		UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
+		if (!user.empty()) {
+			UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
+		}
 	}
 }

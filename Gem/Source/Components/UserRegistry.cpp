@@ -26,7 +26,7 @@ namespace metapulseWorld
             SetPlayer1(entityId.ToString());
         }
         else if (GetPlayer2().empty()) {
-            SetPlayer1(entityId.ToString());
+            SetPlayer2(entityId.ToString());
         }
         else {
             AZLOG_ERROR("Cannot register more users!");
@@ -46,12 +46,20 @@ namespace metapulseWorld
         }
         else {
             AZLOG_ERROR("Could not find user to deregister from user registry");
+            return;
         }
+
+        AZLOG_INFO("User logged out succesfully");
 #endif
 
     }
-    AZStd::vector<AZStd::string> UserRegistryController::GetUserVector()
+    AZStd::string UserRegistryController::BusGetPlayer1()
     {
-        return AZStd::vector({ GetPlayer1(), GetPlayer2() });
+        AZLOG_INFO("First user: %s", GetPlayer1().c_str());
+        return GetPlayer1();
+    }
+    AZStd::string UserRegistryController::BusGetPlayer2()
+    {
+        return GetPlayer2();
     }
 }
