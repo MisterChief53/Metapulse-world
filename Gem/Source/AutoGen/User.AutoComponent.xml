@@ -17,6 +17,7 @@
                     Name="NetworkTransformComponent"
                     Namespace="Multiplayer"
                     Include="Multiplayer/Components/NetworkTransformComponent.h"/>
+  
   <ArchetypeProperty Type="float" Name="WalkSpeed"
                     Init="6.0f" ExposeToEditor="true"/>
   <ArchetypeProperty Type="float" Name="TurnSpeed"

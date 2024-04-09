@@ -84,6 +84,7 @@ namespace metapulseWorld {
 	}
 	void HUDComponent::SpawnNotification(const AZStd::string& text)
 	{
+		AZLOG_INFO("HUD spawning notification...");
 		m_notificationText = text;
 		UiSpawnerBus::Event(m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
 	}

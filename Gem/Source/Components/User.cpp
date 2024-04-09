@@ -131,6 +131,7 @@ namespace metapulseWorld
 
     void UserController::NotifyTrade()
     {
+        AZLOG_INFO("User has received notification of trade, now sending to hud..");
         HUDBus::Broadcast(&HUDBus::Events::SpawnNotification, "Someone wants to trade with you");
     }
 
