@@ -8,6 +8,8 @@ namespace metapulseWorld {
 	{
 	public:
 		virtual float getPitchValue() = 0;
+
+		virtual void NotifyTrade() = 0;
 	};
 
 	using UserBus = AZ::EBus<UserInterface>;

@@ -86,6 +86,9 @@
 					<Class name="EntityId" field="Money Display Entity" version="1" type="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}">
 						<Class name="AZ::u64" field="id" value="3962375137954" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 					</Class>
+					<Class name="EntityId" field="Notification Spawner Entity" version="1" type="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}">
+						<Class name="AZ::u64" field="id" value="1320652183228" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+					</Class>
 				</Class>
 			</Class>
 			<Class name="bool" field="IsDependencyReady" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>

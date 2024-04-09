@@ -7,6 +7,7 @@
 #include <Components/Interfaces/APIRequestsBus.h>
 #include <AzCore/Console/ILogger.h>
 #include <LyShine/Bus/UiTextBus.h>
+#include <LyShine/Bus/UiElementBus.h>
 
 namespace metapulseWorld {
 
@@ -18,11 +19,13 @@ namespace metapulseWorld {
 	void HUDComponent::Activate()
 	{
 		HUDBus::Handler::BusConnect();
+		UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
 	}
 
 	void HUDComponent::Deactivate()
 	{
 		HUDBus::Handler::BusDisconnect();
+		UiSpawnerNotificationBus::Handler::BusDisconnect();
 	}
 
 	void HUDComponent::Reflect(AZ::ReflectContext* context)
@@ -32,6 +35,7 @@ namespace metapulseWorld {
 			serializeContext->Class<HUDComponent, AZ::Component>()
 				->Version(1)
 				->Field("Money Display Entity", &HUDComponent::m_moneyDisplayEntityId)
+				->Field("Notification Spawner Entity", &HUDComponent::m_spawnerEntityId)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -42,6 +46,7 @@ namespace metapulseWorld {
 					->Attribute(AZ::Edit::Attributes::Icon, "Icons/Components/Component_Placeholder.svg")
 					->Attribute(AZ::Edit::Attributes::AppearsInAddComponentMenu, AZ_CRC_CE("CanvasUI"))
 					->DataElement(AZ::Edit::UIHandlers::Default, &HUDComponent::m_moneyDisplayEntityId, "Money Display Entity", "The Money Display's Entity Id")
+					->DataElement(AZ::Edit::UIHandlers::Default, &HUDComponent::m_spawnerEntityId, "Notification Spawner Entity", "The Notification Spawner's Entity Id")
 					;
 			}
 		}
@@ -76,5 +81,32 @@ namespace metapulseWorld {
 				}
 			}
 		);
+	}
+	void HUDComponent::SpawnNotification(const AZStd::string& text)
+	{
+		m_notificationText = text;
+		UiSpawnerBus::Event(m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
+	}
+	void HUDComponent::OnSpawnBegin([[maybe_unused]] const AzFramework::SliceInstantiationTicket&)
+	{
+	}
+	void HUDComponent::OnEntitySpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZ::EntityId&)
+	{
+	}
+	void HUDComponent::OnEntitiesSpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZStd::vector<AZ::EntityId>&)
+	{
+	}
+	void HUDComponent::OnTopLevelEntitiesSpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZStd::vector<AZ::EntityId>& entities)
+	{
+		AZ::EntityId child;
+		UiElementBus::EventResult(child, entities[0], &UiElementBus::Events::GetChildEntityId, 0);
+		UiTextBus::Event(child, &UiTextBus::Events::SetText, m_notificationText);
+
+	}
+	void HUDComponent::OnSpawnEnd([[maybe_unused]] const AzFramework::SliceInstantiationTicket&)
+	{
+	}
+	void HUDComponent::OnSpawnFailed([[maybe_unused]] const AzFramework::SliceInstantiationTicket&)
+	{
 	}
 }

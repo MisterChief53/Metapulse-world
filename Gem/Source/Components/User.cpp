@@ -6,6 +6,7 @@
 // we still need to include the network components even after the XML config
 #include <Multiplayer/Components/NetworkCharacterComponent.h>
 #include <Components/Interfaces/UserRegistryBus.h>
+#include <Components/Interfaces/HUDBus.h>
 
 namespace metapulseWorld
 {
@@ -126,6 +127,11 @@ namespace metapulseWorld
     {
         
         return pitch_transform;
+    }
+
+    void UserController::NotifyTrade()
+    {
+        HUDBus::Broadcast(&HUDBus::Events::SpawnNotification, "Someone wants to trade with you");
     }
 
     void UserController::UpdateRotation(const UserNetworkInput* input) {

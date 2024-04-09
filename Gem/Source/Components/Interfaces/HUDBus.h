@@ -11,6 +11,8 @@ namespace metapulseWorld {
 		static const AZ::EBusAddressPolicy AddressPolicy = AZ::EBusAddressPolicy::Single;
 
 		virtual void DisplayMoney() = 0;
+
+		virtual void SpawnNotification(const AZStd::string& text) = 0;
 	};
 
 	using HUDBus = AZ::EBus<HUDRequests>;

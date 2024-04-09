@@ -41,6 +41,7 @@ namespace metapulseWorld
 
         // UserBus Implementations
         float getPitchValue() override;
+        void NotifyTrade() override;
 
     protected:
         void UpdateRotation(const UserNetworkInput* input);

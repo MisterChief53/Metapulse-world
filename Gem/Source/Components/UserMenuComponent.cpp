@@ -8,6 +8,7 @@
 #include <LyShine/Bus/UiSpawnerBus.h>
 #include <LyShine/Bus/UiElementBus.h>
 #include <LyShine/Bus/UiTextBus.h>
+#include <Components/Interfaces/UserBus.h>
 
 void metapulseWorld::UserMenuComponent::Init()
 {
@@ -92,6 +93,23 @@ void metapulseWorld::UserMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused
 	UiElementBus::Event(spawnedEntities[0], &UiElementBus::Events::ReparentByEntityId, m_userListEntityId, AZ::EntityId());
 	UiElementBus::EventResult(child, spawnedEntities[0], &UiElementBus::Events::GetChildEntityId, 0);
 	UiTextBus::Event(child, &UiTextBus::Events::SetText, m_userQueue.front());
+
+	AZStd::string tempId = m_userQueue.front();
+	tempId.erase(tempId.begin());
+	tempId.pop_back();
+
+	// unsigned long long id;
+	AZ::u64 id = AZStd::stoull(tempId);
+
+	AZLOG_INFO("Trimmed id: %llu", id);
+
+	// setup button callback
+	// the id is supposed to be straight up copied to the lambda, not just the address
+	UiButtonBus::Event(spawnedEntities[0], &UiButtonBus::Events::SetOnClickCallback,
+		[id]([[maybe_unused]] AZ::EntityId buttonEntity, [[maybe_unused]] AZ::Vector2) {
+			UserBus::Event(AZ::EntityId(id), &UserBus::Events::NotifyTrade);
+		});
+
 	m_userQueue.pop();
 }
 

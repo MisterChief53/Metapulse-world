@@ -49,7 +49,7 @@ namespace metapulseWorld {
 	}
 	void UIAdminComponent::OnPressed([[maybe_unused]] float value)
 	{
-		AZLOG_INFO("Escape Key was pressed");
+		AZLOG_INFO("Key was pressed");
 		const StartingPointInput::InputEventNotificationId* inputId = StartingPointInput::InputEventNotificationBus::GetCurrentBusId();
 
 		if (inputId == nullptr) {
