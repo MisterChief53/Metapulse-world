@@ -16,6 +16,7 @@
 #include <Components/IngameMenuComponent.h>
 #include <Components/InventoryMenuComponent.h>
 #include <Components/HUDComponent.h>
+#include <Components/UserMenuComponent.h>
 #endif
 
 
@@ -41,6 +42,7 @@ namespace metapulseWorld
                 IngameMenuComponent::CreateDescriptor(),
                 InventoryMenuComponent::CreateDescriptor(),
                 HUDComponent::CreateDescriptor(),
+                UserMenuComponent::CreateDescriptor(),
 #endif
             });
 

@@ -5,6 +5,7 @@
 #include <AzCore/Serialization/SerializeContext.h>
 // we still need to include the network components even after the XML config
 #include <Multiplayer/Components/NetworkCharacterComponent.h>
+#include <Components/Interfaces/UserRegistryBus.h>
 
 namespace metapulseWorld
 {
@@ -22,12 +23,17 @@ namespace metapulseWorld
         InputEventNotificationBus::MultiHandler::BusConnect(RotateYawEventId);
         InputEventNotificationBus::MultiHandler::BusConnect(RotatePitchEventId);
         metapulseWorld::UserBus::Handler::BusConnect(GetEntityId());
+
+        // register the user on user registry
+        AZLOG_INFO("######################################## Attempting to register a user ########################################");
+        UserRegistryBus::Broadcast(&UserRegistryBus::Events::RegisterUser, this->GetEntityId());
     }
 
     void UserController::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
         InputEventNotificationBus::MultiHandler::BusDisconnect();
         metapulseWorld::UserBus::Handler::BusDisconnect();
+        UserRegistryBus::Broadcast(&UserRegistryBus::Events::UnregisterUser, this->GetEntityId().ToString());
     }
 
     // Create input will collect the input for the last input time period

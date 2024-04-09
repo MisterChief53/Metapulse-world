@@ -13,12 +13,14 @@ namespace metapulseWorld {
 	void UIAdminComponent::Activate()
 	{
 		StartingPointInput::InputEventNotificationBus::MultiHandler::BusConnect(ToggleIngameMenu);
+		StartingPointInput::InputEventNotificationBus::MultiHandler::BusConnect(ToggleUserMenu);
 		metapulseWorld::UIAdminBus::Handler::BusConnect();
 	}
 
 	void UIAdminComponent::Deactivate()
 	{
 		StartingPointInput::InputEventNotificationBus::MultiHandler::BusDisconnect(ToggleIngameMenu);
+		StartingPointInput::InputEventNotificationBus::MultiHandler::BusDisconnect(ToggleUserMenu);
 		metapulseWorld::UIAdminBus::Handler::BusDisconnect();
 	}
 
@@ -29,6 +31,7 @@ namespace metapulseWorld {
 				->Version(1)
 				->Field("Ingame Menu Canvas Path", &UIAdminComponent::m_ingameMenuPath)
 				->Field("Inventory Menu Canvas Path", &UIAdminComponent::m_inventoryMenuPath)
+				->Field("User Menu Canvas Path", &UIAdminComponent::m_userMenuPath)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext()) {
@@ -39,6 +42,7 @@ namespace metapulseWorld {
 					->Attribute(AZ::Edit::Attributes::AppearsInAddComponentMenu, AZ_CRC_CE("Game"))
 					->DataElement(AZ::Edit::UIHandlers::Default, &UIAdminComponent::m_ingameMenuPath,"Ingame Menu Canvas Path", "Path relative to root folder where the ingame manu canvas is located")
 					->DataElement(AZ::Edit::UIHandlers::Default, &UIAdminComponent::m_inventoryMenuPath, "Inventory Menu Canvas Path", "Path relative to root folder where the inventory menu canvas is located")
+					->DataElement(AZ::Edit::UIHandlers::Default, &UIAdminComponent::m_userMenuPath, "User Menu Canvas Path", "Path relative to root folder where the user menu canvas is located")
 					;
 			}
 		}
@@ -59,6 +63,15 @@ namespace metapulseWorld {
 			// The unloading will be done inside the canvas, since it consumes all the input, it would never get triggered here.
 			if (!m_ingameMenuEntityId.IsValid()) {
 				UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::LoadCanvas, m_ingameMenuPath);
+			}
+		}
+
+		if (*inputId == ToggleUserMenu) {
+			UiCanvasManagerBus::BroadcastResult(m_userMenuEntityId, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, m_userMenuPath, false);
+			AZLOG_INFO("Loading user selection menu");
+			// The unloading will be done inside the canvas, since it consumes all the input, it would never get triggered here.
+			if (!m_userMenuEntityId.IsValid()) {
+				UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::LoadCanvas, m_userMenuPath);
 			}
 		}
 	}

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<Component
+  Name="UserRegistry"
+  Namespace="metapulseWorld"
+  OverrideComponent="true"
+  OverrideController="true"
+  OverrideInclude="Source/Components/UserRegistry.h"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <NetworkProperty Name="Player1"
+                   Description="The map that holds the users connected and their ids"
+                   Type="AZStd::string"
+                   Init="&quot;&quot;"
+                   ReplicateFrom="Authority"
+                   ReplicateTo="Client"
+                   IsPublic="false"
+                   IsPredictable="false"
+                   IsRewindable="false"
+                   GenerateEventBindings="false"
+                   ExposeToEditor="false"
+                   Container="Object"
+                   />
+
+  <NetworkProperty Name="Player2"
+                   Description="The map that holds the users connected and their ids"
+                   Type="AZStd::string"
+                   Init="&quot;&quot;"
+                   ReplicateFrom="Authority"
+                   ReplicateTo="Client"
+                   IsPublic="false"
+                   IsPredictable="false"
+                   IsRewindable="false"
+                   GenerateEventBindings="false"
+                   ExposeToEditor="false"
+                   Container="Object"
+                   />
+</Component>
