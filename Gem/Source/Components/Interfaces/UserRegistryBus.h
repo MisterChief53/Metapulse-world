@@ -15,6 +15,17 @@ namespace metapulseWorld {
 		virtual void RegisterUser(const AZ::EntityId& entityId) = 0;
 
 		virtual void UnregisterUser(const AZStd::string& entityId) = 0;
+	};
+
+	using UserRegistryBus = AZ::EBus<UserRegistryRequests>;
+
+	class UserRegistryGettersRequests
+		: public AZ::EBusTraits {
+	public:
+
+		static const AZ::EBusHandlerPolicy HandlerPolicy = AZ::EBusHandlerPolicy::Single;
+
+		static const AZ::EBusAddressPolicy AddressPolicy = AZ::EBusAddressPolicy::Single;
 
 		// I pray to the gods I am never forced to do something like this again.
 		// Maybe generate our own struct container like the multiplayer sample does it?
@@ -23,5 +34,5 @@ namespace metapulseWorld {
 		virtual AZStd::string BusGetPlayer2() = 0;
 	};
 
-	using UserRegistryBus = AZ::EBus<UserRegistryRequests>;
+	using UserRegistryGettersBus = AZ::EBus<UserRegistryGettersRequests>;
 }

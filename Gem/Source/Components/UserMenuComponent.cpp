@@ -31,9 +31,9 @@ void metapulseWorld::UserMenuComponent::Activate()
 
 	/*UserRegistryBus::BroadcastResult(m_userVector, &UserRegistryBus::Events::GetUserVector);*/
 	AZStd::string user;
-	UserRegistryBus::BroadcastResult(user, &UserRegistryBus::Events::BusGetPlayer1);
+	UserRegistryGettersBus::BroadcastResult(user, &UserRegistryGettersBus::Events::BusGetPlayer1);
 	m_userVector.push_back(user);
-	UserRegistryBus::BroadcastResult(user, &UserRegistryBus::Events::BusGetPlayer2);
+	UserRegistryGettersBus::BroadcastResult(user, &UserRegistryGettersBus::Events::BusGetPlayer2);
 	m_userVector.push_back(user);
 
 	FetchUsers();
@@ -106,7 +106,11 @@ void metapulseWorld::UserMenuComponent::FetchUsers()
 	}
 	for (auto user : m_userVector) {
 		if (!user.empty()) {
+			AZLOG_INFO("Got user succesfully: %s!, now spawning...", user.c_str());
 			UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
+		}
+		else {
+			AZLOG_INFO("User is empty!");
 		}
 	}
 }
