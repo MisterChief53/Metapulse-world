@@ -7,6 +7,7 @@
 #include <Components/Interfaces/UserRegistryBus.h>
 #include <LyShine/Bus/UiSpawnerBus.h>
 #include <LyShine/Bus/UiElementBus.h>
+#include <LyShine/Bus/UiTextBus.h>
 
 void metapulseWorld::UserMenuComponent::Init()
 {
@@ -77,15 +78,21 @@ void metapulseWorld::UserMenuComponent::OnSpawnBegin([[maybe_unused]] const AzFr
 
 void metapulseWorld::UserMenuComponent::OnEntitySpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZ::EntityId& spawnedEntity)
 {
-	UiElementBus::Event(spawnedEntity, &UiElementBus::Events::ReparentByEntityId, m_userListEntityId, AZ::EntityId());
+
+	
 }
 
 void metapulseWorld::UserMenuComponent::OnEntitiesSpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZStd::vector<AZ::EntityId>&)
 {
 }
 
-void metapulseWorld::UserMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZStd::vector<AZ::EntityId>&)
+void metapulseWorld::UserMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket&, [[maybe_unused]] const AZStd::vector<AZ::EntityId>& spawnedEntities)
 {
+	AZ::EntityId child;
+	UiElementBus::Event(spawnedEntities[0], &UiElementBus::Events::ReparentByEntityId, m_userListEntityId, AZ::EntityId());
+	UiElementBus::EventResult(child, spawnedEntities[0], &UiElementBus::Events::GetChildEntityId, 0);
+	UiTextBus::Event(child, &UiTextBus::Events::SetText, m_userQueue.front());
+	m_userQueue.pop();
 }
 
 void metapulseWorld::UserMenuComponent::OnSpawnEnd(const AzFramework::SliceInstantiationTicket&)
@@ -107,6 +114,7 @@ void metapulseWorld::UserMenuComponent::FetchUsers()
 	for (auto user : m_userVector) {
 		if (!user.empty()) {
 			AZLOG_INFO("Got user succesfully: %s!, now spawning...", user.c_str());
+			m_userQueue.push(user);
 			UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
 		}
 		else {

@@ -34,6 +34,8 @@ namespace metapulseWorld {
 
 		AZStd::vector<AZStd::string> m_userVector;
 
+		AZStd::queue<AZStd::string> m_userQueue;
+
 		void FetchUsers();
 	};
 }
