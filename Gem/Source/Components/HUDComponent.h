@@ -2,12 +2,15 @@
 #include <Components/Interfaces/HUDBus.h>
 #include <HttpRequestor/HttpTypes.h>
 #include <LyShine/Bus/UiSpawnerBus.h>
+#include <AzCore/Component/TickBus.h>
 
 namespace metapulseWorld {
 	class HUDComponent
 		: public AZ::Component
 		, public metapulseWorld::HUDBus::Handler
-		, public UiSpawnerNotificationBus::Handler {
+		, public UiSpawnerNotificationBus::Handler
+		, public AZ::TickBus::Handler
+	{
 	public:
 		AZ_COMPONENT(metapulseWorld::HUDComponent, "{5D064869-46DB-4BD8-9C41-019316F580F6}", AZ::Component);
 
@@ -29,10 +32,18 @@ namespace metapulseWorld {
 		void OnSpawnEnd(const AzFramework::SliceInstantiationTicket& /*ticket*/) override;
 		void OnSpawnFailed(const AzFramework::SliceInstantiationTicket& /*ticket*/) override;
 
+		// Tick bus overrides
+
+		void OnTick(float deltaTime, AZ::ScriptTimePoint time) override;
+
+		int GetTickOrder() override;
+
 	public:
 		AZ::EntityId m_moneyDisplayEntityId;
 		AZ::EntityId m_spawnerEntityId;
 		AZStd::string m_notificationText;
 
+		double m_prevTime = 0;
+		const double m_cooldown = 5;
 	};
 }

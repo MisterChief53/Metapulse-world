@@ -18,8 +18,7 @@ namespace metapulseWorld
         void OnActivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
         void OnDeactivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
 
-        // Trade notificatin bus overrides
-
+        // Trade notification bus overrides
         Multiplayer::NetworkEntityHandle GetHandleBus() override;
 
 
@@ -36,17 +35,10 @@ namespace metapulseWorld
         void OnActivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
         void OnDeactivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
 
-        //! Common input creation logic for the NetworkInput.
-        //! Fill out the input struct and the MultiplayerInputDriver will send the input data over the network
-        //!    to ensure it's processed.
-        //! @param input  input structure which to store input data for sending to the authority
-        //! @param deltaTime amount of time to integrate the provided inputs over
-        void CreateInput(Multiplayer::NetworkInput& input, float deltaTime) override;
+#if AZ_TRAIT_SERVER
+        void HandleRPC_ChangeHudValue(AzNetworking::IConnection* invokingConnection) override;
+#endif
 
-        //! Common input processing logic for the NetworkInput.
-        //! @param input  input structure to process
-        //! @param deltaTime amount of time to integrate the provided inputs over
-        void ProcessInput(Multiplayer::NetworkInput& input, float deltaTime) override;
 
     protected:
         int m_hudValue = 0;

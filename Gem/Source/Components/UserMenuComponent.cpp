@@ -10,6 +10,9 @@
 #include <LyShine/Bus/UiTextBus.h>
 #include <Components/Interfaces/TradeNotificationBus.h>
 #include <Multiplayer/NetworkEntity/NetworkEntityHandle.h>
+#include <Components/TradeNotification.h>
+#include <HttpRequestor/HttpRequestorBus.h>
+#include <Components/Interfaces/APIRequestsBus.h>
 
 void metapulseWorld::UserMenuComponent::Init()
 {
@@ -120,6 +123,28 @@ void metapulseWorld::UserMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused
 			if (tradeNotificationHandle.Exists()) {
 				AZLOG_INFO("network entity handle is valid!!");
 			}
+
+			AZStd::string accountsServerUrl, token;
+			APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+			APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
+				accountsServerUrl + "/trade/setRequest",
+				Aws::Http::HttpMethod::HTTP_POST,
+				AZStd::map<AZStd::string, AZStd::string>({
+					{"Authorization", token}
+					}),
+				[]([[maybe_unused]] const Aws::Utils::Json::JsonView& json, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Seting up a request to trade...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AZLOG_INFO("Correctly sent the trade request!");
+					}
+					else {
+						AZLOG_ERROR("Failed setting up a request to trade");
+					}
+				}
+			);
+
 		});
 
 	m_userQueue.pop();

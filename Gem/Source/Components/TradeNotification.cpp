@@ -49,11 +49,10 @@ namespace metapulseWorld
     {
     }
 
-    void TradeNotificationController::CreateInput([[maybe_unused]] Multiplayer::NetworkInput& input, [[maybe_unused]] float deltaTime)
-    {
-    }
 
-    void TradeNotificationController::ProcessInput([[maybe_unused]] Multiplayer::NetworkInput& input, [[maybe_unused]] float deltaTime)
-    {
+#if AZ_TRAIT_SERVER
+    void TradeNotificationController::HandleRPC_ChangeHudValue([[maybe_unused]] AzNetworking::IConnection* invokingConnection) {
+        AZLOG_INFO("RPC invoked");
     }
+#endif
 }

@@ -7,21 +7,27 @@
   OverrideController="true"
   OverrideInclude="Source/Components/TradeNotification.h"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  
-  <NetworkProperty Name="HudNetworkProperty"
-                   Description="Value that triggers hud notification"
+
+  <NetworkProperty Name="HudValue"
+                   Description="The value that gets changed to trigger hud"
                    Type="int"
                    Init="0"
                    ReplicateFrom="Authority"
                    ReplicateTo="Client"
-                   IsPublic="false"
-                   IsPredictable="false"
-                   IsRewindable="false"
-                   GenerateEventBindings="true"
-                   ExposeToEditor="false"
                    Container="Object"
-                   />
+                   IsPublic="false"
+                   IsRewindable="true"
+                   IsPredictable="false"
+                   ExposeToEditor="false"
+                   ExposeToScript="false"
+                   GenerateEventBindings="true" />
 
-  <NetworkInput Type="int" Name="HudInput" Init="0"/>
+  <RemoteProcedure Name="RPC_ChangeHudValue"
+                   Description="RPC that changes the hud value"
+                   InvokeFrom="Autonomous"
+                   HandleOn="Authority"
+                   IsPublic="true"
+                   IsReliable="true"
+                   GenerateEventBindings="false" />
   
 </Component>

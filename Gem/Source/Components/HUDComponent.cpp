@@ -8,6 +8,7 @@
 #include <AzCore/Console/ILogger.h>
 #include <LyShine/Bus/UiTextBus.h>
 #include <LyShine/Bus/UiElementBus.h>
+#include <AzCore/Component/TickBus.h>
 
 namespace metapulseWorld {
 
@@ -20,12 +21,14 @@ namespace metapulseWorld {
 	{
 		HUDBus::Handler::BusConnect();
 		UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
+		AZ::TickBus::Handler::BusConnect();
 	}
 
 	void HUDComponent::Deactivate()
 	{
 		HUDBus::Handler::BusDisconnect();
 		UiSpawnerNotificationBus::Handler::BusDisconnect();
+		AZ::TickBus::Handler::BusDisconnect();
 	}
 
 	void HUDComponent::Reflect(AZ::ReflectContext* context)
@@ -109,5 +112,43 @@ namespace metapulseWorld {
 	}
 	void HUDComponent::OnSpawnFailed([[maybe_unused]] const AzFramework::SliceInstantiationTicket&)
 	{
+	}
+	void HUDComponent::OnTick([[maybe_unused]] float deltaTime, AZ::ScriptTimePoint time)
+	{
+		if (time.GetSeconds() - m_prevTime >= m_cooldown) {
+			AZStd::string accountsServerUrl, token;
+			APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+			APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
+				accountsServerUrl + "/trade/hasRequest",
+				Aws::Http::HttpMethod::HTTP_GET,
+				AZStd::map<AZStd::string, AZStd::string>({
+					{"Authorization", token}
+					}),
+				[]([[maybe_unused]] const Aws::Utils::Json::JsonView& json, [[maybe_unused]] Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Chekcking if user has request to trade...");
+					Aws::Utils::Json::JsonView jsonResponse = json;
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						if (jsonResponse.GetBool("response")) {
+							AZLOG_INFO("Can trade");
+							HUDBus::Broadcast(&HUDBus::Events::SpawnNotification, "Trade requested");
+						}
+						else {
+							AZLOG_INFO("Cannot trade");
+						}
+					}
+					else {
+						AZLOG_ERROR("Failed checking if user has request to trade...");
+					}
+				}
+			);
+
+			m_prevTime = time.GetSeconds();
+		}
+	}
+	int HUDComponent::GetTickOrder()
+	{
+		return AZ::TICK_UI;
 	}
 }
