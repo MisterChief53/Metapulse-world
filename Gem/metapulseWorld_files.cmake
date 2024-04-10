@@ -22,4 +22,5 @@ set(FILES
     Source/Components/TradeNotification.cpp
     Source/Components/TradeNotification.h
     Source/Components/Interfaces/TradeNotificationBus.h
+    Source/Components/Interfaces/UserMenuBus.h
 )

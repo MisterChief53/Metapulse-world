@@ -10,9 +10,8 @@ namespace metapulseWorld {
 		static const AZ::EBusHandlerPolicy HandlerPolicy = AZ::EBusHandlerPolicy::Single;
 		static const AZ::EBusAddressPolicy AddressPolicy = AZ::EBusAddressPolicy::Single;
 
-		virtual void SendUsers(const AZStd::vector<AZStd::string> userVector) = 0;
+		virtual void SetHasBeenClicked() = 0;
 
-		virtual AZStd::vector<AZStd::string> GetUsers() = 0;
 	};
 
 	using UserMenuBus = AZ::EBus<UserMenuRequests>;

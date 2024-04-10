@@ -17,6 +17,7 @@
 #include <Components/InventoryMenuComponent.h>
 #include <Components/HUDComponent.h>
 #include <Components/UserMenuComponent.h>
+#include <Components/NotificationComponent.h>
 #endif
 
 
@@ -43,6 +44,7 @@ namespace metapulseWorld
                 InventoryMenuComponent::CreateDescriptor(),
                 HUDComponent::CreateDescriptor(),
                 UserMenuComponent::CreateDescriptor(),
+                NotificationComponent::CreateDescriptor(),
 #endif
             });
 

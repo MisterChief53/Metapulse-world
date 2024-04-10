@@ -44,11 +44,16 @@ void metapulseWorld::UserMenuComponent::Activate()
 
 	FetchUsers();
 
+	AZ::TickBus::Handler::BusConnect();
+	UserMenuBus::Handler::BusConnect();
+
 }
 
 void metapulseWorld::UserMenuComponent::Deactivate()
 {
 	UiSpawnerNotificationBus::Handler::BusDisconnect(m_spawnerEntityId);
+	AZ::TickBus::Handler::BusDisconnect();
+	UserMenuBus::Handler::BusDisconnect();
 }
 
 void metapulseWorld::UserMenuComponent::Reflect(AZ::ReflectContext* context)
@@ -111,6 +116,8 @@ void metapulseWorld::UserMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused
 	// the id is supposed to be straight up copied to the lambda, not just the address
 	UiButtonBus::Event(spawnedEntities[0], &UiButtonBus::Events::SetOnClickCallback,
 		[id]([[maybe_unused]] AZ::EntityId buttonEntity, [[maybe_unused]] AZ::Vector2) {
+			//m_hasBeenClicked = true;
+			UserMenuBus::Broadcast(&UserMenuBus::Events::SetHasBeenClicked);
 			AZLOG_INFO("Button callback called!");
 			AZ::EntityId userEntityId = AZ::EntityId(id);
 			if (userEntityId.IsValid()) {
@@ -156,6 +163,49 @@ void metapulseWorld::UserMenuComponent::OnSpawnEnd(const AzFramework::SliceInsta
 
 void metapulseWorld::UserMenuComponent::OnSpawnFailed(const AzFramework::SliceInstantiationTicket&)
 {
+}
+
+void metapulseWorld::UserMenuComponent::OnTick([[maybe_unused]] float deltaTime, AZ::ScriptTimePoint time)
+{
+	if (time.GetSeconds() - m_prevTime >= m_cooldown) {
+		if (m_hasBeenClicked == true) {
+			AZLOG_INFO("Detected that button has been clicked, so now toggling back to false");
+			AZStd::string accountsServerUrl, token;
+			APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+			APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
+				accountsServerUrl + "/trade/setRequest",
+				Aws::Http::HttpMethod::HTTP_POST,
+				AZStd::map<AZStd::string, AZStd::string>({
+					{"Authorization", token}
+					}),
+				[]([[maybe_unused]] const Aws::Utils::Json::JsonView& json, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Seting up a request to trade...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AZLOG_INFO("Correctly sent the trade request!");
+					}
+					else {
+						AZLOG_ERROR("Failed setting up a request to trade");
+					}
+				}
+			);
+
+			m_hasBeenClicked = false;
+		}
+
+		m_prevTime = time.GetSeconds();
+	}
+}
+
+int metapulseWorld::UserMenuComponent::GetTickOrder()
+{
+	return AZ::TICK_UI;
+}
+
+void metapulseWorld::UserMenuComponent::SetHasBeenClicked()
+{
+	m_hasBeenClicked = true;
 }
 
 void metapulseWorld::UserMenuComponent::FetchUsers()

@@ -49,7 +49,7 @@
 								<Class name="AZ::Component" field="BaseClass1" type="{EDFCB2CF-F75D-43BE-B26B-F35821B29247}">
 									<Class name="AZ::u64" field="Id" value="2930914588085893742" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 								</Class>
-								<Class name="unsigned int" field="Id" value="9" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+								<Class name="unsigned int" field="Id" value="2" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
 								<Class name="bool" field="IsEnabled" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 								<Class name="bool" field="IsVisibleInEditor" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 								<Class name="bool" field="IsSelectableInEditor" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
@@ -89,6 +89,11 @@
 								<Class name="int" field="FillCornerOrigin" value="0" type="{72039442-EB38-4D42-A1AD-CB68F7E0EEF6}"/>
 								<Class name="int" field="FillEdgeOrigin" value="0" type="{72039442-EB38-4D42-A1AD-CB68F7E0EEF6}"/>
 								<Class name="bool" field="FillClockwise" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
+							</Class>
+							<Class name="metapulseWorld::NotificationComponent" field="element" version="1" type="{049FB77F-81DC-4EE5-848D-27D4D038CFEE}">
+								<Class name="AZ::Component" field="BaseClass1" type="{EDFCB2CF-F75D-43BE-B26B-F35821B29247}">
+									<Class name="AZ::u64" field="Id" value="835904340250780881" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+								</Class>
 							</Class>
 						</Class>
 						<Class name="bool" field="IsDependencyReady" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
@@ -133,7 +138,7 @@
 								<Class name="AZ::Component" field="BaseClass1" type="{EDFCB2CF-F75D-43BE-B26B-F35821B29247}">
 									<Class name="AZ::u64" field="Id" value="8734911076855407388" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 								</Class>
-								<Class name="unsigned int" field="Id" value="10" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+								<Class name="unsigned int" field="Id" value="3" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
 								<Class name="bool" field="IsEnabled" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 								<Class name="bool" field="IsVisibleInEditor" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 								<Class name="bool" field="IsSelectableInEditor" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
@@ -176,7 +181,7 @@
 					<Class name="EntityId" field="Id" version="1" type="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}">
 						<Class name="AZ::u64" field="id" value="1337832052412" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 					</Class>
-					<Class name="AZStd::string" field="Name" value="No Asset Association" type="{03AAAB3F-5C47-5A66-9EBC-D5FA4DB353C9}"/>
+					<Class name="AZStd::string" field="Name" value="ui/slices/notification.slice" type="{03AAAB3F-5C47-5A66-9EBC-D5FA4DB353C9}"/>
 					<Class name="AZStd::vector&lt;AZ::Component*, allocator&gt;" field="Components" type="{13D58FF9-1088-5C69-9A1F-C2A144B57B78}">
 						<Class name="SliceMetadataInfoComponent" field="element" version="2" type="{25EE4D75-8A17-4449-81F4-E561005BAABD}">
 							<Class name="AZ::Component" field="BaseClass1" type="{EDFCB2CF-F75D-43BE-B26B-F35821B29247}">
