@@ -6,6 +6,7 @@ namespace metapulseWorld {
 
 	const StartingPointInput::InputEventNotificationId ToggleIngameMenu("toggle_menu");
 	const StartingPointInput::InputEventNotificationId ToggleUserMenu("toggle_user_menu");
+	const StartingPointInput::InputEventNotificationId ToggleTradeMenu("toggle_trade_menu");
 
 	class UIAdminComponent
 		: public AZ::Component
@@ -42,5 +43,8 @@ namespace metapulseWorld {
 
 		AZStd::string m_userMenuPath;
 		AZ::EntityId m_userMenuEntityId;
+
+		AZStd::string m_tradeMenuPath;
+		AZ::EntityId m_tradeMenuEntityId;
 	};
 }
