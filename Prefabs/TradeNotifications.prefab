@@ -1,0 +1,135 @@
+{
+    "ContainerEntity": {
+        "Id": "ContainerEntity",
+        "Name": "TradeNotifications",
+        "Components": {
+            "EditorDisabledCompositionComponent": {
+                "$type": "EditorDisabledCompositionComponent",
+                "Id": 2359310134658864503
+            },
+            "EditorEntityIconComponent": {
+                "$type": "EditorEntityIconComponent",
+                "Id": 1476927409739880467
+            },
+            "EditorEntitySortComponent": {
+                "$type": "EditorEntitySortComponent",
+                "Id": 4812386716279835370,
+                "Child Entity Order": [
+                    "Entity_[371274830502]"
+                ]
+            },
+            "EditorInspectorComponent": {
+                "$type": "EditorInspectorComponent",
+                "Id": 16131065793929319156
+            },
+            "EditorLockComponent": {
+                "$type": "EditorLockComponent",
+                "Id": 4360019692434479673
+            },
+            "EditorOnlyEntityComponent": {
+                "$type": "EditorOnlyEntityComponent",
+                "Id": 12712886113045058955
+            },
+            "EditorPendingCompositionComponent": {
+                "$type": "EditorPendingCompositionComponent",
+                "Id": 5012221912733106669
+            },
+            "EditorPrefabComponent": {
+                "$type": "EditorPrefabComponent",
+                "Id": 16682242365400880126
+            },
+            "EditorVisibilityComponent": {
+                "$type": "EditorVisibilityComponent",
+                "Id": 17680510287576573768
+            },
+            "TransformComponent": {
+                "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                "Id": 655742582984343719,
+                "Parent Entity": ""
+            }
+        }
+    },
+    "Entities": {
+        "Entity_[371274830502]": {
+            "Id": "Entity_[371274830502]",
+            "Name": "TradeNotifications",
+            "Components": {
+                "EditorDisabledCompositionComponent": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 23920542756777729
+                },
+                "EditorEntityIconComponent": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 2842754943141881905
+                },
+                "EditorEntitySortComponent": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 3571243850799850613
+                },
+                "EditorInspectorComponent": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 9466842041987271964,
+                    "ComponentOrderEntryArray": [
+                        {
+                            "ComponentId": 7953616028276151147
+                        },
+                        {
+                            "ComponentId": 4989047699242510785,
+                            "SortIndex": 1
+                        },
+                        {
+                            "ComponentId": 822787870207658695,
+                            "SortIndex": 2
+                        },
+                        {
+                            "ComponentId": 11414413694804395495,
+                            "SortIndex": 3
+                        }
+                    ]
+                },
+                "EditorLockComponent": {
+                    "$type": "EditorLockComponent",
+                    "Id": 4871021451315577428
+                },
+                "EditorOnlyEntityComponent": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 5928673426186304394
+                },
+                "EditorPendingCompositionComponent": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 7028574427943988327
+                },
+                "EditorVisibilityComponent": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 10026764276229493508
+                },
+                "Multiplayer::LocalPredictionPlayerInputComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 822787870207658695,
+                    "m_template": {
+                        "$type": "Multiplayer::LocalPredictionPlayerInputComponent"
+                    }
+                },
+                "NetBindComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 4989047699242510785,
+                    "m_template": {
+                        "$type": "NetBindComponent"
+                    }
+                },
+                "TransformComponent": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 7953616028276151147,
+                    "Parent Entity": "ContainerEntity"
+                },
+                "metapulseWorld::TradeNotification": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 11414413694804395495,
+                    "m_template": {
+                        "$type": "metapulseWorld::TradeNotification"
+                    }
+                }
+            }
+        }
+    }
+}

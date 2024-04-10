@@ -19,4 +19,7 @@ set(FILES
     Source/Helpers/NetworkTypes.h
     Source/Components/UserMenuComponent.h
 	Source/Components/UserMenuComponent.cpp
+    Source/Components/TradeNotification.cpp
+    Source/Components/TradeNotification.h
+    Source/Components/Interfaces/TradeNotificationBus.h
 )

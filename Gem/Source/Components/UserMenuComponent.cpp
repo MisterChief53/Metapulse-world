@@ -8,7 +8,8 @@
 #include <LyShine/Bus/UiSpawnerBus.h>
 #include <LyShine/Bus/UiElementBus.h>
 #include <LyShine/Bus/UiTextBus.h>
-#include <Components/Interfaces/UserBus.h>
+#include <Components/Interfaces/TradeNotificationBus.h>
+#include <Multiplayer/NetworkEntity/NetworkEntityHandle.h>
 
 void metapulseWorld::UserMenuComponent::Init()
 {
@@ -112,7 +113,13 @@ void metapulseWorld::UserMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused
 			if (userEntityId.IsValid()) {
 				AZLOG_INFO("User entity id is valid");
 			}
-			UserBus::Event(AZ::EntityId(id), &UserBus::Events::NotifyTrade);
+			//TradeNotificationBus::Broadcast(&TradeNotificationBus::Events::UpdateHudValue);
+			Multiplayer::NetworkEntityHandle tradeNotificationHandle;
+			TradeNotificationBus::BroadcastResult(tradeNotificationHandle, &TradeNotificationBus::Events::GetHandleBus);
+
+			if (tradeNotificationHandle.Exists()) {
+				AZLOG_INFO("network entity handle is valid!!");
+			}
 		});
 
 	m_userQueue.pop();

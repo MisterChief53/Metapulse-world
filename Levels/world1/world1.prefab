@@ -28,7 +28,8 @@
                     "Entity_[3437135147677]",
                     "Entity_[997177333263]",
                     "Entity_[414057373550]",
-                    "Entity_[360070995751]"
+                    "Instance_[362684895910]/ContainerEntity",
+                    "Instance_[470059078310]/ContainerEntity"
                 ]
             },
             "Component_[15230859088967841193]": {
@@ -947,63 +948,6 @@
                 }
             }
         },
-        "Entity_[360070995751]": {
-            "Id": "Entity_[360070995751]",
-            "Name": "UserRegistry",
-            "Components": {
-                "EditorDisabledCompositionComponent": {
-                    "$type": "EditorDisabledCompositionComponent",
-                    "Id": 292540923741818296
-                },
-                "EditorEntityIconComponent": {
-                    "$type": "EditorEntityIconComponent",
-                    "Id": 11018341029990057591
-                },
-                "EditorEntitySortComponent": {
-                    "$type": "EditorEntitySortComponent",
-                    "Id": 11602955523135959565
-                },
-                "EditorInspectorComponent": {
-                    "$type": "EditorInspectorComponent",
-                    "Id": 11596009265343675072
-                },
-                "EditorLockComponent": {
-                    "$type": "EditorLockComponent",
-                    "Id": 10199308621013059026
-                },
-                "EditorOnlyEntityComponent": {
-                    "$type": "EditorOnlyEntityComponent",
-                    "Id": 6708970881698018545
-                },
-                "EditorPendingCompositionComponent": {
-                    "$type": "EditorPendingCompositionComponent",
-                    "Id": 2408810850495764311
-                },
-                "EditorVisibilityComponent": {
-                    "$type": "EditorVisibilityComponent",
-                    "Id": 6341574252035254408
-                },
-                "NetBindComponent": {
-                    "$type": "GenericComponentWrapper",
-                    "Id": 12505713592229213322,
-                    "m_template": {
-                        "$type": "NetBindComponent"
-                    }
-                },
-                "TransformComponent": {
-                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
-                    "Id": 7226220784242202452,
-                    "Parent Entity": "Entity_[1146574390643]"
-                },
-                "metapulseWorld::UserRegistry": {
-                    "$type": "GenericComponentWrapper",
-                    "Id": 7332848277902203081,
-                    "m_template": {
-                        "$type": "metapulseWorld::UserRegistry"
-                    }
-                }
-            }
-        },
         "Entity_[3983849974434]": {
             "Id": "Entity_[3983849974434]",
             "Name": "AuthClient",
@@ -1309,6 +1253,28 @@
                     "Parent Entity": "Entity_[1146574390643]"
                 }
             }
+        }
+    },
+    "Instances": {
+        "Instance_[362684895910]": {
+            "Source": "Prefabs/TradeNotifications.prefab",
+            "Patches": [
+                {
+                    "op": "replace",
+                    "path": "/ContainerEntity/Components/TransformComponent/Parent Entity",
+                    "value": "../Entity_[1146574390643]"
+                }
+            ]
+        },
+        "Instance_[470059078310]": {
+            "Source": "Prefabs/UserRegistry.prefab",
+            "Patches": [
+                {
+                    "op": "replace",
+                    "path": "/ContainerEntity/Components/TransformComponent/Parent Entity",
+                    "value": "../Entity_[1146574390643]"
+                }
+            ]
         }
     }
 }

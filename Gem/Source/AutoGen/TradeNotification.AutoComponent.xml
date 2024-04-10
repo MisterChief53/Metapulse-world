@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<Component
+  Name="TradeNotification"
+  Namespace="metapulseWorld"
+  OverrideComponent="true"
+  OverrideController="true"
+  OverrideInclude="Source/Components/TradeNotification.h"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  
+  <NetworkProperty Name="HudNetworkProperty"
+                   Description="Value that triggers hud notification"
+                   Type="int"
+                   Init="0"
+                   ReplicateFrom="Authority"
+                   ReplicateTo="Client"
+                   IsPublic="false"
+                   IsPredictable="false"
+                   IsRewindable="false"
+                   GenerateEventBindings="true"
+                   ExposeToEditor="false"
+                   Container="Object"
+                   />
+
+  <NetworkInput Type="int" Name="HudInput" Init="0"/>
+  
+</Component>
