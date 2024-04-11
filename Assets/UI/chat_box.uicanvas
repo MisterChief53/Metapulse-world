@@ -80,7 +80,13 @@
 						<Class name="AZ::u64" field="id" value="676892887718" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 					</Class>
 					<Class name="EntityId" field="Message Text Input Entity" version="1" type="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}">
-						<Class name="AZ::u64" field="id" value="659713018534" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+						<Class name="AZ::u64" field="id" value="844396612262" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+					</Class>
+					<Class name="EntityId" field="Message list" version="1" type="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}">
+						<Class name="AZ::u64" field="id" value="638406673488" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+					</Class>
+					<Class name="EntityId" field="Spawner entity" version="1" type="{6383F1D3-BB27-4E6B-A49A-6409B2059EAA}">
+						<Class name="AZ::u64" field="id" value="638406673488" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 					</Class>
 				</Class>
 			</Class>

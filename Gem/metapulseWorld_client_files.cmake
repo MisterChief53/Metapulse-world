@@ -18,4 +18,6 @@ set(FILES
 	Source/Components/TradeMenuComponent.cpp
 	Source/Components/OtherUserTradeSpawner.h
 	Source/Components/OtherUserTradeSpawner.cpp
+	Source/Components/ChatBoxComponent.h
+	Source/Components/ChatBoxComponent.cpp
 )
