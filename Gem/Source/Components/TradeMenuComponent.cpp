@@ -31,8 +31,9 @@ void metapulseWorld::TradeMenuComponent::Activate()
 	UiDropTargetNotificationBus::MultiHandler::BusConnect(m_offeredDropTargetEntityId);
 	UiDropTargetNotificationBus::MultiHandler::BusConnect(m_unofferedDropTargetEntityId);
 
-	UiSpawnerNotificationBus::MultiHandler::BusConnect(m_inventorySpawnerEntityId);
+	UiSpawnerNotificationBus::Handler::BusConnect(m_inventorySpawnerEntityId);
 
+	FetchTradeData();
 	FetchInventory();
 }
 
@@ -41,7 +42,7 @@ void metapulseWorld::TradeMenuComponent::Deactivate()
 	UiDropTargetNotificationBus::MultiHandler::BusDisconnect(m_offeredDropTargetEntityId);
 	UiDropTargetNotificationBus::MultiHandler::BusDisconnect(m_unofferedDropTargetEntityId);
 
-	UiSpawnerNotificationBus::MultiHandler::BusConnect(m_inventorySpawnerEntityId);
+	UiSpawnerNotificationBus::Handler::BusConnect(m_inventorySpawnerEntityId);
 }
 
 void metapulseWorld::TradeMenuComponent::Reflect(AZ::ReflectContext* context)
@@ -92,9 +93,69 @@ void metapulseWorld::TradeMenuComponent::OnDrop(AZ::EntityId draggable)
 	if (draggableParent.IsValid() && draggableParent == m_unofferedItemsListEntityId) {
 		// 0 to assign an invalid entityid
 		UiElementBus::Event(draggable, &UiElementBus::Events::ReparentByEntityId, m_offeredItemsListEntityId, AZ::EntityId());
+
+		AZStd::string accountsServerUrl, token;
+		APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+		APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+		AZLOG_INFO("Setting tradeable on item id: %d", m_itemMap[draggable].first);
+		AZLOG_INFO("Tostring: %s", AZStd::to_string(m_itemMap[draggable].first).c_str());
+
+		if (!token.empty() && !accountsServerUrl.empty()) {
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
+				accountsServerUrl + "/trade/tradeItem?itemId=" + AZStd::to_string(m_itemMap[draggable].first),
+				Aws::Http::HttpMethod::HTTP_POST,
+				AZStd::map<AZStd::string, AZStd::string>({ 
+					{"Authorization", token},
+					{"Content-Type", "application/x-www-form-urlencoded"},
+					}),
+				[]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Executing set treadable callback...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AZLOG_INFO("Correctly set item as tradeable");
+					}
+					else {
+						AZLOG_ERROR("Failed setting item as tradeable");
+					}
+				}
+			);
+		}
+		else {
+			AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
+		}
 	}
 	else if (draggableParent.IsValid() && draggableParent == m_offeredItemsListEntityId) {
 		UiElementBus::Event(draggable, &UiElementBus::Events::ReparentByEntityId, m_unofferedItemsListEntityId, AZ::EntityId());
+
+		AZStd::string accountsServerUrl, token;
+		APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+		APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+		AZLOG_INFO("Unsetting tradeable on item id: %d", m_itemMap[draggable].first);
+		AZLOG_INFO("Tostring: %s", AZStd::to_string(m_itemMap[draggable].first).c_str());
+
+		if (!token.empty() && !accountsServerUrl.empty()) {
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
+				accountsServerUrl + "/trade/tradeItem?itemId=" + AZStd::to_string(m_itemMap[draggable].first),
+				Aws::Http::HttpMethod::HTTP_POST,
+				AZStd::map<AZStd::string, AZStd::string>({
+					{"Authorization", token},
+					{"Content-Type", "application/x-www-form-urlencoded"},
+					}),
+					[]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Executing set treadable callback...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AZLOG_INFO("Correctly unset item as tradeable");
+					}
+					else {
+						AZLOG_ERROR("Failed unsetting item as tradeable");
+					}
+				}
+			);
+		}
+		else {
+			AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
+		}
 	}
 }
 
@@ -155,7 +216,7 @@ void metapulseWorld::TradeMenuComponent::FetchInventory()
 						UiSpawnerBus::EventResult(itemInstantiationTicket, m_inventorySpawnerEntityId, &UiSpawnerBus::Events::Spawn);
 
 						//m_spawnQueue.push(AZStd::make_pair( (size_t) item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()) ));
-						m_spawnMap[itemInstantiationTicket.GetRequestId()] = AZStd::make_pair((size_t)item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()));
+						m_spawnMap[itemInstantiationTicket.GetRequestId()] = AZStd::make_pair(item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()));
 					}
 				}
 				else {
@@ -167,4 +228,9 @@ void metapulseWorld::TradeMenuComponent::FetchInventory()
 	else {
 		AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
 	}
+}
+
+void metapulseWorld::TradeMenuComponent::FetchTradeData()
+{
+
 }

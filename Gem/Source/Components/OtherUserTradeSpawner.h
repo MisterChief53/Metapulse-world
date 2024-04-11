@@ -1,28 +1,22 @@
 #include <AzCore/Component/Component.h>
-#include <LyShine/Bus/UiDropTargetBus.h>
+#include <HttpRequestor/HttpTypes.h>
 #include <LyShine/Bus/UiSpawnerBus.h>
 #include <AzCore/Math/Uuid.h>
-#include <HttpRequestor/HttpTypes.h>
+#include <AzCore/Component/TickBus.h>
 
 namespace metapulseWorld {
-	class TradeMenuComponent
+	class OtherUserTradeSpawner
 		: public AZ::Component
-		, public UiDropTargetNotificationBus::MultiHandler
 		, public UiSpawnerNotificationBus::Handler
-	{
+		, public AZ::TickBus::Handler {
 	public:
-		AZ_COMPONENT(metapulseWorld::TradeMenuComponent, "{8109FA40-547C-467D-8EDE-89F6431275F8}", AZ::Component);
+		AZ_COMPONENT(metapulseWorld::OtherUserTradeSpawner, "{3DA5B064-01AB-46D6-A8A5-031D919524DF}", AZ::Component);
 
 		// Component Overrides
 		void Init() override;
 		void Activate() override;
 		void Deactivate() override;
 		static void Reflect(AZ::ReflectContext* context);
-
-		// Drop target overrides
-		void OnDropHoverStart(AZ::EntityId draggable) override;
-		void OnDropHoverEnd(AZ::EntityId draggable) override;
-		void OnDrop(AZ::EntityId draggable) override;
 
 		// UI spawner notification bus overrides
 		void OnSpawnBegin(const AzFramework::SliceInstantiationTicket& /*ticket*/) override;
@@ -31,26 +25,23 @@ namespace metapulseWorld {
 		void OnTopLevelEntitiesSpawned(const AzFramework::SliceInstantiationTicket& /*ticket*/, const AZStd::vector<AZ::EntityId>& /*spawnedEntities*/) override;
 		void OnSpawnEnd(const AzFramework::SliceInstantiationTicket& /*ticket*/) override;
 		void OnSpawnFailed(const AzFramework::SliceInstantiationTicket& /*ticket*/) override;
-	
+
+		void FetchItems();
+
+		// Tick bus overrides
+
+		void OnTick(float deltaTime, AZ::ScriptTimePoint time) override;
+
+		int GetTickOrder() override;
+
 	private:
-		void FetchInventory();
-		void FetchTradeData();
-
-		AZ::EntityId m_closeButtonEntityId;
-
-		AZ::EntityId m_unofferedItemsListEntityId;
-		AZ::EntityId m_unofferedDropTargetEntityId;
-
-		AZ::EntityId m_offeredItemsListEntityId;
-		AZ::EntityId m_offeredDropTargetEntityId;
-
-		AZ::EntityId m_inventorySpawnerEntityId;
+		AZ::EntityId m_spawnerEntityId;
 
 		// pairs contain itemId, itemName
-		AZStd::map<AZ::u64, AZStd::pair<int, AZStd::string>> m_spawnMap;
-		AZStd::map<AZ::EntityId, AZStd::pair<int, AZStd::string>> m_itemMap;
+		AZStd::map<AZ::u64, AZStd::pair<size_t, AZStd::string>> m_spawnMap;
+		AZStd::map<AZ::EntityId, AZStd::pair<size_t, AZStd::string>> m_itemMap;
 
-		AZStd::map<AZ::u64, AZStd::pair<int, AZStd::string>> m_otherSpawnMap;
-		AZStd::map<AZ::EntityId, AZStd::pair<int, AZStd::string>> m_otherItemMap;
+		double m_prevTime = 0;
+		const double m_cooldown = 5;
 	};
 }

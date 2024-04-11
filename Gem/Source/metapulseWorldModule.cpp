@@ -19,7 +19,7 @@
 #include <Components/UserMenuComponent.h>
 #include <Components/NotificationComponent.h>
 #include <Components/TradeMenuComponent.h>
-#include <Components/ChatBoxComponent.h>
+#include <Components/OtherUserTradeSpawner.h>
 #endif
 
 
@@ -48,7 +48,7 @@ namespace metapulseWorld
                 UserMenuComponent::CreateDescriptor(),
                 NotificationComponent::CreateDescriptor(),
                 TradeMenuComponent::CreateDescriptor(),
-                ChatBoxComponent::CreateDescriptor(),
+                OtherUserTradeSpawner::CreateDescriptor(),
 #endif
             });
 

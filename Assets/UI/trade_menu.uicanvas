@@ -1224,6 +1224,13 @@
 									<Class name="int" field="ChildVAlignment" value="0" type="{72039442-EB38-4D42-A1AD-CB68F7E0EEF6}"/>
 									<Class name="bool" field="IgnoreDefaultLayoutCells" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
 								</Class>
+								<Class name="UiSpawnerComponent" field="element" version="1" type="{5AF19874-04A4-4540-82FC-5F29EC854E31}">
+									<Class name="AZ::Component" field="BaseClass1" type="{EDFCB2CF-F75D-43BE-B26B-F35821B29247}">
+										<Class name="AZ::u64" field="Id" value="4772033412145454706" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+									</Class>
+									<Class name="Asset&lt;DynamicSliceAsset&gt;" field="Slice" value="id={D7553AA2-0666-5145-9866-FD38439AA2C1}:2,type={78802ABF-9595-463A-8D2B-D022F906F9B1},hint={ui/slices/item_inventory_menu.dynamicslice},loadBehavior=1" version="3" type="{58D8A471-1618-5B3E-8CDD-EDFD88319C83}"/>
+									<Class name="bool" field="SpawnOnActivate" value="false" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
+								</Class>
 								<Class name="UiImageComponent" field="element" version="8" type="{BDBEFD23-DBB4-4726-A32D-4FEAC24E51F6}">
 									<Class name="AZ::Component" field="BaseClass1" type="{EDFCB2CF-F75D-43BE-B26B-F35821B29247}">
 										<Class name="AZ::u64" field="Id" value="9355780656399596434" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
@@ -1272,6 +1279,11 @@
 										</Class>
 									</Class>
 									<Class name="AZStd::string" field="OnDropActionName" value="" type="{03AAAB3F-5C47-5A66-9EBC-D5FA4DB353C9}"/>
+								</Class>
+								<Class name="metapulseWorld::OtherUserTradeSpawner" field="element" version="1" type="{3DA5B064-01AB-46D6-A8A5-031D919524DF}">
+									<Class name="AZ::Component" field="BaseClass1" type="{EDFCB2CF-F75D-43BE-B26B-F35821B29247}">
+										<Class name="AZ::u64" field="Id" value="16318664666637541197" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+									</Class>
 								</Class>
 							</Class>
 							<Class name="bool" field="IsDependencyReady" value="true" type="{A0CA880C-AFE4-43CB-926C-59AC48496112}"/>
