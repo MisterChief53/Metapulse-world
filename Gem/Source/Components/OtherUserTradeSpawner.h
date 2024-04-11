@@ -2,11 +2,13 @@
 #include <HttpRequestor/HttpTypes.h>
 #include <LyShine/Bus/UiSpawnerBus.h>
 #include <AzCore/Math/Uuid.h>
+#include <AzCore/Component/TickBus.h>
 
 namespace metapulseWorld {
 	class OtherUserTradeSpawner
 		: public AZ::Component
-		, public UiSpawnerNotificationBus::Handler {
+		, public UiSpawnerNotificationBus::Handler
+		, public AZ::TickBus::Handler {
 	public:
 		AZ_COMPONENT(metapulseWorld::OtherUserTradeSpawner, "{3DA5B064-01AB-46D6-A8A5-031D919524DF}", AZ::Component);
 
@@ -26,11 +28,20 @@ namespace metapulseWorld {
 
 		void FetchItems();
 
+		// Tick bus overrides
+
+		void OnTick(float deltaTime, AZ::ScriptTimePoint time) override;
+
+		int GetTickOrder() override;
+
 	private:
 		AZ::EntityId m_spawnerEntityId;
 
 		// pairs contain itemId, itemName
 		AZStd::map<AZ::u64, AZStd::pair<size_t, AZStd::string>> m_spawnMap;
 		AZStd::map<AZ::EntityId, AZStd::pair<size_t, AZStd::string>> m_itemMap;
+
+		double m_prevTime = 0;
+		const double m_cooldown = 5;
 	};
 }

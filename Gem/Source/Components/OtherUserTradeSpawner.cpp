@@ -15,12 +15,14 @@ void metapulseWorld::OtherUserTradeSpawner::Activate()
 {
 	m_spawnerEntityId = this->GetEntityId();
 	UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
-	FetchItems();
+	AZ::TickBus::Handler::BusConnect();
+	//FetchItems();
 }
 
 void metapulseWorld::OtherUserTradeSpawner::Deactivate()
 {
 	UiSpawnerNotificationBus::Handler::BusDisconnect(m_spawnerEntityId);
+	AZ::TickBus::Handler::BusDisconnect();
 }
 
 void metapulseWorld::OtherUserTradeSpawner::Reflect(AZ::ReflectContext* context)
@@ -113,4 +115,25 @@ void metapulseWorld::OtherUserTradeSpawner::FetchItems()
 	else {
 		AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
 	}
+}
+
+void metapulseWorld::OtherUserTradeSpawner::OnTick([[maybe_unused]] float deltaTime, AZ::ScriptTimePoint time)
+{
+	if (time.GetSeconds() - m_prevTime >= m_cooldown) {
+		for (auto entityPair : m_itemMap) {
+			UiElementBus::Event(entityPair.first, &UiElementBus::Events::DestroyElement);
+			//m_itemMap.erase(entityPair.first);
+		}
+
+		m_itemMap = {};
+
+		FetchItems();
+
+		m_prevTime = time.GetSeconds();
+	}
+}
+
+int metapulseWorld::OtherUserTradeSpawner::GetTickOrder()
+{
+	return AZ::TICK_UI;
 }
