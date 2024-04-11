@@ -7,6 +7,7 @@ namespace metapulseWorld {
 	const StartingPointInput::InputEventNotificationId ToggleIngameMenu("toggle_menu");
 	const StartingPointInput::InputEventNotificationId ToggleUserMenu("toggle_user_menu");
 	const StartingPointInput::InputEventNotificationId ToggleTradeMenu("toggle_trade_menu");
+	const StartingPointInput::InputEventNotificationId ToggleChatBox("toggle_chat_box");
 
 	class UIAdminComponent
 		: public AZ::Component
@@ -46,5 +47,8 @@ namespace metapulseWorld {
 
 		AZStd::string m_tradeMenuPath;
 		AZ::EntityId m_tradeMenuEntityId;
+
+		AZStd::string m_chatBoxPath;
+		AZ::EntityId m_chatBoxEntityId;
 	};
 }

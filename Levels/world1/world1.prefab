@@ -731,7 +731,8 @@
                         "Ingame Menu Canvas Path": "assets/ui/ingame_menu.uicanvas",
                         "Inventory Menu Canvas Path": "assets/ui/inventory_menu.uicanvas",
                         "User Menu Canvas Path": "assets/ui/user_selection.uicanvas",
-                        "Trade Menu Canvas Path": "assets/ui/trade_menu.uicanvas"
+                        "Trade Menu Canvas Path": "assets/ui/trade_menu.uicanvas",
+                        "Chat Box Canvas Path": "assets/ui/chat_box.uicanvas"
                     }
                 }
             }
