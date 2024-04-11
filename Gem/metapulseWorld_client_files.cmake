@@ -14,4 +14,6 @@ set(FILES
 	Source/Components/Interfaces/HUDBus.h
 	Source/Components/NotificationComponent.h
 	Source/Components/NotificationComponent.cpp
+	Source/Components/TradeMenuComponent.h
+	Source/Components/TradeMenuComponent.cpp
 )

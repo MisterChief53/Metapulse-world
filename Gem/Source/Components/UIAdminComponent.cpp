@@ -14,6 +14,7 @@ namespace metapulseWorld {
 	{
 		StartingPointInput::InputEventNotificationBus::MultiHandler::BusConnect(ToggleIngameMenu);
 		StartingPointInput::InputEventNotificationBus::MultiHandler::BusConnect(ToggleUserMenu);
+		StartingPointInput::InputEventNotificationBus::MultiHandler::BusConnect(ToggleTradeMenu);
 		metapulseWorld::UIAdminBus::Handler::BusConnect();
 	}
 
@@ -21,6 +22,7 @@ namespace metapulseWorld {
 	{
 		StartingPointInput::InputEventNotificationBus::MultiHandler::BusDisconnect(ToggleIngameMenu);
 		StartingPointInput::InputEventNotificationBus::MultiHandler::BusDisconnect(ToggleUserMenu);
+		StartingPointInput::InputEventNotificationBus::MultiHandler::BusDisconnect(ToggleTradeMenu);
 		metapulseWorld::UIAdminBus::Handler::BusDisconnect();
 	}
 
@@ -32,6 +34,7 @@ namespace metapulseWorld {
 				->Field("Ingame Menu Canvas Path", &UIAdminComponent::m_ingameMenuPath)
 				->Field("Inventory Menu Canvas Path", &UIAdminComponent::m_inventoryMenuPath)
 				->Field("User Menu Canvas Path", &UIAdminComponent::m_userMenuPath)
+				->Field("Trade Menu Canvas Path", &UIAdminComponent::m_tradeMenuPath)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext()) {
@@ -43,6 +46,7 @@ namespace metapulseWorld {
 					->DataElement(AZ::Edit::UIHandlers::Default, &UIAdminComponent::m_ingameMenuPath,"Ingame Menu Canvas Path", "Path relative to root folder where the ingame manu canvas is located")
 					->DataElement(AZ::Edit::UIHandlers::Default, &UIAdminComponent::m_inventoryMenuPath, "Inventory Menu Canvas Path", "Path relative to root folder where the inventory menu canvas is located")
 					->DataElement(AZ::Edit::UIHandlers::Default, &UIAdminComponent::m_userMenuPath, "User Menu Canvas Path", "Path relative to root folder where the user menu canvas is located")
+					->DataElement(AZ::Edit::UIHandlers::Default, &UIAdminComponent::m_tradeMenuPath, "Trade Menu Canvas Path", "Path relative to root folder where the trade menu canvas is located")
 					;
 			}
 		}
@@ -72,6 +76,15 @@ namespace metapulseWorld {
 			// The unloading will be done inside the canvas, since it consumes all the input, it would never get triggered here.
 			if (!m_userMenuEntityId.IsValid()) {
 				UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::LoadCanvas, m_userMenuPath);
+			}
+		}
+
+		if (*inputId == ToggleTradeMenu) {
+			UiCanvasManagerBus::BroadcastResult(m_tradeMenuEntityId, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, m_tradeMenuPath, false);
+			AZLOG_INFO("Loading trade menu");
+			// The unloading will be done inside the canvas, since it consumes all the input, it would never get triggered here.
+			if (!m_tradeMenuEntityId.IsValid()) {
+				UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::LoadCanvas, m_tradeMenuPath);
 			}
 		}
 	}

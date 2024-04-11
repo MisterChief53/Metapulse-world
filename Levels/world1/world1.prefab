@@ -730,7 +730,8 @@
                         "$type": "metapulseWorld::UIAdminComponent",
                         "Ingame Menu Canvas Path": "assets/ui/ingame_menu.uicanvas",
                         "Inventory Menu Canvas Path": "assets/ui/inventory_menu.uicanvas",
-                        "User Menu Canvas Path": "assets/ui/user_selection.uicanvas"
+                        "User Menu Canvas Path": "assets/ui/user_selection.uicanvas",
+                        "Trade Menu Canvas Path": "assets/ui/trade_menu.uicanvas"
                     }
                 }
             }
@@ -1099,6 +1100,59 @@
                 }
             }
         },
+        "Entity_[444524402743]": {
+            "Id": "Entity_[444524402743]",
+            "Name": "trade_menu",
+            "Components": {
+                "EditorDisabledCompositionComponent": {
+                    "$type": "EditorDisabledCompositionComponent",
+                    "Id": 1553236407720860127
+                },
+                "EditorEntityIconComponent": {
+                    "$type": "EditorEntityIconComponent",
+                    "Id": 13789685340602000102
+                },
+                "EditorEntitySortComponent": {
+                    "$type": "EditorEntitySortComponent",
+                    "Id": 12115079164185523301
+                },
+                "EditorInspectorComponent": {
+                    "$type": "EditorInspectorComponent",
+                    "Id": 14477092760416058666
+                },
+                "EditorLockComponent": {
+                    "$type": "EditorLockComponent",
+                    "Id": 8446006934225781754
+                },
+                "EditorOnlyEntityComponent": {
+                    "$type": "EditorOnlyEntityComponent",
+                    "Id": 15431150812542855465
+                },
+                "EditorPendingCompositionComponent": {
+                    "$type": "EditorPendingCompositionComponent",
+                    "Id": 3770553118728506160
+                },
+                "EditorVisibilityComponent": {
+                    "$type": "EditorVisibilityComponent",
+                    "Id": 1464453252489256479
+                },
+                "TransformComponent": {
+                    "$type": "{27F1E1A1-8D9D-4C3B-BD3A-AFB9762449C0} TransformComponent",
+                    "Id": 14706483142358221584,
+                    "Parent Entity": "Entity_[997177333263]"
+                },
+                "UiCanvasAssetRefComponent": {
+                    "$type": "GenericComponentWrapper",
+                    "Id": 6174907008866806518,
+                    "m_template": {
+                        "$type": "UiCanvasAssetRefComponent",
+                        "CanvasAssetRef": {
+                            "AssetPath": "assets/ui/trade_menu.uicanvas"
+                        }
+                    }
+                }
+            }
+        },
         "Entity_[686761042901]": {
             "Id": "Entity_[686761042901]",
             "Name": "hud",
@@ -1224,7 +1278,8 @@
                         "Entity_[686761042901]",
                         "Entity_[356665965953]",
                         "Entity_[358447151274]",
-                        "Entity_[359307902734]"
+                        "Entity_[359307902734]",
+                        "Entity_[444524402743]"
                     ]
                 },
                 "EditorInspectorComponent": {
