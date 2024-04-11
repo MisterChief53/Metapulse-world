@@ -30,6 +30,8 @@ namespace metapulseWorld {
 				AZLOG_INFO("unloading canvas");
 				UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntityId);
 			});
+
+		FetchMessages();
 	}
 	void ChatBoxComponent::Deactivate()
 	{
@@ -69,28 +71,27 @@ namespace metapulseWorld {
 
 		if (!username.empty() && !accountsServerUrl.empty()) {
 			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
-				accountsServerUrl + "/chat/getMessage",
+				accountsServerUrl + "/chat/getMessages",
 				Aws::Http::HttpMethod::HTTP_GET,
 				AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
 				[this](const Aws::Utils::Json::JsonView& json, Aws::Http::HttpResponseCode responseCode) {
 					AZLOG_INFO("Executing fetch messages callback...");
 					if (responseCode == Aws::Http::HttpResponseCode::OK) {
-						AzFramework::SliceInstantiationTicket itemInstantiationTicket;
-						AZ::EntityId itemEntityId;
+						AzFramework::SliceInstantiationTicket messageInstantiationTicket;
+						AZ::EntityId messageEntityId;
 
-						Aws::Utils::Array<Aws::Utils::Json::JsonView> items = json.AsArray();
+						Aws::Utils::Array<Aws::Utils::Json::JsonView> messages = json.AsArray();
 
-						for (size_t i = 0; i < items.GetLength(); i++) {
-							Aws::Utils::Json::JsonView item = items.GetItem(i);
+						for (size_t i = 0; i < messages.GetLength(); i++) {
+							Aws::Utils::Json::JsonView message = messages.GetItem(i);
 
-							UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
+							UiSpawnerBus::EventResult(messageInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
 
-							//m_spawnQueue.push(AZStd::make_pair( (size_t) item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()) ));
-							m_spawnMap[itemInstantiationTicket.GetRequestId()] = AZStd::make_pair((size_t)item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()));
+							m_spawnMap[messageInstantiationTicket.GetRequestId()] = AZStd::make_pair((size_t)message.GetInteger("id"), AZStd::string(message.GetString("content").c_str()));
 						}
 					}
 					else {
-						AZLOG_ERROR("Failed fetching items");
+						AZLOG_ERROR("Failed fetching messages");
 					}
 				}
 			);
@@ -98,5 +99,15 @@ namespace metapulseWorld {
 		else {
 			AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
 		}
+	}
+
+	void ChatBoxComponent::OnEntitySpawned([[maybe_unused]] const AzFramework::SliceInstantiationTicket& ticket, const AZ::EntityId& spawnedEntity) 
+	{
+		m_itemMap[spawnedEntity] = AZStd::make_pair(m_spawnMap[ticket.GetRequestId()].first, m_spawnMap[ticket.GetRequestId()].second);
+		m_spawnMap.erase(ticket.GetRequestId());
+
+		UiTextBus::Event(spawnedEntity, &UiTextBus::Events::SetText, m_itemMap[spawnedEntity].second);
+
+		UiElementBus::Event(spawnedEntity, &UiElementBus::Events::ReparentByEntityId, m_unequippedItemsListEntityId, AZ::EntityId());
 	}
 }

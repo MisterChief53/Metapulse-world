@@ -1,6 +1,7 @@
 #include <AzCore/Component/Component.h>
 #include <HttpRequestor/HttpTypes.h>
 #include <Components/Interfaces/APIRequestsBus.h>
+#include <LyShine/Bus/UiSpawnerBus.h>
 #include <AzCore/Math/Uuid.h>
 
 namespace metapulseWorld {
@@ -15,11 +16,20 @@ namespace metapulseWorld {
 		void Deactivate() override;
 		static void Reflect(AZ::ReflectContext* context);
 
+		void OnEntitySpawned(const AzFramework::SliceInstantiationTicket& /*ticket*/, const AZ::EntityId& /*spawnedEntity*/) override;
+
 		void FetchMessages();
 
 	private:
 		AZ::EntityId m_closeButtonEntityId;
 		AZ::EntityId m_sendButtonEntityId;
 		AZ::EntityId m_messageInputTextEntityId;
+
+		AZ::EntityId m_messagesList;
+
+		AZ::EntityId m_spawnerEntityId;
+
+		AZStd::map<AZ::u64, AZStd::pair<size_t, AZStd::string>> m_spawnMap;
+		AZStd::map<AZ::EntityId, AZStd::pair<size_t, AZStd::string>> m_itemMap;
 	};
 }
