@@ -33,13 +33,16 @@ namespace metapulseWorld {
 
 		UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
 
-		FetchMessages();
+		AZ::TickBus::Handler::BusConnect();
+
+		//FetchMessages();
 
 		RegisterSendButton();
 	}
 	void ChatBoxComponent::Deactivate()
 	{
 		UiSpawnerNotificationBus::Handler::BusDisconnect(m_spawnerEntityId);
+		AZ::TickBus::Handler::BusDisconnect();
 	}
 	void ChatBoxComponent::Reflect(AZ::ReflectContext* context)
 	{
@@ -111,6 +114,27 @@ namespace metapulseWorld {
 		}
 	}
 
+	void ChatBoxComponent::OnTick([[maybe_unused]] float deltaTime, AZ::ScriptTimePoint time)
+	{
+		if (time.GetSeconds() - m_prevTime >= m_cooldown) {
+			for (auto entityPair : m_itemMap) {
+				UiElementBus::Event(entityPair.first, &UiElementBus::Events::DestroyElement);
+				//m_itemMap.erase(entityPair.first);
+			}
+
+			m_itemMap = {};
+
+			FetchMessages();
+
+			m_prevTime = time.GetSeconds();
+		}
+	}
+
+	int ChatBoxComponent::GetTickOrder()
+	{
+		return AZ::TICK_UI;
+	}
+
 	void ChatBoxComponent::RegisterSendButton()
 	{
 		UiButtonBus::Event(m_sendButtonEntityId, &UiButtonInterface::SetOnClickCallback,
@@ -131,10 +155,11 @@ namespace metapulseWorld {
 						{"Authorization", token},
 						{"Content-Type", "application/x-www-form-urlencoded"}
 						}),
-					[]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
+					[this]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
 						AZLOG_INFO("Executing send message request...");
 						if (responseCode == Aws::Http::HttpResponseCode::OK) {
 							AZLOG_INFO("Message sent correclty!");
+							UiTextBus::Event(m_messageInputTextEntityId, &UiTextBus::Events::SetText, "");
 						}
 						else {
 							AZLOG_ERROR("Failed sending message");
