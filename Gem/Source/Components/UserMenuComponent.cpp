@@ -152,6 +152,20 @@ void metapulseWorld::UserMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused
 				}
 			);
 
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequest,
+				accountsServerUrl + "/trade/create",
+				Aws::Http::HttpMethod::HTTP_POST,
+				[]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Creating a new trade...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AZLOG_INFO("Correctly created a new trade!");
+					}
+					else {
+						AZLOG_ERROR("Failed creating a new trade");
+					}
+				}
+			);
+
 		});
 
 	m_userQueue.pop();

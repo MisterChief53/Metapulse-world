@@ -8,7 +8,7 @@ namespace metapulseWorld {
 	class TradeMenuComponent
 		: public AZ::Component
 		, public UiDropTargetNotificationBus::MultiHandler
-		, public UiSpawnerNotificationBus::MultiHandler
+		, public UiSpawnerNotificationBus::Handler
 	{
 	public:
 		AZ_COMPONENT(metapulseWorld::TradeMenuComponent, "{8109FA40-547C-467D-8EDE-89F6431275F8}", AZ::Component);
@@ -34,6 +34,7 @@ namespace metapulseWorld {
 	
 	private:
 		void FetchInventory();
+		void FetchTradeData();
 
 		AZ::EntityId m_closeButtonEntityId;
 
@@ -46,7 +47,10 @@ namespace metapulseWorld {
 		AZ::EntityId m_inventorySpawnerEntityId;
 
 		// pairs contain itemId, itemName
-		AZStd::map<AZ::u64, AZStd::pair<size_t, AZStd::string>> m_spawnMap;
-		AZStd::map<AZ::EntityId, AZStd::pair<size_t, AZStd::string>> m_itemMap;
+		AZStd::map<AZ::u64, AZStd::pair<int, AZStd::string>> m_spawnMap;
+		AZStd::map<AZ::EntityId, AZStd::pair<int, AZStd::string>> m_itemMap;
+
+		AZStd::map<AZ::u64, AZStd::pair<int, AZStd::string>> m_otherSpawnMap;
+		AZStd::map<AZ::EntityId, AZStd::pair<int, AZStd::string>> m_otherItemMap;
 	};
 }

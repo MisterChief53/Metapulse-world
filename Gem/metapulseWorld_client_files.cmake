@@ -16,4 +16,6 @@ set(FILES
 	Source/Components/NotificationComponent.cpp
 	Source/Components/TradeMenuComponent.h
 	Source/Components/TradeMenuComponent.cpp
+	Source/Components/OtherUserTradeSpawner.h
+	Source/Components/OtherUserTradeSpawner.cpp
 )
