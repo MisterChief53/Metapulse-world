@@ -3,6 +3,7 @@
 #include <LyShine/Bus/UiSpawnerBus.h>
 #include <AzCore/Math/Uuid.h>
 #include <HttpRequestor/HttpTypes.h>
+#include <AzCore/std/containers/set.h>
 
 namespace metapulseWorld {
 	class TradeMenuComponent
@@ -52,5 +53,7 @@ namespace metapulseWorld {
 
 		AZStd::map<AZ::u64, AZStd::pair<int, AZStd::string>> m_otherSpawnMap;
 		AZStd::map<AZ::EntityId, AZStd::pair<int, AZStd::string>> m_otherItemMap;
+
+		AZStd::set<AZ::EntityId> m_offeredItemsSet;
 	};
 }
