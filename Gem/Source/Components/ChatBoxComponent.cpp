@@ -144,12 +144,13 @@ namespace metapulseWorld {
 
 				AZLOG_INFO("Text to SEND: %s", textTosend.c_str());
 
-				AZStd::string accountsServerUrl, token;
+				AZStd::string accountsServerUrl, token, username;
 				APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
 				APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+				APIRequestsBus::BroadcastResult(username, &APIRequestsBus::Events::getUsername);
 
 				HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
-					accountsServerUrl + "/chat/sendMessage?chatId=1&content=" + textTosend,
+					accountsServerUrl + "/chat/sendMessage?chatId=1&content=" + username + ": " + textTosend,
 					Aws::Http::HttpMethod::HTTP_POST,
 					AZStd::map<AZStd::string, AZStd::string>({
 						{"Authorization", token},
