@@ -37,20 +37,25 @@ namespace metapulseWorld
         if (materialLabelMap.empty()) {
             AZLOG_INFO("Material label map is empty!");
         }
-        AZ::Render::MaterialAssignmentId materialId;
+        AZStd::vector<AZ::Render::MaterialAssignmentId> materialVector;
+        AZStd::string propertyName = "baseColor.color";
 
         for (auto idLabelPair : materialLabelMap) {
             if (idLabelPair.second == "DefaultMaterial") {
                 AZLOG_INFO("Found a material label we were looking for");
-                materialId = idLabelPair.first;
+                materialVector.push_back(idLabelPair.first);
+                AZLOG_INFO("Label: %s", idLabelPair.second.c_str());
             }
         }
 
-        //AZStd::vector<float> color = { 1.0, 1.0, 1.0 };
-        AZ::Color color = AZ::Color(1.0);
+        AZLOG_INFO("Setting up new player color...");
+        AZ::Color color = AZ::Color(AZ::Vector3(10.0f, 10.0f, 255.0f));
         // SetPropertyValue(const MaterialAssignmentId& materialAssignmentId, const AZStd::string& propertyName, const AZStd::any& value)
-        AZ::Render::MaterialComponentRequestBus::Event(this->GetEntityId(),
-            &AZ::Render::MaterialComponentRequestBus::Events::SetPropertyValue, materialId, "Base Color", color);
+        for (auto materialId : materialVector) {
+            AZLOG_INFO("Setting up new player color...")
+            AZ::Render::MaterialComponentRequestBus::Event(this->GetEntityId(),
+                &AZ::Render::MaterialComponentRequestBus::Events::SetPropertyValue, materialId, propertyName, AZStd::any(color));
+        }
     }
 
     void UserController::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
