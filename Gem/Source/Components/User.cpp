@@ -7,6 +7,7 @@
 #include <Multiplayer/Components/NetworkCharacterComponent.h>
 #include <Components/Interfaces/UserRegistryBus.h>
 #include <Components/Interfaces/HUDBus.h>
+#include <AzCore/Math/Color.h>
 
 namespace metapulseWorld
 {
@@ -28,6 +29,28 @@ namespace metapulseWorld
         // register the user on user registry
         AZLOG_INFO("######################################## Attempting to register a user ########################################");
         UserRegistryBus::Broadcast(&UserRegistryBus::Events::RegisterUser, this->GetEntityId());
+
+        AZ::Render::MaterialAssignmentLabelMap materialLabelMap;
+        AZ::Render::MaterialConsumerRequestBus::EventResult(materialLabelMap, this->GetEntityId(),
+            &AZ::Render::MaterialConsumerRequestBus::Events::GetMaterialLabels);
+
+        if (materialLabelMap.empty()) {
+            AZLOG_INFO("Material label map is empty!");
+        }
+        AZ::Render::MaterialAssignmentId materialId;
+
+        for (auto idLabelPair : materialLabelMap) {
+            if (idLabelPair.second == "DefaultMaterial") {
+                AZLOG_INFO("Found a material label we were looking for");
+                materialId = idLabelPair.first;
+            }
+        }
+
+        //AZStd::vector<float> color = { 1.0, 1.0, 1.0 };
+        AZ::Color color = AZ::Color(1.0);
+        // SetPropertyValue(const MaterialAssignmentId& materialAssignmentId, const AZStd::string& propertyName, const AZStd::any& value)
+        AZ::Render::MaterialComponentRequestBus::Event(this->GetEntityId(),
+            &AZ::Render::MaterialComponentRequestBus::Events::SetPropertyValue, materialId, "Base Color", color);
     }
 
     void UserController::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)

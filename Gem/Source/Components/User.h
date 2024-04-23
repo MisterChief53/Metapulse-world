@@ -3,6 +3,7 @@
 #include <Source/AutoGen/User.AutoComponent.h>
 #include <StartingPointInput/InputEventNotificationBus.h>
 #include <Components/Interfaces/UserBus.h>
+#include <AtomLyIntegration/CommonFeatures/Material/MaterialComponentBus.h>
 
 namespace metapulseWorld
 {
