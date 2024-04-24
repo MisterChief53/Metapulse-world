@@ -8,6 +8,7 @@
 #include <Components/Interfaces/UserRegistryBus.h>
 #include <Components/Interfaces/HUDBus.h>
 #include <AzCore/Math/Color.h>
+#include <random>
 
 namespace metapulseWorld
 {
@@ -29,33 +30,6 @@ namespace metapulseWorld
         // register the user on user registry
         AZLOG_INFO("######################################## Attempting to register a user ########################################");
         UserRegistryBus::Broadcast(&UserRegistryBus::Events::RegisterUser, this->GetEntityId());
-
-        AZ::Render::MaterialAssignmentLabelMap materialLabelMap;
-        AZ::Render::MaterialConsumerRequestBus::EventResult(materialLabelMap, this->GetEntityId(),
-            &AZ::Render::MaterialConsumerRequestBus::Events::GetMaterialLabels);
-
-        if (materialLabelMap.empty()) {
-            AZLOG_INFO("Material label map is empty!");
-        }
-        AZStd::vector<AZ::Render::MaterialAssignmentId> materialVector;
-        AZStd::string propertyName = "baseColor.color";
-
-        for (auto idLabelPair : materialLabelMap) {
-            if (idLabelPair.second == "DefaultMaterial") {
-                AZLOG_INFO("Found a material label we were looking for");
-                materialVector.push_back(idLabelPair.first);
-                AZLOG_INFO("Label: %s", idLabelPair.second.c_str());
-            }
-        }
-
-        AZLOG_INFO("Setting up new player color...");
-        AZ::Color color = AZ::Color(AZ::Vector3(10.0f, 10.0f, 255.0f));
-        // SetPropertyValue(const MaterialAssignmentId& materialAssignmentId, const AZStd::string& propertyName, const AZStd::any& value)
-        for (auto materialId : materialVector) {
-            AZLOG_INFO("Setting up new player color...")
-            AZ::Render::MaterialComponentRequestBus::Event(this->GetEntityId(),
-                &AZ::Render::MaterialComponentRequestBus::Events::SetPropertyValue, materialId, propertyName, AZStd::any(color));
-        }
     }
 
     void UserController::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
@@ -89,6 +63,7 @@ namespace metapulseWorld
         UpdateRotation(playerInput);
         UpdateVelocity(playerInput);
         GetNetworkCharacterComponentController()->TryMoveWithVelocity(m_velocity, deltaTime);
+        UpdateMaterial();
     }
 
     void UserController::OnPressed(float value) {
@@ -180,5 +155,47 @@ namespace metapulseWorld
 
         m_velocity = AZ::Quaternion::CreateRotationZ(currentHeading).TransformVector(combined) * GetWalkSpeed() 
             + AZ::Vector3::CreateAxisZ(GetGravity());
+    }
+    void UserController::UpdateMaterial()
+    {
+        AZ::Render::MaterialAssignmentLabelMap materialLabelMap;
+        AZ::Render::MaterialConsumerRequestBus::EventResult(materialLabelMap, this->GetEntityId(),
+            &AZ::Render::MaterialConsumerRequestBus::Events::GetMaterialLabels);
+
+        if (materialLabelMap.empty()) {
+            AZLOG_INFO("Material label map is empty!");
+            return;
+        }
+        AZStd::vector<AZ::Render::MaterialAssignmentId> materialVector;
+        AZStd::string propertyName = "baseColor.color";
+
+        for (auto idLabelPair : materialLabelMap) {
+            if (idLabelPair.second == "DefaultMaterial") {
+                materialVector.push_back(idLabelPair.first);
+            }
+        }
+
+        // virtual AZStd::any GetPropertyValue(const MaterialAssignmentId & materialAssignmentId, const AZStd::string & propertyName) const = 0;
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+
+        // Create a uniform real distribution between 0.0 and 1.0
+        std::uniform_real_distribution<float> dis(0.0f, 1.0f);
+
+        AZ::Color color = AZ::Color(AZ::Vector3(dis(gen), dis(gen), dis(gen)));
+        // SetPropertyValue(const MaterialAssignmentId& materialAssignmentId, const AZStd::string& propertyName, const AZStd::any& value)
+        for (auto materialId : materialVector) {
+            AZStd::any gottenAny;
+            //AZ::Color gottenColor;
+            AZ::Render::MaterialComponentRequestBus::EventResult(gottenAny, this->GetEntityId(),
+                &AZ::Render::MaterialComponentRequestBus::Events::GetPropertyValue, materialId, propertyName);
+            if (gottenAny.empty()) {
+                AZLOG_ERROR("Could not get player's material color!");
+            }
+
+            AZ::Render::MaterialComponentRequestBus::Event(this->GetEntityId(),
+                    &AZ::Render::MaterialComponentRequestBus::Events::SetPropertyValue, materialId, propertyName, AZStd::any(color));
+        }
     }
 }

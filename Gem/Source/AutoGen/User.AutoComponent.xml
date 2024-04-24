@@ -3,7 +3,7 @@
 <Component
   Name="User"
   Namespace="metapulseWorld"
-  OverrideComponent="false"
+  OverrideComponent="true"
   OverrideController="true"
   OverrideInclude="Source/Components/User.h"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -17,6 +17,11 @@
                     Name="NetworkTransformComponent"
                     Namespace="Multiplayer"
                     Include="Multiplayer/Components/NetworkTransformComponent.h"/>
+
+  <ComponentRelation Constraint="Weak" HasController="false"
+                     Name="Material"
+                     Namespace="AZ::RPI"
+                     Include="Atom/RPI.Public/Material/Material.h" />
   
   <ArchetypeProperty Type="float" Name="WalkSpeed"
                     Init="6.0f" ExposeToEditor="true"/>
