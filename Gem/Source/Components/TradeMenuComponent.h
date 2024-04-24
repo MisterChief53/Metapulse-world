@@ -37,6 +37,7 @@ namespace metapulseWorld {
 		void FetchInventory();
 		void FetchTradeData();
 
+		void RegisterRejectButton();
 		void RegisterAcceptButton();
 
 		AZ::EntityId m_closeButtonEntityId;

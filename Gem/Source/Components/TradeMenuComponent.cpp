@@ -36,6 +36,7 @@ void metapulseWorld::TradeMenuComponent::Activate()
 	FetchTradeData();
 	FetchInventory();
 	RegisterAcceptButton();
+	RegisterRejectButton();
 }
 
 void metapulseWorld::TradeMenuComponent::Deactivate()
@@ -290,10 +291,37 @@ void metapulseWorld::TradeMenuComponent::RegisterAcceptButton() {
 				[]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
 					AZLOG_INFO("Accepting trade...");
 					if (responseCode == Aws::Http::HttpResponseCode::OK) {
-						AZLOG_INFO("Trade accepted correclty!");
+						AZLOG_INFO("Trade accepted correctly!");
 					}
 					else {
 						AZLOG_ERROR("Failed accepting trade");
+					}
+				}
+			);
+		});
+}
+
+void metapulseWorld::TradeMenuComponent::RegisterRejectButton() {
+	UiButtonBus::Event(m_rejectTradeButtonEntityId, &UiButtonInterface::SetOnClickCallback,
+		[]([[maybe_unused]] AZ::EntityId m_rejectTradeButtonEntityId, [[maybe_unused]] AZ::Vector2 position) {
+			AZStd::string accountsServerUrl, token;
+			APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+			APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
+				accountsServerUrl + "/trade/rejectTrade",
+				Aws::Http::HttpMethod::HTTP_PUT,
+				AZStd::map<AZStd::string, AZStd::string>({
+					{"Authorization", token},
+					{"Content-Type", "application/x-www-form-urlencoded"}
+					}),
+				[]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Rejecting trade...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AZLOG_INFO("Trade rejected correctly!");
+					}
+					else {
+						AZLOG_ERROR("Failed rejecting trade");
 					}
 				}
 			);
