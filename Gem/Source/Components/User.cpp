@@ -9,7 +9,6 @@
 #include <Components/Interfaces/HUDBus.h>
 #include <AzCore/Math/Color.h>
 #include <random>
-
 namespace metapulseWorld
 {
     using namespace StartingPointInput;
@@ -49,6 +48,15 @@ namespace metapulseWorld
         playerInput->m_viewPitch = m_pitch;
 
         playerInput->m_resetCount = GetNetworkTransformComponentController()->GetResetCount();
+
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+
+        // Create a uniform real distribution between 0.0 and 1.0
+        std::uniform_real_distribution<float> dis(0.0f, 1.0f);
+
+        playerInput->m_colorInput = dis(gen);
     }
 
     void UserController::ProcessInput([[maybe_unused]] Multiplayer::NetworkInput& input, [[maybe_unused]] float deltaTime)
@@ -63,7 +71,9 @@ namespace metapulseWorld
         UpdateRotation(playerInput);
         UpdateVelocity(playerInput);
         GetNetworkCharacterComponentController()->TryMoveWithVelocity(m_velocity, deltaTime);
-        UpdateMaterial();
+#if AZ_TRAIT_SERVER
+        SetColorProperty(playerInput->m_colorInput);
+#endif
     }
 
     void UserController::OnPressed(float value) {
@@ -156,7 +166,42 @@ namespace metapulseWorld
         m_velocity = AZ::Quaternion::CreateRotationZ(currentHeading).TransformVector(combined) * GetWalkSpeed() 
             + AZ::Vector3::CreateAxisZ(GetGravity());
     }
-    void UserController::UpdateMaterial()
+
+    void User::Reflect(AZ::ReflectContext* context)
+    {
+        AZ::SerializeContext* serializeContext = azrtti_cast<AZ::SerializeContext*>(context);
+        if (serializeContext)
+        {
+            serializeContext->Class<User, UserBase>()
+                ->Version(1);
+        }
+        UserBase::Reflect(context);
+    }
+
+    void User::OnInit()
+    {
+    }
+
+    void User::OnActivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
+    {
+        ColorPropertyAddEvent(m_ColorChanged);
+    }
+
+    void User::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
+    {
+    }
+    User::User()
+        : m_ColorChanged([this](float newColor) {
+        OnColorChanged(newColor);
+        })
+    {
+    }
+    void User::OnColorChanged(float newColor)
+    {
+        AZLOG_INFO("Color changed to: %0.2f", newColor);
+        UpdateMaterial(newColor);
+    }
+    void User::UpdateMaterial(float newColor)
     {
         AZ::Render::MaterialAssignmentLabelMap materialLabelMap;
         AZ::Render::MaterialConsumerRequestBus::EventResult(materialLabelMap, this->GetEntityId(),
@@ -175,19 +220,9 @@ namespace metapulseWorld
             }
         }
 
-        // virtual AZStd::any GetPropertyValue(const MaterialAssignmentId & materialAssignmentId, const AZStd::string & propertyName) const = 0;
-
-        std::random_device rd;
-        std::mt19937 gen(rd());
-
-        // Create a uniform real distribution between 0.0 and 1.0
-        std::uniform_real_distribution<float> dis(0.0f, 1.0f);
-
-        AZ::Color color = AZ::Color(AZ::Vector3(dis(gen), dis(gen), dis(gen)));
-        // SetPropertyValue(const MaterialAssignmentId& materialAssignmentId, const AZStd::string& propertyName, const AZStd::any& value)
+        AZ::Color color = AZ::Color(newColor);
         for (auto materialId : materialVector) {
             AZStd::any gottenAny;
-            //AZ::Color gottenColor;
             AZ::Render::MaterialComponentRequestBus::EventResult(gottenAny, this->GetEntityId(),
                 &AZ::Render::MaterialComponentRequestBus::Events::GetPropertyValue, materialId, propertyName);
             if (gottenAny.empty()) {
@@ -195,7 +230,7 @@ namespace metapulseWorld
             }
 
             AZ::Render::MaterialComponentRequestBus::Event(this->GetEntityId(),
-                    &AZ::Render::MaterialComponentRequestBus::Events::SetPropertyValue, materialId, propertyName, AZStd::any(color));
+                &AZ::Render::MaterialComponentRequestBus::Events::SetPropertyValue, materialId, propertyName, AZStd::any(color));
         }
     }
 }

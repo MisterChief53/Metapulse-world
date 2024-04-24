@@ -57,7 +57,27 @@ namespace metapulseWorld
         float pitch_transform = 0;
 
         AZ::Vector3 m_velocity = AZ::Vector3::CreateZero();
+    };
 
-        void UpdateMaterial();
+    class User
+        : public UserBase
+    {
+    public:
+        AZ_MULTIPLAYER_COMPONENT(metapulseWorld::User, s_userConcreteUuid, metapulseWorld::UserBase);
+
+        static void Reflect(AZ::ReflectContext* context);
+
+        void OnInit() override;
+        void OnActivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
+        void OnDeactivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
+
+        User();
+
+
+    protected:
+        AZ::Color m_materialBaseColor;
+        AZ::Event<float>::Handler m_ColorChanged;
+        void OnColorChanged(float newColor);
+        void UpdateMaterial(float newColor);
     };
 }
