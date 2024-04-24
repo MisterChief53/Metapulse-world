@@ -3,6 +3,10 @@
 #include <Source/AutoGen/User.AutoComponent.h>
 #include <StartingPointInput/InputEventNotificationBus.h>
 #include <Components/Interfaces/UserBus.h>
+#include <AtomLyIntegration/CommonFeatures/Material/MaterialComponentBus.h>
+#if AZ_TRAIT_CLIENT
+#include <Components/Interfaces/ItemBus.h>
+#endif
 
 namespace metapulseWorld
 {
@@ -15,6 +19,9 @@ namespace metapulseWorld
         : public UserControllerBase
         , public StartingPointInput::InputEventNotificationBus::MultiHandler
         , public metapulseWorld::UserBus::Handler
+#if AZ_TRAIT_CLIENT
+        , public ItemBus::Handler
+#endif
     {
     public:
         explicit UserController(User& parent);
@@ -42,6 +49,11 @@ namespace metapulseWorld
         // UserBus Implementations
         float getPitchValue() override;
 
+#if AZ_TRAIT_CLIENT
+        // item bus overrides
+        void executeItem(AZStd::string itemName) override;
+#endif
+
     protected:
         void UpdateRotation(const UserNetworkInput* input);
         void UpdateVelocity(const UserNetworkInput* input);
@@ -50,11 +62,36 @@ namespace metapulseWorld
         float m_strafe = 0;
         float m_yaw = 0;
         float m_pitch = 0;
+        float m_color = 0;
 
         // this is the transformation needed to be applied
         // to the camera to move it vertically
         float pitch_transform = 0;
 
         AZ::Vector3 m_velocity = AZ::Vector3::CreateZero();
+
+        AZStd::unordered_map<AZStd::string, float> m_itemMap = { {"red", 0.255f}, {"blue", 0.5f}, {"green", 0.01f} };
+    };
+
+    class User
+        : public UserBase
+    {
+    public:
+        AZ_MULTIPLAYER_COMPONENT(metapulseWorld::User, s_userConcreteUuid, metapulseWorld::UserBase);
+
+        static void Reflect(AZ::ReflectContext* context);
+
+        void OnInit() override;
+        void OnActivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
+        void OnDeactivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
+
+        User();
+
+
+    protected:
+        AZ::Color m_materialBaseColor;
+        AZ::Event<float>::Handler m_ColorChanged;
+        void OnColorChanged(float newColor);
+        void UpdateMaterial(float newColor);
     };
 }

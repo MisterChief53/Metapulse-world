@@ -7,7 +7,8 @@
 #include <Multiplayer/Components/NetworkCharacterComponent.h>
 #include <Components/Interfaces/UserRegistryBus.h>
 #include <Components/Interfaces/HUDBus.h>
-
+#include <AzCore/Math/Color.h>
+#include <random>
 namespace metapulseWorld
 {
     using namespace StartingPointInput;
@@ -28,6 +29,10 @@ namespace metapulseWorld
         // register the user on user registry
         AZLOG_INFO("######################################## Attempting to register a user ########################################");
         UserRegistryBus::Broadcast(&UserRegistryBus::Events::RegisterUser, this->GetEntityId());
+
+#if AZ_TRAIT_CLIENT
+        ItemBus::Handler::BusConnect();
+#endif
     }
 
     void UserController::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
@@ -35,6 +40,9 @@ namespace metapulseWorld
         InputEventNotificationBus::MultiHandler::BusDisconnect();
         metapulseWorld::UserBus::Handler::BusDisconnect();
         UserRegistryBus::Broadcast(&UserRegistryBus::Events::UnregisterUser, this->GetEntityId().ToString());
+#if AZ_TRAIT_CLIENT
+        ItemBus::Handler::BusDisconnect();
+#endif
     }
 
     // Create input will collect the input for the last input time period
@@ -47,6 +55,10 @@ namespace metapulseWorld
         playerInput->m_viewPitch = m_pitch;
 
         playerInput->m_resetCount = GetNetworkTransformComponentController()->GetResetCount();
+
+#if AZ_TRAIT_CLIENT
+        playerInput->m_colorInput = m_color;
+#endif
     }
 
     void UserController::ProcessInput([[maybe_unused]] Multiplayer::NetworkInput& input, [[maybe_unused]] float deltaTime)
@@ -61,6 +73,9 @@ namespace metapulseWorld
         UpdateRotation(playerInput);
         UpdateVelocity(playerInput);
         GetNetworkCharacterComponentController()->TryMoveWithVelocity(m_velocity, deltaTime);
+#if AZ_TRAIT_SERVER
+        SetColorProperty(playerInput->m_colorInput);
+#endif
     }
 
     void UserController::OnPressed(float value) {
@@ -152,5 +167,79 @@ namespace metapulseWorld
 
         m_velocity = AZ::Quaternion::CreateRotationZ(currentHeading).TransformVector(combined) * GetWalkSpeed() 
             + AZ::Vector3::CreateAxisZ(GetGravity());
+    }
+
+#if AZ_TRAIT_CLIENT
+    void UserController::executeItem(AZStd::string itemName) {
+        m_color = m_itemMap[itemName];
+    }
+#endif
+
+    void User::Reflect(AZ::ReflectContext* context)
+    {
+        AZ::SerializeContext* serializeContext = azrtti_cast<AZ::SerializeContext*>(context);
+        if (serializeContext)
+        {
+            serializeContext->Class<User, UserBase>()
+                ->Version(1);
+        }
+        UserBase::Reflect(context);
+    }
+
+    void User::OnInit()
+    {
+    }
+
+    void User::OnActivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
+    {
+        ColorPropertyAddEvent(m_ColorChanged);
+        UpdateMaterial(GetColorProperty());
+    }
+
+    void User::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
+    {
+    }
+    User::User()
+        : m_ColorChanged([this](float newColor) {
+        OnColorChanged(newColor);
+        })
+    {
+    }
+    void User::OnColorChanged(float newColor)
+    {
+        AZLOG_INFO("Color changed to: %0.2f", newColor);
+        UpdateMaterial(newColor);
+    }
+    void User::UpdateMaterial(float newColor)
+    {
+        AZ::Render::MaterialAssignmentLabelMap materialLabelMap;
+        AZ::Render::MaterialConsumerRequestBus::EventResult(materialLabelMap, this->GetEntityId(),
+            &AZ::Render::MaterialConsumerRequestBus::Events::GetMaterialLabels);
+
+        if (materialLabelMap.empty()) {
+            AZLOG_INFO("Material label map is empty!");
+            return;
+        }
+        AZStd::vector<AZ::Render::MaterialAssignmentId> materialVector;
+        AZStd::string propertyName = "baseColor.color";
+
+        for (auto idLabelPair : materialLabelMap) {
+            if (idLabelPair.second == "DefaultMaterial") {
+                materialVector.push_back(idLabelPair.first);
+            }
+        }
+
+        AZ::Color color = AZ::Color(newColor);
+        for (auto materialId : materialVector) {
+            AZStd::any gottenAny;
+            AZ::Render::MaterialComponentRequestBus::EventResult(gottenAny, this->GetEntityId(),
+                &AZ::Render::MaterialComponentRequestBus::Events::GetPropertyValue, materialId, propertyName);
+            if (gottenAny.empty()) {
+                AZLOG_ERROR("Could not get player's material color!");
+            }
+
+            AZ::Render::MaterialComponentRequestBus::Event(this->GetEntityId(),
+                &AZ::Render::MaterialComponentRequestBus::Events::SetPropertyValue, materialId, propertyName, AZStd::any(color));
+        }
     }
 }

@@ -11,6 +11,7 @@
 #include <HttpRequestor/HttpTypes.h>
 #include <Components/Interfaces/APIRequestsBus.h>
 #include <LyShine/Bus/UiTextBus.h>
+#include <Components/Interfaces/ItemBus.h>
 
 namespace metapulseWorld {
 	void InventoryMenuComponent::Init()
@@ -90,10 +91,15 @@ namespace metapulseWorld {
 		UiElementBus::EventResult(draggableParent, draggable, &UiElementBus::Events::GetParentEntityId);
 
 		if (draggableParent.IsValid() && draggableParent == m_unequippedItemsListEntityId) {
-			// 0 to assign an invalid entityid
+			// an item is equipped
 			UiElementBus::Event(draggable, &UiElementBus::Events::ReparentByEntityId, m_equippedItemsListEntityId, AZ::EntityId());
+
+			AZStd::string itemName;
+			UiTextBus::EventResult(itemName, draggable, &UiTextBus::Events::GetText);
+			ItemBus::Broadcast(&ItemBus::Events::executeItem, itemName);
 		}
 		else if (draggableParent.IsValid() && draggableParent == m_equippedItemsListEntityId) {
+			// an item is unequipped
 			UiElementBus::Event(draggable, &UiElementBus::Events::ReparentByEntityId, m_unequippedItemsListEntityId, AZ::EntityId());
 		}
 	}
