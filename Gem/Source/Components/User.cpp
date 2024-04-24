@@ -29,6 +29,10 @@ namespace metapulseWorld
         // register the user on user registry
         AZLOG_INFO("######################################## Attempting to register a user ########################################");
         UserRegistryBus::Broadcast(&UserRegistryBus::Events::RegisterUser, this->GetEntityId());
+
+#if AZ_TRAIT_CLIENT
+        ItemBus::Handler::BusConnect();
+#endif
     }
 
     void UserController::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
@@ -36,6 +40,9 @@ namespace metapulseWorld
         InputEventNotificationBus::MultiHandler::BusDisconnect();
         metapulseWorld::UserBus::Handler::BusDisconnect();
         UserRegistryBus::Broadcast(&UserRegistryBus::Events::UnregisterUser, this->GetEntityId().ToString());
+#if AZ_TRAIT_CLIENT
+        ItemBus::Handler::BusDisconnect();
+#endif
     }
 
     // Create input will collect the input for the last input time period
@@ -49,14 +56,9 @@ namespace metapulseWorld
 
         playerInput->m_resetCount = GetNetworkTransformComponentController()->GetResetCount();
 
-
-        std::random_device rd;
-        std::mt19937 gen(rd());
-
-        // Create a uniform real distribution between 0.0 and 1.0
-        std::uniform_real_distribution<float> dis(0.0f, 1.0f);
-
-        playerInput->m_colorInput = dis(gen);
+#if AZ_TRAIT_CLIENT
+        playerInput->m_colorInput = m_color;
+#endif
     }
 
     void UserController::ProcessInput([[maybe_unused]] Multiplayer::NetworkInput& input, [[maybe_unused]] float deltaTime)
@@ -167,6 +169,12 @@ namespace metapulseWorld
             + AZ::Vector3::CreateAxisZ(GetGravity());
     }
 
+#if AZ_TRAIT_CLIENT
+    void UserController::executeItem(AZStd::string itemName) {
+        m_color = m_itemMap[itemName];
+    }
+#endif
+
     void User::Reflect(AZ::ReflectContext* context)
     {
         AZ::SerializeContext* serializeContext = azrtti_cast<AZ::SerializeContext*>(context);
@@ -185,6 +193,7 @@ namespace metapulseWorld
     void User::OnActivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
         ColorPropertyAddEvent(m_ColorChanged);
+        UpdateMaterial(GetColorProperty());
     }
 
     void User::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
