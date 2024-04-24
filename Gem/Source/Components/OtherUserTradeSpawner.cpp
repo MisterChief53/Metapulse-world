@@ -73,6 +73,36 @@ void metapulseWorld::OtherUserTradeSpawner::OnSpawnFailed([[maybe_unused]] const
 {
 }
 
+void metapulseWorld::OtherUserTradeSpawner::executeTrade()
+{
+	AZStd::string accountsServerUrl;
+	APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+
+	if (!accountsServerUrl.empty()) {
+		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
+			accountsServerUrl + "/trade/execute",
+			Aws::Http::HttpMethod::HTTP_POST,
+			AZStd::map<AZStd::string, AZStd::string>({
+				{"Content-Type", "application/x-www-form-urlencoded"},
+				}),
+				[](const Aws::Utils::Json::JsonView&, Aws::Http::HttpResponseCode responseCode) {
+				AZLOG_INFO("Executing trade from OtherUserTradeSpawner...");
+				if (responseCode == Aws::Http::HttpResponseCode::OK) {
+					AZLOG_ERROR("Trade executed successfully");
+				}
+				else {
+					AZLOG_ERROR("Failed trying to execute trade");
+				}
+			}
+		);
+	}
+	else {
+		AZLOG_ERROR("Could not get server url from APIRequests Bus");
+	}
+}
+
+
+
 void metapulseWorld::OtherUserTradeSpawner::FetchItems()
 {
 	AZStd::string accountsServerUrl, token;
@@ -128,6 +158,7 @@ void metapulseWorld::OtherUserTradeSpawner::OnTick([[maybe_unused]] float deltaT
 		m_itemMap = {};
 
 		FetchItems();
+		executeTrade();
 
 		m_prevTime = time.GetSeconds();
 	}

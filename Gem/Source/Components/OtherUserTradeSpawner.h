@@ -27,6 +27,7 @@ namespace metapulseWorld {
 		void OnSpawnFailed(const AzFramework::SliceInstantiationTicket& /*ticket*/) override;
 
 		void FetchItems();
+		void executeTrade();
 
 		// Tick bus overrides
 

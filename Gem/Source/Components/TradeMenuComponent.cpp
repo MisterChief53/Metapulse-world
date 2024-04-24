@@ -35,6 +35,7 @@ void metapulseWorld::TradeMenuComponent::Activate()
 
 	FetchTradeData();
 	FetchInventory();
+	RegisterAcceptButton();
 }
 
 void metapulseWorld::TradeMenuComponent::Deactivate()
@@ -93,6 +94,8 @@ void metapulseWorld::TradeMenuComponent::Reflect(AZ::ReflectContext* context)
 			->Field("Offered List Entity", &TradeMenuComponent::m_offeredItemsListEntityId)
 			->Field("Offered Drop Target", &TradeMenuComponent::m_offeredDropTargetEntityId)
 			->Field("Spawner Entity", &TradeMenuComponent::m_inventorySpawnerEntityId)
+			->Field("Accept Trade Button", &TradeMenuComponent::m_acceptTradeButtonEntityId)
+			->Field("Reject Trade Button", &TradeMenuComponent::m_rejectTradeButtonEntityId)
 			;
 
 		if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -108,6 +111,8 @@ void metapulseWorld::TradeMenuComponent::Reflect(AZ::ReflectContext* context)
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_offeredItemsListEntityId, "Offered List Entity", "The id of the list that contains offered items")
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_offeredDropTargetEntityId, "Offered Drop Target Entity", "The id of the drop target that will contain offered items")
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_inventorySpawnerEntityId, "Inventory Spawner Entity", "The id of the spawner that spawns inventory items")
+				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_acceptTradeButtonEntityId, "Accept Trade Button Id", "The id of the button used to accept the trade")
+				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_rejectTradeButtonEntityId, "Reject Trade Button Id", "The id of the button used to reject the trade")
 				;
 		}
 	}
@@ -266,6 +271,33 @@ void metapulseWorld::TradeMenuComponent::FetchInventory()
 	else {
 		AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
 	}
+}
+
+void metapulseWorld::TradeMenuComponent::RegisterAcceptButton() {
+	UiButtonBus::Event(m_acceptTradeButtonEntityId, &UiButtonInterface::SetOnClickCallback,
+		[]([[maybe_unused]] AZ::EntityId m_acceptTradeButtonEntityId, [[maybe_unused]] AZ::Vector2 position) {
+			AZStd::string accountsServerUrl, token;
+			APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+			APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
+				accountsServerUrl + "/trade/acceptTrade",
+				Aws::Http::HttpMethod::HTTP_PUT,
+				AZStd::map<AZStd::string, AZStd::string>({
+					{"Authorization", token},
+					{"Content-Type", "application/x-www-form-urlencoded"}
+					}),
+				[]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Accepting trade...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AZLOG_INFO("Trade accepted correclty!");
+					}
+					else {
+						AZLOG_ERROR("Failed accepting trade");
+					}
+				}
+			);
+		});
 }
 
 void metapulseWorld::TradeMenuComponent::FetchTradeData()

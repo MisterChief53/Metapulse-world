@@ -37,6 +37,8 @@ namespace metapulseWorld {
 		void FetchInventory();
 		void FetchTradeData();
 
+		void RegisterAcceptButton();
+
 		AZ::EntityId m_closeButtonEntityId;
 
 		AZ::EntityId m_unofferedItemsListEntityId;
@@ -46,6 +48,9 @@ namespace metapulseWorld {
 		AZ::EntityId m_offeredDropTargetEntityId;
 
 		AZ::EntityId m_inventorySpawnerEntityId;
+
+		AZ::EntityId m_acceptTradeButtonEntityId;
+		AZ::EntityId m_rejectTradeButtonEntityId;
 
 		// pairs contain itemId, itemName
 		AZStd::map<AZ::u64, AZStd::pair<int, AZStd::string>> m_spawnMap;
