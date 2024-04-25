@@ -4,12 +4,14 @@
 #include <LyShine/Bus/UiSpawnerBus.h>
 #include <AzCore/Math/Uuid.h>
 #include <AzCore/Component/TickBus.h>
+#include <Components/Interfaces/ChatBus.h>
 
 namespace metapulseWorld {
 	class ChatBoxComponent
 		: public AZ::Component
 		, public UiSpawnerNotificationBus::Handler
-		, public AZ::TickBus::Handler {
+		, public AZ::TickBus::Handler
+		, public ChatBus::Handler {
 	public:
 		AZ_COMPONENT(metapulseWorld::ChatBoxComponent, "{d5cac6c7-afbc-4dbf-b941-f75d22e276ba}", AZ::Component);
 
@@ -30,19 +32,29 @@ namespace metapulseWorld {
 
 		int GetTickOrder() override;
 
+		// Chat Bus Overrides
+		AZ::EntityId GetActiveChat() override;
+		void SetActiveChat(AZ::EntityId newActiveChat) override;
+
 	private:
 		AZ::EntityId m_closeButtonEntityId;
 		AZ::EntityId m_sendButtonEntityId;
 		AZ::EntityId m_messageInputTextEntityId;
-
 		AZ::EntityId m_messagesList;
-
 		AZ::EntityId m_spawnerEntityId;
+		AZ::EntityId m_aiChat;
+		AZ::EntityId m_friendChat;
+		AZ::EntityId m_friendButton;
+		AZ::EntityId m_aiButton;
+
+		AZ::EntityId m_activeChat;
 
 		AZStd::map<AZ::u64, AZStd::pair<size_t, AZStd::string>> m_spawnMap;
 		AZStd::map<AZ::EntityId, AZStd::pair<size_t, AZStd::string>> m_itemMap;
 
 		void RegisterSendButton();
+
+		void RegisterChatButton(AZ::EntityId buttonEntityId, AZ::EntityId chatEntityId);
 
 		double m_prevTime = 0;
 		const double m_cooldown = 5;

@@ -32,16 +32,23 @@ namespace metapulseWorld {
 			});
 
 		UiSpawnerNotificationBus::Handler::BusConnect(m_spawnerEntityId);
+		ChatBus::Handler::BusConnect();
 
 		AZ::TickBus::Handler::BusConnect();
 
 		//FetchMessages();
 
 		RegisterSendButton();
+
+		m_activeChat = m_friendChat;
+
+		RegisterChatButton(m_friendButton, m_friendChat);
+		RegisterChatButton(m_aiButton, m_aiChat);
 	}
 	void ChatBoxComponent::Deactivate()
 	{
 		UiSpawnerNotificationBus::Handler::BusDisconnect(m_spawnerEntityId);
+		ChatBus::Handler::BusConnect();
 		AZ::TickBus::Handler::BusDisconnect();
 	}
 	void ChatBoxComponent::Reflect(AZ::ReflectContext* context)
@@ -55,6 +62,10 @@ namespace metapulseWorld {
 				->Field("Message Text Input Entity", &ChatBoxComponent::m_messageInputTextEntityId)
 				->Field("Message list", &ChatBoxComponent::m_messagesList)
 				->Field("Spawner entity", &ChatBoxComponent::m_spawnerEntityId)
+				->Field("AI Chat Entity", &ChatBoxComponent::m_aiChat)
+				->Field("Friend Chat Entity", &ChatBoxComponent::m_friendChat)
+				->Field("Friend Button Entity", &ChatBoxComponent::m_friendButton)
+				->Field("AI Button Entity", &ChatBoxComponent::m_aiButton)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext()) {
@@ -67,7 +78,11 @@ namespace metapulseWorld {
 					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_sendButtonEntityId, "Send Message Button Entity", "The id of the button used to send a message")
 					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_messageInputTextEntityId, "Message Text Input Entity", "The id of the text input that contains the message")
 					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_messagesList, "Mesasge List", "the id of the message list")
-					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_spawnerEntityId, "Spawner entity", "The if othe spawner")
+					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_spawnerEntityId, "Spawner entity", "The id of the spawner")
+					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_aiChat, "AI Chat Entity", "The id of the AI chat")
+					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_friendChat, "Friend Chat Entity", "The id of the friend chat")
+					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_friendButton, "Friend Button Entity", "The id of the friend button")
+					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_aiButton, "AI Button Entity", "The id of the AI button")
 					;
 			}
 		}
@@ -80,7 +95,10 @@ namespace metapulseWorld {
 
 		//AZ::EntityId spawnerEntity = m_spawnerEntityId;
 
-		if (!username.empty() && !accountsServerUrl.empty()) {
+		bool isFriendChatActive;
+		UiElementBus::EventResult(isFriendChatActive, m_friendChat, &UiElementBus::Events::IsEnabled);
+
+		if (!username.empty() && !accountsServerUrl.empty() && isFriendChatActive) {
 			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
 				accountsServerUrl + "/chat/getMessages?chatId=1",
 				Aws::Http::HttpMethod::HTTP_GET,
@@ -135,6 +153,16 @@ namespace metapulseWorld {
 		return AZ::TICK_UI;
 	}
 
+	AZ::EntityId ChatBoxComponent::GetActiveChat()
+	{
+		return m_activeChat;
+	}
+
+	void ChatBoxComponent::SetActiveChat(AZ::EntityId newActiveChat)
+	{
+		m_activeChat = newActiveChat;
+	}
+
 	void ChatBoxComponent::RegisterSendButton()
 	{
 		UiButtonBus::Event(m_sendButtonEntityId, &UiButtonInterface::SetOnClickCallback,
@@ -168,6 +196,27 @@ namespace metapulseWorld {
 					}
 				);
 
+			});
+	}
+
+	void ChatBoxComponent::RegisterChatButton(AZ::EntityId buttonEntityId, AZ::EntityId chatEntityId)
+	{
+		UiButtonBus::Event(buttonEntityId, &UiButtonInterface::SetOnClickCallback,
+			[chatEntityId]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position) {
+				AZ::EntityId activeChat;
+				ChatBus::BroadcastResult(activeChat, &ChatBus::Events::GetActiveChat);
+
+				AZLOG_INFO("This chat: %s", chatEntityId.ToString().c_str());
+				AZLOG_INFO("The active chat: %s", activeChat.ToString().c_str());
+				if (activeChat != chatEntityId) {
+					AZLOG_INFO("Toggling chat..");
+					UiElementBus::Event(activeChat, &UiElementBus::Events::SetIsEnabled, false);
+					UiElementBus::Event(chatEntityId, &UiElementBus::Events::SetIsEnabled, true);
+					ChatBus::Broadcast(&ChatBus::Events::SetActiveChat, chatEntityId);
+				}
+				else {
+					AZLOG_INFO("Cannot invoke the chat since it is already active!");
+				}
 			});
 	}
 

@@ -21,4 +21,5 @@ set(FILES
 	Source/Components/ChatBoxComponent.h
 	Source/Components/ChatBoxComponent.cpp
 	Source/Components/Interfaces/ItemBus.h
+	Source/Components/Interfaces/ChatBus.h
 )
