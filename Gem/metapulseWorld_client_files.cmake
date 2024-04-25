@@ -20,4 +20,5 @@ set(FILES
 	Source/Components/OtherUserTradeSpawner.cpp
 	Source/Components/ChatBoxComponent.h
 	Source/Components/ChatBoxComponent.cpp
+	Source/Components/Interfaces/ItemBus.h
 )

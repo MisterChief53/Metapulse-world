@@ -1604,7 +1604,8 @@
                                         "MaterialAsset": {
                                             "assetId": {
                                                 "guid": "{EBEB0D83-E541-57BD-AEA8-1359B24DC766}"
-                                            }
+                                            },
+                                            "assetHint": "assets/red.azmaterial"
                                         }
                                     }
                                 }
