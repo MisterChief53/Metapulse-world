@@ -4,7 +4,8 @@
 
 # Continuous Integration CLI entrypoint script to start CTest, triggering post-build tests
 
-$AWS_EC2_METADATA_DISABLED = $true
+# $AWS_EC2_METADATA_DISABLED = $true
+[System.Environment]::SetEnvironmentVariable("AWS_EC2_METADATA_DISABLED", $true)
 
 # Start the game launcher in a separate process
 Start-Process -FilePath .\build\windows\bin\profile\metapulseWorld.GameLauncher.exe -ArgumentList '--console-command-file=launch_client.cfg', '-rhi=vulkan'
