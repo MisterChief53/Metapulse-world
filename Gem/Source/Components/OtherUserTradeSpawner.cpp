@@ -4,6 +4,7 @@
 #include <HttpRequestor/HttpRequestorBus.h>
 #include <Components/Interfaces/APIRequestsBus.h>
 #include <AzCore/Console/ILogger.h>
+#include <LyShine/Bus/UiCanvasManagerBus.h>
 #include <LyShine/Bus/UiTextBus.h>
 #include <LyShine/Bus/UiElementBus.h>
 
@@ -89,6 +90,16 @@ void metapulseWorld::OtherUserTradeSpawner::executeTrade()
 				AZLOG_INFO("Executing trade from OtherUserTradeSpawner...");
 				if (responseCode == Aws::Http::HttpResponseCode::OK) {
 					AZLOG_ERROR("Trade executed successfully");
+				}
+				else if (responseCode == Aws::Http::HttpResponseCode::INTERNAL_SERVER_ERROR) {
+					AZLOG_ERROR("Closing Trade interface");
+
+					AZLOG_INFO("Close trade ui callback triggered");
+					AZ::EntityId canvasEntityId;
+					AZStd::string canvasPath = "assets/ui/trade_menu.uicanvas";
+					UiCanvasManagerBus::BroadcastResult(canvasEntityId, &UiCanvasManagerBus::Events::FindLoadedCanvasByPathName, canvasPath, false);
+					AZLOG_INFO("unloading canvas");
+					UiCanvasManagerBus::Broadcast(&UiCanvasManagerBus::Events::UnloadCanvas, canvasEntityId);
 				}
 				else {
 					AZLOG_ERROR("Failed trying to execute trade");
