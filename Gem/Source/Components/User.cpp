@@ -57,7 +57,9 @@ namespace metapulseWorld
         playerInput->m_resetCount = GetNetworkTransformComponentController()->GetResetCount();
 
 #if AZ_TRAIT_CLIENT
-        playerInput->m_colorInput = m_color;
+        playerInput->m_colorInputR = m_colorR;
+        playerInput->m_colorInputG = m_colorG;
+        playerInput->m_colorInputB = m_colorB;
 #endif
     }
 
@@ -74,7 +76,10 @@ namespace metapulseWorld
         UpdateVelocity(playerInput);
         GetNetworkCharacterComponentController()->TryMoveWithVelocity(m_velocity, deltaTime);
 #if AZ_TRAIT_SERVER
-        SetColorProperty(playerInput->m_colorInput);
+        // SetColorProperty(playerInput->m_colorInput);
+        SetColorProperty(0, playerInput->m_colorInputR);
+        SetColorProperty(1, playerInput->m_colorInputG);
+        SetColorProperty(2, playerInput->m_colorInputB);
 #endif
     }
 
@@ -171,7 +176,9 @@ namespace metapulseWorld
 
 #if AZ_TRAIT_CLIENT
     void UserController::executeItem(AZStd::string itemName) {
-        m_color = m_itemMap[itemName];
+        m_colorR = m_itemMap[itemName][0];
+        m_colorG = m_itemMap[itemName][1];
+        m_colorB = m_itemMap[itemName][2];
     }
 #endif
 
@@ -193,24 +200,31 @@ namespace metapulseWorld
     void User::OnActivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
         ColorPropertyAddEvent(m_ColorChanged);
-        UpdateMaterial(GetColorProperty());
+        // UpdateMaterial(GetColorProperty());
+        float r = GetColorProperty(0);
+        float g = GetColorProperty(1);
+        float b = GetColorProperty(2);
+        UpdateMaterial(r, g, b);
     }
 
     void User::OnDeactivate([[maybe_unused]] Multiplayer::EntityIsMigrating entityIsMigrating)
     {
     }
     User::User()
-        : m_ColorChanged([this](float newColor) {
-        OnColorChanged(newColor);
+        : m_ColorChanged([this](int32_t index, float newColor) {
+        OnColorChanged(index, newColor);
         })
     {
     }
-    void User::OnColorChanged(float newColor)
+    void User::OnColorChanged([[maybe_unused]] int32_t index, float newColor)
     {
         AZLOG_INFO("Color changed to: %0.2f", newColor);
-        UpdateMaterial(newColor);
+        float r = GetColorProperty(0);
+        float g = GetColorProperty(1);
+        float b = GetColorProperty(2);
+        UpdateMaterial(r, g, b);
     }
-    void User::UpdateMaterial(float newColor)
+    void User::UpdateMaterial(float r, float b, float g)
     {
         AZ::Render::MaterialAssignmentLabelMap materialLabelMap;
         AZ::Render::MaterialConsumerRequestBus::EventResult(materialLabelMap, this->GetEntityId(),
@@ -229,7 +243,7 @@ namespace metapulseWorld
             }
         }
 
-        AZ::Color color = AZ::Color(newColor);
+        AZ::Color color = AZ::Color(r, g, b, 1.0f);
         for (auto materialId : materialVector) {
             AZStd::any gottenAny;
             AZ::Render::MaterialComponentRequestBus::EventResult(gottenAny, this->GetEntityId(),

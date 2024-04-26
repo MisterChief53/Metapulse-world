@@ -62,7 +62,9 @@ namespace metapulseWorld
         float m_strafe = 0;
         float m_yaw = 0;
         float m_pitch = 0;
-        float m_color = 0;
+        float m_colorR = 0;
+        float m_colorG = 0;
+        float m_colorB = 0;
 
         // this is the transformation needed to be applied
         // to the camera to move it vertically
@@ -70,7 +72,7 @@ namespace metapulseWorld
 
         AZ::Vector3 m_velocity = AZ::Vector3::CreateZero();
 
-        AZStd::unordered_map<AZStd::string, float> m_itemMap = { {"red", 0.255f}, {"blue", 0.5f}, {"green", 0.01f} };
+        AZStd::unordered_map<AZStd::string, AZStd::vector<float>> m_itemMap = { {"red", {0.255f, 0.1f, 0.2f} }, {"blue", {0.5f, 0.41f, 0.22f}}, {"green", {0.15f, 0.7f, 0.2f}} };
     };
 
     class User
@@ -90,8 +92,8 @@ namespace metapulseWorld
 
     protected:
         AZ::Color m_materialBaseColor;
-        AZ::Event<float>::Handler m_ColorChanged;
-        void OnColorChanged(float newColor);
-        void UpdateMaterial(float newColor);
+        AZ::Event<int32_t, float>::Handler m_ColorChanged;
+        void OnColorChanged(int32_t index, float newColor);
+        void UpdateMaterial(float r, float g, float b);
     };
 }
