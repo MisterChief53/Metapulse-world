@@ -22,4 +22,7 @@ set(FILES
 	Source/Components/ChatBoxComponent.cpp
 	Source/Components/Interfaces/ItemBus.h
 	Source/Components/Interfaces/ChatBus.h
+	Source/Components/AIChatSpawnerComponent.h
+	Source/Components/AIChatSpawnerComponent.cpp
+	Source/Components/Interfaces/AIChatSpawnerBus.h
 )

@@ -21,6 +21,7 @@
 #include <Components/TradeMenuComponent.h>
 #include <Components/OtherUserTradeSpawner.h>
 #include <Components/ChatBoxComponent.h>
+#include <Components/AIChatSpawnerComponent.h>
 #endif
 
 
@@ -51,6 +52,7 @@ namespace metapulseWorld
                 TradeMenuComponent::CreateDescriptor(),
                 OtherUserTradeSpawner::CreateDescriptor(),
                 ChatBoxComponent::CreateDescriptor(),
+                AIChatSpawnerComponent::CreateDescriptor(),
 #endif
             });
 

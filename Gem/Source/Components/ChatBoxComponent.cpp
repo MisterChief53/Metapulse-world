@@ -11,6 +11,7 @@
 #include <HttpRequestor/HttpTypes.h>
 #include <Components/Interfaces/APIRequestsBus.h>
 #include <LyShine/Bus/UiTextBus.h>
+#include <Components/Interfaces/AIChatSpawnerBus.h>
 
 namespace metapulseWorld {
 	void ChatBoxComponent::Init()
@@ -66,6 +67,9 @@ namespace metapulseWorld {
 				->Field("Friend Chat Entity", &ChatBoxComponent::m_friendChat)
 				->Field("Friend Button Entity", &ChatBoxComponent::m_friendButton)
 				->Field("AI Button Entity", &ChatBoxComponent::m_aiButton)
+				->Field("AI Messages List", &ChatBoxComponent::m_aiMessagesList)
+				->Field("Send AI Message Button Entity", &ChatBoxComponent::m_sendAIButtonEntityId)
+				->Field("AI Message Text Input Entity", &ChatBoxComponent::m_aiMessageInputTextEntityId)
 				;
 
 			if (AZ::EditContext* editContext = serializeContext->GetEditContext()) {
@@ -83,6 +87,9 @@ namespace metapulseWorld {
 					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_friendChat, "Friend Chat Entity", "The id of the friend chat")
 					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_friendButton, "Friend Button Entity", "The id of the friend button")
 					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_aiButton, "AI Button Entity", "The id of the AI button")
+					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_aiMessagesList, "AI Messages List", "The id of the ai message list")
+					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_sendAIButtonEntityId, "Send AI Message Button Entity", "The id of the button used to send a message to the AI")
+					->DataElement(AZ::Edit::UIHandlers::Default, &ChatBoxComponent::m_aiMessageInputTextEntityId, "AI Message Text Input Entity", "The id of the text input that contains the message")
 					;
 			}
 		}
@@ -97,6 +104,9 @@ namespace metapulseWorld {
 
 		bool isFriendChatActive;
 		UiElementBus::EventResult(isFriendChatActive, m_friendChat, &UiElementBus::Events::IsEnabled);
+
+		bool isAIChatActive;
+		UiElementBus::EventResult(isAIChatActive, m_aiChat, &UiElementBus::Events::IsEnabled);
 
 		if (!username.empty() && !accountsServerUrl.empty() && isFriendChatActive) {
 			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
@@ -127,8 +137,42 @@ namespace metapulseWorld {
 				}
 			);
 		}
+		else if (!username.empty() && !accountsServerUrl.empty() && isAIChatActive) {
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
+				accountsServerUrl + "/chat/getMessages?chatId=2",
+				Aws::Http::HttpMethod::HTTP_GET,
+				AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
+				[](const Aws::Utils::Json::JsonView& json, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Executing fetch messages callback...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AZLOG_INFO("Got a positive response from the server, now spawning messages...");
+						AzFramework::SliceInstantiationTicket messageInstantiationTicket;
+						AZ::EntityId messageEntityId;
+
+						Aws::Utils::Array<Aws::Utils::Json::JsonView> messages = json.AsArray();
+
+						for (size_t i = 0; i < messages.GetLength(); i++) {
+							AZLOG_INFO("Spawning a message...");
+							Aws::Utils::Json::JsonView message = messages.GetItem(i);
+
+							// TODO: make a spawner handler for the AI
+							//UiSpawnerBus::EventResult(messageInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
+
+							//m_spawnMap[messageInstantiationTicket.GetRequestId()] = AZStd::make_pair((size_t)message.GetInteger("id"), AZStd::string(message.GetString("content").c_str()));
+
+							AZLOG_INFO("Message gotten: %s", AZStd::string(message.GetString("content").c_str()));
+
+							AIChatSpawnerBus::Broadcast(&AIChatSpawnerBus::Events::SpawnMessage, AZStd::make_pair((size_t)message.GetInteger("id"), AZStd::string(message.GetString("content").c_str())));
+						}
+					}
+					else {
+						AZLOG_ERROR("Failed fetching messages");
+					}
+				}
+			);
+		}
 		else {
-			AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
+			AZLOG_ERROR("Could not get username or server url from APIRequests Bus or a chat is not active");
 		}
 	}
 
@@ -141,6 +185,8 @@ namespace metapulseWorld {
 			}
 
 			m_itemMap = {};
+
+			AIChatSpawnerBus::Broadcast(&AIChatSpawnerBus::Events::ClearMessages);
 
 			FetchMessages();
 
@@ -189,6 +235,41 @@ namespace metapulseWorld {
 						if (responseCode == Aws::Http::HttpResponseCode::OK) {
 							AZLOG_INFO("Message sent correclty!");
 							UiTextBus::Event(m_messageInputTextEntityId, &UiTextBus::Events::SetText, "");
+						}
+						else {
+							AZLOG_ERROR("Failed sending message");
+						}
+					}
+				);
+
+			});
+
+		UiButtonBus::Event(m_sendAIButtonEntityId, &UiButtonInterface::SetOnClickCallback,
+			[this]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position) {
+				AZStd::string textTosend;
+				UiTextBus::EventResult(textTosend, m_aiMessageInputTextEntityId, &UiTextBus::Events::GetText);
+
+				AZLOG_INFO("Text to SEND: %s", textTosend.c_str());
+
+				AZStd::string accountsServerUrl, token, username;
+				APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+				APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+				APIRequestsBus::BroadcastResult(username, &APIRequestsBus::Events::getUsername);
+
+				AZLOG_INFO("Token: %s", token.c_str());
+
+				HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
+					accountsServerUrl + "/chat/sendMessageIA?chatId=2&content=" + username + ": " + textTosend,
+					Aws::Http::HttpMethod::HTTP_POST,
+					AZStd::map<AZStd::string, AZStd::string>({
+						{"Authorization", token},
+						{"Content-Type", "application/x-www-form-urlencoded"}
+						}),
+					[this]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
+						AZLOG_INFO("Executing send message request...");
+						if (responseCode == Aws::Http::HttpResponseCode::OK) {
+							AZLOG_INFO("Message sent correclty!");
+							UiTextBus::Event(m_aiMessageInputTextEntityId, &UiTextBus::Events::SetText, "");
 						}
 						else {
 							AZLOG_ERROR("Failed sending message");

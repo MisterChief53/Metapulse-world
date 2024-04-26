@@ -46,11 +46,17 @@ namespace metapulseWorld {
 		AZ::EntityId m_friendChat;
 		AZ::EntityId m_friendButton;
 		AZ::EntityId m_aiButton;
+		AZ::EntityId m_aiMessagesList;
+		AZ::EntityId m_sendAIButtonEntityId;
+		AZ::EntityId m_aiMessageInputTextEntityId;
 
 		AZ::EntityId m_activeChat;
 
 		AZStd::map<AZ::u64, AZStd::pair<size_t, AZStd::string>> m_spawnMap;
 		AZStd::map<AZ::EntityId, AZStd::pair<size_t, AZStd::string>> m_itemMap;
+
+		/*AZStd::map<AZ::u64, AZStd::pair<size_t, AZStd::string>> m_aiSpawnMap;
+		AZStd::map<AZ::EntityId, AZStd::pair<size_t, AZStd::string>> m_aiItemMap;*/
 
 		void RegisterSendButton();
 
