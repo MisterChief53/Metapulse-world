@@ -3,6 +3,11 @@
     "materialTypeVersion": 5,
     "propertyValues": {
         "baseColor.textureMap": "img.png",
-        "uv.scale": 7.0
+        "uv.center": [
+            0.5,
+            1.0
+        ],
+        "uv.offsetV": 0.23000000417232513,
+        "uv.scale": 4.25
     }
 }

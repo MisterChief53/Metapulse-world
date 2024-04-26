@@ -1555,6 +1555,10 @@
             "Id": "Entity_[941891505997]",
             "Name": "Cube",
             "Components": {
+                "AZ::Render::EditorDecalComponent": {
+                    "$type": "AZ::Render::EditorDecalComponent",
+                    "Id": 11035795452333286677
+                },
                 "AZ::Render::EditorMeshComponent": {
                     "$type": "AZ::Render::EditorMeshComponent",
                     "Id": 171755492661931027,
@@ -1618,8 +1622,8 @@
                     "Id": 14852977437079980848,
                     "NonUniformScale": [
                         0.25,
-                        1.0,
-                        1.0
+                        2.0,
+                        1.25
                     ]
                 },
                 "EditorOnlyEntityComponent": {
@@ -1640,9 +1644,9 @@
                     "Parent Entity": "Entity_[933301571405]",
                     "Transform Data": {
                         "Translate": [
-                            -5.826408863067627,
+                            -11.447428703308105,
                             -8.065382957458496,
-                            -1.1171183586120605
+                            -1.7960309982299805
                         ],
                         "Rotate": [
                             0.0,
