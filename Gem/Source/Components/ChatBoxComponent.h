@@ -64,5 +64,7 @@ namespace metapulseWorld {
 
 		double m_prevTime = 0;
 		const double m_cooldown = 5;
+
+		AZStd::string m_chatId;
 	};
 }

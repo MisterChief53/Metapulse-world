@@ -72,7 +72,7 @@ namespace metapulseWorld
 
         AZ::Vector3 m_velocity = AZ::Vector3::CreateZero();
 
-        AZStd::unordered_map<AZStd::string, AZStd::vector<float>> m_itemMap = { {"red", {1.0f, 0.0f, 0.0f}}, {"blue", {0.0f, 0.0f, 1.0f}}, {"green", {0.0f, 1.0f, 0.0f}} };
+        AZStd::unordered_map<AZStd::string, AZStd::vector<float>> m_itemMap = { {"red", {1.0f, 0.0f, 0.0f}}, {"blue", {0.0f, 1.0f, 0.0f}}, {"green", {0.0f, 0.0f, 1.0f}} };
     };
 
     class User

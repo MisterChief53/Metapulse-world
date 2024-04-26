@@ -37,6 +37,16 @@ namespace metapulseWorld {
 
 		AZ::TickBus::Handler::BusConnect();
 
+		AZStd::string username;
+		APIRequestsBus::BroadcastResult(username, &APIRequestsBus::Events::getUsername);
+
+		if (username == "edson") {
+			m_chatId = "2";
+		}
+		else {
+			m_chatId = "3";
+		}
+
 		//FetchMessages();
 
 		RegisterSendButton();
@@ -139,7 +149,7 @@ namespace metapulseWorld {
 		}
 		else if (!username.empty() && !accountsServerUrl.empty() && isAIChatActive) {
 			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
-				accountsServerUrl + "/chat/getMessages?chatId=2",
+				accountsServerUrl + "/chat/getMessages?chatId=" + m_chatId,
 				Aws::Http::HttpMethod::HTTP_GET,
 				AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
 				[](const Aws::Utils::Json::JsonView& json, Aws::Http::HttpResponseCode responseCode) {
@@ -259,7 +269,7 @@ namespace metapulseWorld {
 				AZLOG_INFO("Token: %s", token.c_str());
 
 				HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
-					accountsServerUrl + "/chat/sendMessageIA?chatId=2&content=" + username + ": " + textTosend,
+					accountsServerUrl + "/chat/sendMessageIA?chatId=" + m_chatId + "&content=" + username + ": " + textTosend,
 					Aws::Http::HttpMethod::HTTP_POST,
 					AZStd::map<AZStd::string, AZStd::string>({
 						{"Authorization", token},
