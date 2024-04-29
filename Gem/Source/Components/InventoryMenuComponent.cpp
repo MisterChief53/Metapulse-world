@@ -152,8 +152,6 @@ namespace metapulseWorld {
 							Aws::Utils::Json::JsonView item = items.GetItem(i);
 
 							UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
-
-							//m_spawnQueue.push(AZStd::make_pair( (size_t) item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()) ));
 							m_spawnMap[itemInstantiationTicket.GetRequestId()] = AZStd::make_pair((size_t)item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()));
 						}
 					}

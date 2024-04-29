@@ -4,6 +4,11 @@
 #include <AzCore/Component/ComponentBus.h>
 
 namespace metapulseWorld {
+
+	/*
+	* An interface to handle interaction with the start menu 
+	* (where login or signup happens)
+	*/
 	class StartMenuRequests
 		: public AZ::EBusTraits{
 	public:
@@ -11,6 +16,9 @@ namespace metapulseWorld {
 
 		static const AZ::EBusAddressPolicy AddressPolicy = AZ::EBusAddressPolicy::Single;
 
+		/*
+		* This closes the start menu.
+		*/
 		virtual void closeStartMenu() = 0;
 	};
 

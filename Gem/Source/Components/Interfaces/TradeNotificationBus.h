@@ -4,6 +4,10 @@
 #include <Multiplayer/NetworkEntity/NetworkEntityHandle.h>
 
 namespace metapulseWorld {
+	/*
+	* legacy interface to spawn a notification. Still kept in case in the future
+	* we want to change the way notifications are handled.
+	*/
 	class TradeNotificationRequests
 		: public AZ::EBusTraits {
 	public:
@@ -11,6 +15,9 @@ namespace metapulseWorld {
 
 		static const AZ::EBusAddressPolicy AddressPolicy = AZ::EBusAddressPolicy::Single;
 
+		/*
+		* Gets the handler of the component that implements this bus.
+		*/
 		virtual Multiplayer::NetworkEntityHandle GetHandleBus() = 0;
 	};
 

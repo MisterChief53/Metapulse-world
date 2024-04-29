@@ -116,7 +116,6 @@ void metapulseWorld::UserMenuComponent::OnTopLevelEntitiesSpawned([[maybe_unused
 	// the id is supposed to be straight up copied to the lambda, not just the address
 	UiButtonBus::Event(spawnedEntities[0], &UiButtonBus::Events::SetOnClickCallback,
 		[id]([[maybe_unused]] AZ::EntityId buttonEntity, [[maybe_unused]] AZ::Vector2) {
-			//m_hasBeenClicked = true;
 			UserMenuBus::Broadcast(&UserMenuBus::Events::SetHasBeenClicked);
 			AZLOG_INFO("Button callback called!");
 			AZ::EntityId userEntityId = AZ::EntityId(id);

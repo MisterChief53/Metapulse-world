@@ -4,6 +4,11 @@
 #include <AzCore/Component/EntityId.h>
 
 namespace metapulseWorld {
+
+	/*
+	* Interface to communicate witht he UserRegistry Component, which holds
+	* EntityIDs to the different users.
+	*/
 	class UserRegistryRequests
 		: public AZ::EBusTraits {
 	public:
@@ -12,13 +17,22 @@ namespace metapulseWorld {
 
 		static const AZ::EBusAddressPolicy AddressPolicy = AZ::EBusAddressPolicy::Single;
 
+		/*
+		* Registers a user in the user registry, by storing their entityId
+		*/
 		virtual void RegisterUser(const AZ::EntityId& entityId) = 0;
 
+		/*
+		* Unregisters an entityId from the user registry.
+		*/
 		virtual void UnregisterUser(const AZStd::string& entityId) = 0;
 	};
 
 	using UserRegistryBus = AZ::EBus<UserRegistryRequests>;
 
+	/*
+	* Contains the getters to extract information from the UserRegistry.
+	*/
 	class UserRegistryGettersRequests
 		: public AZ::EBusTraits {
 	public:

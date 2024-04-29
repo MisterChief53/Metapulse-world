@@ -3,7 +3,11 @@
 #include <LyShine/Bus/UiDropdownBus.h>
 
 namespace metapulseWorld {
-
+	/*
+	* Component to control behavior of the ingame menu, which holds
+	* basic graphics settings and is able to logout and trigger the 
+	* inventory menu
+	*/
 	class IngameMenuComponent
 		: public AZ::Component
 		, public UiDropdownNotificationBus::Handler {
@@ -15,6 +19,10 @@ namespace metapulseWorld {
 
 		void Init() override;
 
+		/*
+		* This component notably registers the logout button, that quits the client whenever
+		* it is pressed.
+		*/
 		void Activate() override;
 
 		void Deactivate() override;
@@ -27,6 +35,11 @@ namespace metapulseWorld {
 
 		void OnDropdownCollapsed() override;
 
+		/*
+		* Whenever the user selects one of the dropdown elements (in this case, one of many
+		* resolutions), we use the console to set the new resolution, by also getting the
+		* window handle.
+		*/
 		void OnDropdownValueChanged([[maybe_unused]] AZ::EntityId option) override;
 
 	private:
@@ -43,13 +56,27 @@ namespace metapulseWorld {
 
 		AZStd::string m_canvasPath;
 
+		/*
+		* This vector of pairs holds the currently supported resolutions
+		*/
 		const AZStd::vector<AZStd::pair<uint32_t, uint32_t>> m_resolutionsVector = { {800, 600}, {1280, 720}, {1920,1080} };
 
+		/*
+		* This returns the active camera, which is retrieved by getting the client's
+		* active camera, of which there can only be one.
+		*/
 		AZ::Entity* GetActiveCamera();
 
 		// Button Setup
+		/*
+		* Sets up the functionality of the FOV slider. We set a callback that tells the 
+		* slider to change the FOV whenever the slider's value is changed.
+		*/
 		void setupSlider();
 
+		/*
+		* Set the callback to trigger the inventory menu and close this one.
+		*/
 		void setupInventoryButton();
 
 	};

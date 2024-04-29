@@ -110,8 +110,6 @@ namespace metapulseWorld {
 		APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
 		APIRequestsBus::BroadcastResult(username, &APIRequestsBus::Events::getUsername);
 
-		//AZ::EntityId spawnerEntity = m_spawnerEntityId;
-
 		bool isFriendChatActive;
 		UiElementBus::EventResult(isFriendChatActive, m_friendChat, &UiElementBus::Events::IsEnabled);
 
