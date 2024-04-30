@@ -33,7 +33,6 @@ void metapulseWorld::TradeMenuComponent::Activate()
 
 	UiSpawnerNotificationBus::Handler::BusConnect(m_inventorySpawnerEntityId);
 
-	FetchTradeData();
 	FetchInventory();
 	RegisterAcceptButton();
 	RegisterRejectButton();
@@ -239,8 +238,6 @@ void metapulseWorld::TradeMenuComponent::FetchInventory()
 	APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
 	APIRequestsBus::BroadcastResult(username, &APIRequestsBus::Events::getUsername);
 
-	//AZ::EntityId spawnerEntity = m_spawnerEntityId;
-
 	if (!username.empty() && !accountsServerUrl.empty()) {
 		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
 			accountsServerUrl + "/items/getItemsUser?name=" + username,
@@ -326,9 +323,4 @@ void metapulseWorld::TradeMenuComponent::RegisterRejectButton() {
 				}
 			);
 		});
-}
-
-void metapulseWorld::TradeMenuComponent::FetchTradeData()
-{
-
 }
