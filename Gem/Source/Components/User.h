@@ -42,27 +42,55 @@ namespace metapulseWorld
         //!    to ensure it's processed.
         //! @param input  input structure which to store input data for sending to the authority
         //! @param deltaTime amount of time to integrate the provided inputs over
+        //! 
+        //! We only set the color inputs client-side, since that is where
+        //! the color variables are going to be manipulated
         void CreateInput(Multiplayer::NetworkInput& input, float deltaTime) override;
 
         //! Common input processing logic for the NetworkInput.
         //! @param input  input structure to process
         //! @param deltaTime amount of time to integrate the provided inputs over
+        //! 
+        //! For the items, the server is the one who is going to change the colors 
+        //! from the input changes it god, triggering the replication to all clients
         void ProcessInput(Multiplayer::NetworkInput& input, float deltaTime) override;
 
         // AZ::InputEventNotificationBus interface
+        /*
+        * We update translation values on "pressing" one of our relevant inputs.
+        */
         void OnPressed(float value) override;
+        /*
+        * On the release of one of our buttons or mouse movement, we still update
+        * those values for them to eventually be sent to the server
+        */
         void OnReleased(float value) override;
+        /*
+        * We only handle camera rotation events since the movement does not need
+        * OnHeld event handling.
+        */
         void OnHeld(float value) override;
 
         // UserBus Implementations
+        /*
+        * The pitch value is the rotation that we calculated from the inputs. It is what
+        * resulted after all the manipuations we have made.
+        */
         float getPitchValue() override;
 
 #if AZ_TRAIT_CLIENT
         // item bus overrides
+        /*
+        * We updat the *local* rgb values, since on each event time, we use these to update
+        * the network inputs, and if they change, the material will change.
+        */
         void executeItem(AZStd::string itemName) override;
 #endif
 
     protected:
+        /*
+        * We manipulate the rotatin quaternion depending on the mouse input values
+        */
         void UpdateRotation(const UserNetworkInput* input);
         void UpdateVelocity(const UserNetworkInput* input);
 

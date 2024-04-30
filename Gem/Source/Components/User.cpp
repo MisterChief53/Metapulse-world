@@ -30,6 +30,10 @@ namespace metapulseWorld
         AZLOG_INFO("######################################## Attempting to register a user ########################################");
         UserRegistryBus::Broadcast(&UserRegistryBus::Events::RegisterUser, this->GetEntityId());
 
+        /* 
+        * We only connect to the itembus client-side since the instructions
+        * to execute the items come from UI elements on the client.
+        */
 #if AZ_TRAIT_CLIENT
         ItemBus::Handler::BusConnect();
 #endif
