@@ -31,7 +31,8 @@
                     "Entity_[414057373550]",
                     "Instance_[362684895910]/ContainerEntity",
                     "Instance_[470059078310]/ContainerEntity",
-                    "Entity_[933301571405]"
+                    "Entity_[933301571405]",
+                    "Instance_[486922538600]/ContainerEntity"
                 ]
             },
             "Component_[15230859088967841193]": {
@@ -1785,6 +1786,64 @@
                     "op": "replace",
                     "path": "/ContainerEntity/Components/TransformComponent/Parent Entity",
                     "value": "../Entity_[1146574390643]"
+                }
+            ]
+        },
+        "Instance_[486922538600]": {
+            "Source": "Prefabs/player.prefab",
+            "Patches": [
+                {
+                    "op": "remove",
+                    "path": "/Entities/Entity_[394615630069]/Components/Multiplayer::LocalPredictionPlayerInputComponent"
+                },
+                {
+                    "op": "remove",
+                    "path": "/Entities/Entity_[394615630069]/Components/Multiplayer::NetworkCharacterComponent"
+                },
+                {
+                    "op": "remove",
+                    "path": "/Entities/Entity_[394615630069]/Components/Multiplayer::NetworkTransformComponent"
+                },
+                {
+                    "op": "remove",
+                    "path": "/Entities/Entity_[394615630069]/Components/NetBindComponent"
+                },
+                {
+                    "op": "remove",
+                    "path": "/Entities/Entity_[394615630069]/Components/metapulseWorld::User"
+                },
+                {
+                    "op": "remove",
+                    "path": "/Entities/Entity_[394615630069]/Components/metapulseWorld::UserCamera"
+                },
+                {
+                    "op": "remove",
+                    "path": "/Entities/Entity_[576686928541]/Components/EditorCameraComponent"
+                },
+                {
+                    "op": "replace",
+                    "path": "/ContainerEntity/Components/TransformComponent/Parent Entity",
+                    "value": "../Entity_[1146574390643]"
+                },
+                {
+                    "op": "replace",
+                    "path": "/ContainerEntity/Components/TransformComponent/Transform Data/Translate/0",
+                    "value": -6.921513557434082
+                },
+                {
+                    "op": "replace",
+                    "path": "/ContainerEntity/Components/TransformComponent/Transform Data/Translate/1",
+                    "value": -6.311755180358887
+                },
+                {
+                    "op": "replace",
+                    "path": "/ContainerEntity/Components/TransformComponent/Transform Data/Translate/2",
+                    "value": 0.06019964814186096
+                },
+                {
+                    "op": "replace",
+                    "path": "/ContainerEntity/Components/TransformComponent/Transform Data/Rotate/2",
+                    "value": -90.00000762939453
                 }
             ]
         }
