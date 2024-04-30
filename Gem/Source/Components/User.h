@@ -10,11 +10,19 @@
 
 namespace metapulseWorld
 {
+    /*
+    * These are the input bindings that we set on editor which are relevant for
+    * user movement and control.
+    */
     const StartingPointInput::InputEventNotificationId MoveFwdEventId("move_fwd");
     const StartingPointInput::InputEventNotificationId MoveRightEventId("move_right");
     const StartingPointInput::InputEventNotificationId RotateYawEventId("rotate_yaw");
     const StartingPointInput::InputEventNotificationId RotatePitchEventId("rotate_pitch");
 
+    /*
+    * Controller for the User multiplayer component. Handles server side and autonomous side
+    * item execution logic and player movement.
+    */
     class UserController
         : public UserControllerBase
         , public StartingPointInput::InputEventNotificationBus::MultiHandler
