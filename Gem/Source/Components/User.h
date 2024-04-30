@@ -89,9 +89,17 @@ namespace metapulseWorld
 
     protected:
         /*
-        * We manipulate the rotatin quaternion depending on the mouse input values
+        * We manipulate the rotation quaternion depending on the yaw mouse changes.
+        * This modifies the network input, so that means that these changes are 
+        * reflected on the server and are not client-side only.
         */
         void UpdateRotation(const UserNetworkInput* input);
+
+        /*
+        * Updates the entity's velocity from the axis that we get from combining
+        * the forward and strave axis. This will tell our entity where to move once we
+        * later apply the changes.
+        */
         void UpdateVelocity(const UserNetworkInput* input);
 
         float m_forward = 0;
@@ -106,11 +114,23 @@ namespace metapulseWorld
         // to the camera to move it vertically
         float pitch_transform = 0;
 
+        /*
+        * The velocity is first initialized at zero because we
+        * will not move unless we get an input telling us otherwise
+        */
         AZ::Vector3 m_velocity = AZ::Vector3::CreateZero();
 
+        /*
+        * Specifies the items' name and corresponding color value, which in this case
+        * is the material's base RGB color.
+        */
         AZStd::unordered_map<AZStd::string, AZStd::vector<float>> m_itemMap = { {"red", {1.0f, 0.0f, 0.0f}}, {"blue", {0.0f, 1.0f, 0.0f}}, {"green", {0.0f, 0.0f, 1.0f}} };
     };
-
+    
+    /*
+    * Component for client-side interaction of the user multiplayer component, that]
+    * provides read-only acccess to our relevant network properties.
+    */
     class User
         : public UserBase
     {
@@ -120,16 +140,47 @@ namespace metapulseWorld
         static void Reflect(AZ::ReflectContext* context);
 
         void OnInit() override;
+        /*
+        * On activation, we are going to trigger the fetching of the server's 
+        * configured color for this entity. This is because, the user might
+        * have set their item while we were offline. So, we update the material.
+        * 
+        * TODO: UpdateMaterial fails whenever the Material component is not set
+        * (which is almost always). Try to make this component depend on the
+        * Material service.
+        */
         void OnActivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
         void OnDeactivate(Multiplayer::EntityIsMigrating entityIsMigrating) override;
 
+        /*
+        * The constructor defines a handler for the OnColorChanged event. This, as 
+        * is specified by the autogen XML, hsa to have the index of the array (since
+        * our network property is an array of two values), and the float value itself.
+        */
         User();
 
 
     protected:
+        /*
+        * Our player's current color (item)
+        */
         AZ::Color m_materialBaseColor;
+
+        /*
+        * The handler for when the color property has been changed.
+        */
         AZ::Event<int32_t, float>::Handler m_ColorChanged;
+
+        /*
+        * Whenever a color is changed, we update the entity's material.
+        */
         void OnColorChanged(int32_t index, float newColor);
+
+        /*
+        * Get this entity's material slots, then for those, we change the property
+        * baseColor.color, which is the one that controls the base color for
+        * the material.
+        */
         void UpdateMaterial(float r, float g, float b);
     };
 }
