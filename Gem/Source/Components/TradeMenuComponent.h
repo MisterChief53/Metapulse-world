@@ -79,7 +79,7 @@ namespace metapulseWorld {
 		*/
 		void RegisterAcceptButton();
 
-		//void RegisterTradeMoneyButton();
+		void RegisterTradeMoneyButton();
 
 		AZ::EntityId m_closeButtonEntityId;
 

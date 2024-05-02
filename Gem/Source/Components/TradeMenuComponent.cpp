@@ -36,7 +36,7 @@ void metapulseWorld::TradeMenuComponent::Activate()
 	FetchInventory();
 	RegisterAcceptButton();
 	RegisterRejectButton();
-	//RegisterTradeMoneyButton();
+	RegisterTradeMoneyButton();
 }
 
 void metapulseWorld::TradeMenuComponent::Deactivate()
@@ -332,11 +332,11 @@ void metapulseWorld::TradeMenuComponent::RegisterRejectButton() {
 		});
 }
 
-/*
+
 void metapulseWorld::TradeMenuComponent::RegisterTradeMoneyButton()
 {
 	UiButtonBus::Event(m_tradeMoneyButtonEntityId, &UiButtonInterface::SetOnClickCallback,
-		[]([[maybe_unused]] AZ::EntityId m_tradeMoneyButtonEntityId, [[maybe_unused]] AZ::EntityId m_tradeMoneyTextEntityId, [[maybe_unused]] AZ::Vector2 position) {
+		[this]([[maybe_unused]] AZ::EntityId m_tradeMoneyButtonEntityId, [[maybe_unused]] AZ::Vector2 position) {
 			AZStd::string accountsServerURL, token, money; 
 			APIRequestsBus::BroadcastResult(accountsServerURL, &APIRequestsBus::Events::getUrl);
 			APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
@@ -364,4 +364,3 @@ void metapulseWorld::TradeMenuComponent::RegisterTradeMoneyButton()
 			);
 		});
 }
-*/
