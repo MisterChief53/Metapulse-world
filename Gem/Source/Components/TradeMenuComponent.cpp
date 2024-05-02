@@ -36,6 +36,7 @@ void metapulseWorld::TradeMenuComponent::Activate()
 	FetchInventory();
 	RegisterAcceptButton();
 	RegisterRejectButton();
+	//RegisterTradeMoneyButton();
 }
 
 void metapulseWorld::TradeMenuComponent::Deactivate()
@@ -98,6 +99,7 @@ void metapulseWorld::TradeMenuComponent::Reflect(AZ::ReflectContext* context)
 			->Field("Reject Trade Button", &TradeMenuComponent::m_rejectTradeButtonEntityId)
 			->Field("Trade Money Button", &TradeMenuComponent::m_tradeMoneyButtonEntityId)
 			->Field("Trade Money Text", &TradeMenuComponent::m_tradeMoneyTextEntityId)
+			->Field("Status Text Entity", &TradeMenuComponent::m_statusTextEntityId)
 			;
 
 		if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -117,6 +119,7 @@ void metapulseWorld::TradeMenuComponent::Reflect(AZ::ReflectContext* context)
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_rejectTradeButtonEntityId, "Reject Trade Button Id", "The id of the button used to reject the trade")
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_tradeMoneyButtonEntityId, "Trade Money Button Id", "The id of the button used to add money to the trade")
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_tradeMoneyTextEntityId, "Trade Money Text Id", "The id of the text used to add money to the trade")
+				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_statusTextEntityId, "Status Text Entity", "For displaying results of calling API")
 				;
 		}
 	}
@@ -328,3 +331,37 @@ void metapulseWorld::TradeMenuComponent::RegisterRejectButton() {
 			);
 		});
 }
+
+/*
+void metapulseWorld::TradeMenuComponent::RegisterTradeMoneyButton()
+{
+	UiButtonBus::Event(m_tradeMoneyButtonEntityId, &UiButtonInterface::SetOnClickCallback,
+		[]([[maybe_unused]] AZ::EntityId m_tradeMoneyButtonEntityId, [[maybe_unused]] AZ::EntityId m_tradeMoneyTextEntityId, [[maybe_unused]] AZ::Vector2 position) {
+			AZStd::string accountsServerURL, token, money; 
+			APIRequestsBus::BroadcastResult(accountsServerURL, &APIRequestsBus::Events::getUrl);
+			APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+			UiTextBus::EventResult(money, m_tradeMoneyTextEntityId, &UiTextBus::Events::GetText);
+
+			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
+				accountsServerURL + "/trade/tradeMoney?money=" + money,  
+				Aws::Http::HttpMethod::HTTP_PUT,
+				AZStd::map<AZStd::string, AZStd::string>({
+					{"Authorization", token},
+					{"Content-Type", "application/x-www-form-urlencoded"}
+					}),
+				[]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
+					AZLOG_INFO("Adding money to the trade...");
+					if (responseCode == Aws::Http::HttpResponseCode::OK) {
+						AZLOG_INFO("Money added correctly!");
+					}
+					else if (responseCode == Aws::Http::HttpResponseCode::CONFLICT) {
+						AZLOG_INFO("Not a double");
+					}
+					else {
+						AZLOG_ERROR("Failed adding money");
+					}
+				}
+			);
+		});
+}
+*/

@@ -79,6 +79,8 @@ namespace metapulseWorld {
 		*/
 		void RegisterAcceptButton();
 
+		//void RegisterTradeMoneyButton();
+
 		AZ::EntityId m_closeButtonEntityId;
 
 		AZ::EntityId m_unofferedItemsListEntityId;
@@ -94,6 +96,8 @@ namespace metapulseWorld {
 
 		AZ::EntityId m_tradeMoneyButtonEntityId;
 		AZ::EntityId m_tradeMoneyTextEntityId;
+
+		AZ::EntityId m_statusTextEntityId;
 
 
 		// pairs contain itemId, itemName

@@ -158,6 +158,49 @@ void metapulseWorld::OtherUserTradeSpawner::FetchItems()
 	}
 }
 
+
+void metapulseWorld::OtherUserTradeSpawner::FetchMoney()
+{
+	AZStd::string accountsServerUrl, token;
+	APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+	APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+	if (!token.empty() && !accountsServerUrl.empty()) {
+		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
+			accountsServerUrl + "/trade/tradeInformation",
+			Aws::Http::HttpMethod::HTTP_GET,
+			AZStd::map<AZStd::string, AZStd::string>({
+				{"Authorization", token},
+				{"Content-Type", "application/x-www-form-urlencoded"},
+				}),
+				[this](const Aws::Utils::Json::JsonView& json, Aws::Http::HttpResponseCode responseCode) {
+				AZLOG_INFO("Executing fetch trade money of other user callback...");
+				if (responseCode == Aws::Http::HttpResponseCode::OK) {
+					AzFramework::SliceInstantiationTicket itemInstantiationTicket;
+					AZ::EntityId itemEntityId;
+
+					Aws::Utils::Array<Aws::Utils::Json::JsonView> items = json.AsArray();
+
+					for (size_t i = 0; i < items.GetLength(); i++) {
+						Aws::Utils::Json::JsonView item = items.GetItem(i);
+
+						UiSpawnerBus::EventResult(itemInstantiationTicket, m_spawnerEntityId, &UiSpawnerBus::Events::Spawn);
+
+						//m_spawnQueue.push(AZStd::make_pair( (size_t) item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()) ));
+						m_spawnMap[itemInstantiationTicket.GetRequestId()] = AZStd::make_pair((size_t)item.GetInteger("id"), AZStd::string(item.GetString("name").c_str()));
+					}
+				}
+				else {
+					AZLOG_ERROR("Failed fetching items of other user");
+				}
+			}
+		);
+	}
+	else {
+		AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
+	}
+}
+
 void metapulseWorld::OtherUserTradeSpawner::OnTick([[maybe_unused]] float deltaTime, AZ::ScriptTimePoint time)
 {
 	if (time.GetSeconds() - m_prevTime >= m_cooldown) {
@@ -169,6 +212,7 @@ void metapulseWorld::OtherUserTradeSpawner::OnTick([[maybe_unused]] float deltaT
 		m_itemMap = {};
 
 		FetchItems();
+		//FetchMoney();
 		executeTrade();
 
 		m_prevTime = time.GetSeconds();
