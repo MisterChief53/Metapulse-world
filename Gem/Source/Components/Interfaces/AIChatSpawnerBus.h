@@ -2,7 +2,7 @@
 
 #include <AzCore/EBus/EBus.h>
 #include <AzCore/std/string/string.h>
-#include <AzCore/std/utility/pair.h>
+//#include <AzCore/std/utility/pair.h>
 
 namespace metapulseWorld {
 	/*

@@ -92,6 +92,9 @@ namespace metapulseWorld {
 		AZ::EntityId m_acceptTradeButtonEntityId;
 		AZ::EntityId m_rejectTradeButtonEntityId;
 
+		AZ::EntityId m_tradeMoneyButtonEntityId;
+		AZ::EntityId m_tradeMoneyTextEntityId;
+
 
 		// pairs contain itemId, itemName
 		/*

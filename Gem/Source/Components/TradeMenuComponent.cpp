@@ -96,6 +96,8 @@ void metapulseWorld::TradeMenuComponent::Reflect(AZ::ReflectContext* context)
 			->Field("Spawner Entity", &TradeMenuComponent::m_inventorySpawnerEntityId)
 			->Field("Accept Trade Button", &TradeMenuComponent::m_acceptTradeButtonEntityId)
 			->Field("Reject Trade Button", &TradeMenuComponent::m_rejectTradeButtonEntityId)
+			->Field("Trade Money Button", &TradeMenuComponent::m_tradeMoneyButtonEntityId)
+			->Field("Trade Money Text", &TradeMenuComponent::m_tradeMoneyTextEntityId)
 			;
 
 		if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -113,6 +115,8 @@ void metapulseWorld::TradeMenuComponent::Reflect(AZ::ReflectContext* context)
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_inventorySpawnerEntityId, "Inventory Spawner Entity", "The id of the spawner that spawns inventory items")
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_acceptTradeButtonEntityId, "Accept Trade Button Id", "The id of the button used to accept the trade")
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_rejectTradeButtonEntityId, "Reject Trade Button Id", "The id of the button used to reject the trade")
+				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_tradeMoneyButtonEntityId, "Trade Money Button Id", "The id of the button used to add money to the trade")
+				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_tradeMoneyTextEntityId, "Trade Money Text Id", "The id of the text used to add money to the trade")
 				;
 		}
 	}
