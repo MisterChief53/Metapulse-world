@@ -343,19 +343,25 @@ void metapulseWorld::TradeMenuComponent::RegisterTradeMoneyButton()
 			UiTextBus::EventResult(money, m_tradeMoneyTextEntityId, &UiTextBus::Events::GetText);
 
 			HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
-				accountsServerURL + "/trade/tradeMoney?money=" + money,  
+				accountsServerURL + "/trade/tradeMoney?moneyString=" + money,  
 				Aws::Http::HttpMethod::HTTP_PUT,
 				AZStd::map<AZStd::string, AZStd::string>({
 					{"Authorization", token},
 					{"Content-Type", "application/x-www-form-urlencoded"}
 					}),
-				[]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
+				[this]([[maybe_unused]] const AZStd::string& text, Aws::Http::HttpResponseCode responseCode) {
 					AZLOG_INFO("Adding money to the trade...");
 					if (responseCode == Aws::Http::HttpResponseCode::OK) {
 						AZLOG_INFO("Money added correctly!");
+						UiTextBus::Event(m_statusTextEntityId, &UiTextBus::Events::SetText, "Money added correctly");
 					}
 					else if (responseCode == Aws::Http::HttpResponseCode::CONFLICT) {
 						AZLOG_INFO("Not a double");
+						UiTextBus::Event(m_statusTextEntityId, &UiTextBus::Events::SetText, "Value is not a number");
+					}
+					else if (responseCode == Aws::Http::HttpResponseCode::NOT_ACCEPTABLE) {
+						AZLOG_INFO("Not enough money");
+						UiTextBus::Event(m_statusTextEntityId, &UiTextBus::Events::SetText, "Value is not a number");
 					}
 					else {
 						AZLOG_ERROR("Failed adding money");
