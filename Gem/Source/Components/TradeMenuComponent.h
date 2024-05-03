@@ -4,6 +4,7 @@
 #include <AzCore/Math/Uuid.h>
 #include <HttpRequestor/HttpTypes.h>
 #include <AzCore/std/containers/set.h>
+#include <AzCore/Component/TickBus.h>
 
 namespace metapulseWorld {
 	/*
@@ -15,6 +16,7 @@ namespace metapulseWorld {
 		: public AZ::Component
 		, public UiDropTargetNotificationBus::MultiHandler
 		, public UiSpawnerNotificationBus::Handler
+		, public AZ::TickBus::Handler
 	{
 	public:
 		AZ_COMPONENT(metapulseWorld::TradeMenuComponent, "{8109FA40-547C-467D-8EDE-89F6431275F8}", AZ::Component);
@@ -45,6 +47,25 @@ namespace metapulseWorld {
 
 		// UI spawner notification bus overrides
 		void OnSpawnBegin(const AzFramework::SliceInstantiationTicket& /*ticket*/) override;
+
+		// Tick bus overrides
+		/*
+		* Every cooldown seconds, we destroy all the items listed and remove them from the
+		* itemMap, so that we can then fetch new items and not bother about the previous
+		* list
+		*/
+		void OnTick(float deltaTime, AZ::ScriptTimePoint time) override;
+
+		/*
+		* Since we are dealing with UI elements, we set the tick order to be TICK_UI
+		*/
+		int GetTickOrder() override;
+
+		/*
+		* When we fetch the money, we make a request to the accounts server, get the other
+		* user's trade money, and then spawn them and added to the UI canvas
+		*/
+		void FetchMoney();
 
 		/*
 		* The entities we will be spawning are the items that we own, so, we will use the ticket
@@ -79,6 +100,10 @@ namespace metapulseWorld {
 		*/
 		void RegisterAcceptButton();
 
+		/*
+		* Registers the callback for the trade money button, which sends a request to the accounts
+		* server for the money that is going to be traded.
+		*/
 		void RegisterTradeMoneyButton();
 
 		AZ::EntityId m_closeButtonEntityId;
@@ -98,6 +123,9 @@ namespace metapulseWorld {
 		AZ::EntityId m_tradeMoneyTextEntityId;
 
 		AZ::EntityId m_statusTextEntityId;
+
+		AZ::EntityId m_tradeMoneyDisplayEntityId;
+		AZ::EntityId m_tradeMoneyOtherUserDisplayEntityId;
 
 
 		// pairs contain itemId, itemName
@@ -132,5 +160,8 @@ namespace metapulseWorld {
 		* is offered quickly.
 		*/
 		AZStd::set<AZ::EntityId> m_offeredItemsSet;
+
+		double m_prevTime = 0;
+		const double m_cooldown = 5;
 	};
 }

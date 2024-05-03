@@ -33,6 +33,8 @@ void metapulseWorld::TradeMenuComponent::Activate()
 
 	UiSpawnerNotificationBus::Handler::BusConnect(m_inventorySpawnerEntityId);
 
+	AZ::TickBus::Handler::BusConnect();
+
 	FetchInventory();
 	RegisterAcceptButton();
 	RegisterRejectButton();
@@ -45,6 +47,8 @@ void metapulseWorld::TradeMenuComponent::Deactivate()
 	UiDropTargetNotificationBus::MultiHandler::BusDisconnect(m_unofferedDropTargetEntityId);
 
 	UiSpawnerNotificationBus::Handler::BusConnect(m_inventorySpawnerEntityId);
+
+	AZ::TickBus::Handler::BusDisconnect();
 
 	// unset all the offered items on the database
 	for (auto item : m_offeredItemsSet) {
@@ -100,6 +104,8 @@ void metapulseWorld::TradeMenuComponent::Reflect(AZ::ReflectContext* context)
 			->Field("Trade Money Button", &TradeMenuComponent::m_tradeMoneyButtonEntityId)
 			->Field("Trade Money Text", &TradeMenuComponent::m_tradeMoneyTextEntityId)
 			->Field("Status Text Entity", &TradeMenuComponent::m_statusTextEntityId)
+			->Field("Trade Money Display", &TradeMenuComponent::m_tradeMoneyDisplayEntityId)
+			->Field("Other User Trade Money Display", &TradeMenuComponent::m_tradeMoneyOtherUserDisplayEntityId)
 			;
 
 		if (AZ::EditContext* editContext = serializeContext->GetEditContext())
@@ -120,6 +126,8 @@ void metapulseWorld::TradeMenuComponent::Reflect(AZ::ReflectContext* context)
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_tradeMoneyButtonEntityId, "Trade Money Button Id", "The id of the button used to add money to the trade")
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_tradeMoneyTextEntityId, "Trade Money Text Id", "The id of the text used to add money to the trade")
 				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_statusTextEntityId, "Status Text Entity", "For displaying results of calling API")
+				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_tradeMoneyDisplayEntityId, "Trade Money Display", "The Money Display's Entity Id")
+				->DataElement(AZ::Edit::UIHandlers::Default, &TradeMenuComponent::m_tradeMoneyOtherUserDisplayEntityId, "Other User Trade Money Display", "The Money Display's Of the Other User Entity Id")
 				;
 		}
 	}
@@ -361,7 +369,7 @@ void metapulseWorld::TradeMenuComponent::RegisterTradeMoneyButton()
 					}
 					else if (responseCode == Aws::Http::HttpResponseCode::NOT_ACCEPTABLE) {
 						AZLOG_INFO("Not enough money");
-						UiTextBus::Event(m_statusTextEntityId, &UiTextBus::Events::SetText, "Value is not a number");
+						UiTextBus::Event(m_statusTextEntityId, &UiTextBus::Events::SetText, "Not enough money");
 					}
 					else {
 						AZLOG_ERROR("Failed adding money");
@@ -369,4 +377,67 @@ void metapulseWorld::TradeMenuComponent::RegisterTradeMoneyButton()
 				}
 			);
 		});
+}
+
+void metapulseWorld::TradeMenuComponent::FetchMoney()
+{
+	AZStd::string accountsServerUrl, token;
+	APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+	APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+	AZLOG_INFO("Executing fetch trade money...");
+
+	if (!token.empty() && !accountsServerUrl.empty()) {
+		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddRequestWithHeaders,
+			accountsServerUrl + "/trade/tradeMoney",
+			Aws::Http::HttpMethod::HTTP_GET,
+			AZStd::map<AZStd::string, AZStd::string>({
+				{"Authorization", token},
+				{"Content-Type", "application/x-www-form-urlencoded"},
+				}),
+				[this](const Aws::Utils::Json::JsonView& json, Aws::Http::HttpResponseCode responseCode) {
+				AZLOG_INFO("Fetching trade money callback...");
+				if (responseCode == Aws::Http::HttpResponseCode::OK) {
+					AZStd::string tradeMoneyString = AZStd::to_string((float)json.GetDouble("tradeMoney"));
+					AZStd::string tradeMoneyOtherUserString = AZStd::to_string((float)json.GetDouble("tradeMoneyOtherUser"));
+
+					// Ugly hack to get rid of extra zeroes
+					tradeMoneyString.pop_back();
+					tradeMoneyString.pop_back(); 
+					tradeMoneyString.pop_back(); 
+					tradeMoneyString.pop_back(); 
+
+					tradeMoneyOtherUserString.pop_back();
+					tradeMoneyOtherUserString.pop_back(); 
+					tradeMoneyOtherUserString.pop_back(); 
+					tradeMoneyOtherUserString.pop_back(); 
+
+					UiTextBus::Event(m_tradeMoneyDisplayEntityId, &UiTextBus::Events::SetText, tradeMoneyString);
+					UiTextBus::Event(m_tradeMoneyOtherUserDisplayEntityId, &UiTextBus::Events::SetText, tradeMoneyOtherUserString);
+				}
+				else {
+					AZLOG_ERROR("Failed fetching user's trade money");
+				}
+			}
+		);
+	}
+	else {
+		AZLOG_ERROR("Could not get username or server url from APIRequests Bus");
+	}
+}
+
+void metapulseWorld::TradeMenuComponent::OnTick([[maybe_unused]] float deltaTime, AZ::ScriptTimePoint time)
+{
+	if (time.GetSeconds() - m_prevTime >= m_cooldown) {
+		AZLOG_INFO("Se hace un tick dentro del trade menu component");
+
+		FetchMoney();
+
+		m_prevTime = time.GetSeconds();
+	}
+}
+
+int metapulseWorld::TradeMenuComponent::GetTickOrder()
+{
+	return AZ::TICK_UI;
 }

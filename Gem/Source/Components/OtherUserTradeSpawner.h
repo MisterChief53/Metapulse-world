@@ -43,12 +43,6 @@ namespace metapulseWorld {
 		void FetchItems();
 
 		/*
-		* When we fetch the money, we make a request to the accounts server, get the other
-		* user's trade money, and then spawn them and added to the UI canvas
-		*/
-		void FetchMoney();
-
-		/*
 		* Calls the accounts server to tell it that we should execute the trade, and closes
 		* this trade menu
 		*/
