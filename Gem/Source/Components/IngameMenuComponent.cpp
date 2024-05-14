@@ -12,6 +12,8 @@
 #include <LyShine/Bus/UiCanvasBus.h>
 #include <AzFramework/Windowing/WindowBus.h>
 #include <Components/Interfaces/UIAdminBus.h>
+#include <HttpRequestor/HttpRequestorBus.h>
+#include <Components/Interfaces/APIRequestsBus.h>
 
 namespace metapulseWorld {
 	void IngameMenuComponent::Init()
@@ -35,14 +37,42 @@ namespace metapulseWorld {
 
 		UiButtonBus::Event(m_logoutButtonEntityId, &UiButtonInterface::SetOnClickCallback,
 			[]([[maybe_unused]] AZ::EntityId buttonEntityId, [[maybe_unused]] AZ::Vector2 position) {
-				const auto console = AZ::Interface<AZ::IConsole>::Get();
 
-				if (!console) {
-					AZ_Assert(false, "UiStartMenuComponent attempting to use console commands before AZ::Console is available.");
-					return;
-				}
 
-				console->PerformCommand("quit");
+				AZStd::string token, accountsServerUrl;
+				APIRequestsBus::BroadcastResult(accountsServerUrl, &APIRequestsBus::Events::getUrl);
+				APIRequestsBus::BroadcastResult(token, &APIRequestsBus::Events::getToken);
+
+				AZLOG_INFO("Performing request...");
+				HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
+					accountsServerUrl + "/auth/logout",
+					Aws::Http::HttpMethod::HTTP_POST,
+					AZStd::map<AZStd::string, AZStd::string>({
+						{"Authorization", token},
+						}),
+					[](const AZStd::string& response, Aws::Http::HttpResponseCode responseCode) {
+						AZLOG_INFO("Executing login callback...");
+						if (responseCode == Aws::Http::HttpResponseCode::OK) {
+							const auto console = AZ::Interface<AZ::IConsole>::Get();
+
+							if (!console) {
+								AZ_Assert(false, "UiStartMenuComponent attempting to use console commands before AZ::Console is available.");
+								return;
+							}
+
+							console->PerformCommand("quit");
+						}
+						else {
+							if (!response.empty()) {
+								AZLOG_ERROR("Empty response when logging out!");
+							}
+							else {
+								AZLOG_ERROR("Could not logout");
+							}
+
+						}
+					}
+				);
 			});
 
 		setupSlider();

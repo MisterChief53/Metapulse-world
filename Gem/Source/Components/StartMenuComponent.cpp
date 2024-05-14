@@ -89,7 +89,7 @@ namespace metapulseWorld {
 
 		AZLOG_INFO("Performing request...");
 		HttpRequestor::HttpRequestorRequestBus::Broadcast(&HttpRequestor::HttpRequestorRequests::AddTextRequestWithHeaders,
-			accountsServerUrl + "/auth/login?name=" + username + "&password=" + password,
+			accountsServerUrl + "/auth/login?name=" + username + "&password=" + password + "&source=1",
 			Aws::Http::HttpMethod::HTTP_POST,
 			AZStd::map<AZStd::string, AZStd::string>({ {"Content-Type", "application/x-www-form-urlencoded"} }),
 			[&statusTextEntityId, &canvasEntity](const AZStd::string& response, Aws::Http::HttpResponseCode responseCode) {

@@ -1,6 +1,8 @@
 #include <AzCore/Component/Component.h>
 #include <AzCore/Math/Vector2.h>
 #include <LyShine/Bus/UiDropdownBus.h>
+#include <AzCore/Math/Uuid.h>
+#include <HttpRequestor/HttpTypes.h>
 
 namespace metapulseWorld {
 	/*
